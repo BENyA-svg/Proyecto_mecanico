@@ -1,0 +1,99 @@
+<form action="inicio2.php" method="post">
+            <input type="hidden" name="color" value="1">
+                            <button class="text-white" type="submit">color</button>
+                        </form>
+
+                        
+
+
+    <form action="" method="post">
+        <label for="nombre">Nombre: </label>
+        <br>
+        <input type="text" name="nombre" id="" required>
+        <br>
+        <label for="apellido">Apellido:</label>
+        <br>
+        <input type="text" name="apellido" id="" required>
+        <br>
+        <label for="email">Correo electrónico:</label>
+        <br>
+        <input type="email" name="email" id="" required>
+        <br>
+        <label for="telefono">Teléfono:</label>
+        <br>
+        <input type="tel" name="telefono" id="" required>
+        <br>
+        <label for="marca">Marca:</label>
+        <br>
+        <select name="marca" id="">
+            <option value="toyota">Toyota</option>
+            <option value="ford">Ford</option>
+            <option value="chevrolet">Chevrolet</option>
+        </select>
+        <br>
+        <label for="modelo">Modelo:</label>
+        <br>
+        <input type="text" name="modelo" id="" required>
+        <br>
+        <label for="fecha">Fecha preferida:</label>
+        <br>
+        <input type="datetime-local" name="fecha" id="">
+        <button type="submit">Enviar</button>
+    </form>
+
+
+
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro de Vehículo - JuancitoMotores</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>JuancitoMotores</h1>
+    <nav aria-label="Menu principal">
+      <a href="inicio1.php">Inicio</a>
+      <a href="servicios.php">Servicios</a>
+      <a href="contacto.php">Contacto</a>
+      <!-- Session links -->
+      <!-- Replace below PHP blocks with your own session handling -->
+      <a href="registro.php">Iniciar sesión</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Formulario de Registro de Vehículo</h2>
+    <form action="procesar_registro.php" method="post" autocomplete="off" novalidate>
+      <div>
+        <label for="marca">Marca:</label>
+        <select id="marca" name="marca" required>
+          <option value="" disabled selected>Seleccione una marca</option>
+
+
+<?php
+// procesar_registro.php
+// Procesa el formulario de registro de vehículo con formato y estilo consistente
+// Configuración de conexión a la base de datos - ajustar según entorno
+\$host = 'localhost';
+\$db   = 'motos_garantia';
+\$user = 'root';
+\$pass = '';
+\$charset = 'utf8mb4';
+\$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
+try {
+    \$pdo = new PDO("mysql:host=\$host;dbname=\$db;charset=\$charset", \$user, \$pass, \$options);
+} catch (PDOException \$e) {
+    http_response_code(500);
+    echo "<!DOCTYPE html>
+<html lang=\"es\">
+<head>
+<meta charset=\"UTF-8\"/>
+<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>
+<title>Error de conexión</title>
+<style>

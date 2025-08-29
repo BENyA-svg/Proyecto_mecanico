@@ -1,0 +1,164 @@
+.header-section {
+    background-color: #007bff;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    padding-bottom: 20px;
+}
+.form-container {
+    background-color: #e4e4e6;
+    border-radius: 8px;
+    padding: 50px;
+    padding-top: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+.form-title {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #007bff;
+}
+.alert {
+    margin-top: 20px;
+}
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+a {
+    color: #007bff;
+}
+a:hover {
+    color: #0056b3;
+}
+button.text-white {
+    background-color: transparent;
+    border: none;
+    color: white;
+    padding: 0rem 0rem;
+}
+nav form {
+    display: inline;
+}
+nav form button {
+    display: inline;
+    vertical-align: baseline;
+}   
+    
+.btn-añadir-insumo {     
+    background: transparent;
+    cursor: pointer;
+    color: #007bff;
+    font-size: 60px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  
+}
+.btn-añadir-insumo:hover {
+    transform: scale(1.20);
+}
+.card {
+    width: 18rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+  
+}
+.card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+.border-container {
+    padding: 50px;
+    display: flex;
+    gap: 20px; /* Espacio entre las cartas */
+    flex-wrap: wrap; /* Para que bajen si no caben en una línea */
+}
+.insumo-btn-container {
+    border-radius: 50%;
+    display: flex;
+    justify-content: flex-end; /* derecha, usa flex-start para izquierda */
+    padding: 5px 50px 0 50px; /* ajusta según tu diseño */
+}
+.btn.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.btn.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    transform: scale(1.20);
+}
+.overlay{
+    background: rgba(0, 0, 0,.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+}
+.overlay.active{
+    visibility: visible;
+}
+.popup{
+    background: white;
+    width: 500px;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    opacity: 0;
+    transition: 0.3s ease all;
+    transform: scale(0.7);
+}
+.popup.active{
+    opacity: 1;
+    transform: scale(1);
+}
+.popup .btn-cerrar-popup{
+    text-align: right;
+    color: #333;
+    font-size: 16px;
+    display: block;
+    line-height: 16px;
+    transition: 0.3s ease all;
+}
+.popup .btn-cerrar-popup:hover{
+    color: #0b79e7;
+}
+.popup .info {
+    display: block;
+    margin: 5px 0;
+    padding: 5px;
+ text-align: left;
+}
+.popup .info label {
+    font-weight: bold;
+}
+.popup .info input {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.popup .info select {
+    width: 95%;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.formulario {
+    margin-top: 5px;
+    padding: 5px;
+ 
+}
