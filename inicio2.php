@@ -1,21 +1,33 @@
 <?php
+include 'conexionbd.php';
 session_start();
 
+if (isset($_POST['cerrar'])) {
+    session_unset();
+    session_destroy();
+    header("Location: inicio1.php");
+    exit();
+}
+
+if (empty($_POST['email']) || empty($_POST['contraseña'])) {
+   echo "No se proporcionaron email o contraseña.";
+    exit();
+}
 if (isset($_REQUEST['email']) && isset($_REQUEST['contraseña'])) {
     $email = $_REQUEST['email'];
     $contraseña = $_REQUEST['contraseña'];
-    $sql =" SELECT * FROM usuarios WHERE email = '.$email.' AND contraseña = '.$contraseña.'";
+    $sql =" SELECT * FROM usuario WHERE correo = '$email' AND contraseña = '$contraseña'";
     $res = $con->query($sql);
     if ($res->num_rows > 0) {
-   
+     $sesion = $res->fetch_assoc();
 
-       $_SESSION['ci'] = $res["ci"];
-        $_SESSION['nombre'] = $res["nombre"];
-        $_SESSION['apellido'] = $res["apellido"];
-        $_SESSION['email'] = $res["email"];
+       $_SESSION['ci'] = $sesion["ci"];
+        $_SESSION['nombre'] = $sesion["nombre"];
+        $_SESSION['apellido'] = $sesion["apellido"];
+        $_SESSION['email'] = $sesion["correo"];
 
-    }else {
-        echo "Error: Usuario o contraseña incorrectos.";
+    }else{
+       echo "Error: Usuario o contraseña incorrectos.";
         exit();
     }
 
@@ -52,10 +64,6 @@ if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro' && !isset($_SE
     ];
 }
 
-if (isset($_POST['cerrar'])) {
-    session_unset();
-    session_destroy();
-    header("Location: inicio1.php");
-}
+
 header("Location: inicio1.php");
 ?>

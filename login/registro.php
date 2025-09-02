@@ -1,5 +1,6 @@
 <?php
 include ('../conexionbd.php');
+
 session_start();
 ?>
 
@@ -23,10 +24,11 @@ session_start();
             <?php endif; ?>
         </nav>
     </div> 
- 
+
     <form action="../inicio2.php" method="post">
         <div class="container mt-5">
             <div class="form-container">
+                
                 <label for="email">Correo electronico</label>
                 <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="ejemplo@gmail.com" name="email">
 
@@ -42,7 +44,7 @@ session_start();
 
                 <p>¿No tienes cuenta? 
                 <a href="registrarse.php">registrarse</a></p>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button name="submit" type="submit" class="btn btn-primary">Submit</button>
 
             </div>
         </div>
