@@ -1,14 +1,28 @@
 <?php
 session_start();
 
-if (isset($_REQUEST['email'])) {
-    $_SESSION['email'] = $_REQUEST['email'];
-}
+if (isset($_REQUEST['email']) && isset($_REQUEST['contraseña'])) {
+    $email = $_REQUEST['email'];
+    $contraseña = $_REQUEST['contraseña'];
+    $sql =" SELECT * FROM usuarios WHERE email = '.$email.' AND contraseña = '.$contraseña.'";
+    $res = $con->query($sql);
+    if ($res->num_rows > 0) {
+   
 
-if (isset($_REQUEST['contraseña'])) {
-    $_SESSION['contraseña'] = $_REQUEST['contraseña'];
-}
+       $_SESSION['ci'] = $res["ci"];
+        $_SESSION['nombre'] = $res["nombre"];
+        $_SESSION['apellido'] = $res["apellido"];
+        $_SESSION['email'] = $res["email"];
 
+    }else {
+        echo "Error: Usuario o contraseña incorrectos.";
+        exit();
+    }
+
+ }else {
+    echo "Error: No se proporcionaron email o contraseña.";
+   exit();
+}
 if (isset($_REQUEST['perfil'])) {
     $_SESSION['perfil'] = $_REQUEST['perfil'];
 }
@@ -41,8 +55,6 @@ if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro' && !isset($_SE
 if (isset($_POST['cerrar'])) {
     session_unset();
     session_destroy();
-    header("Location: inicio1.php");
-
     header("Location: inicio1.php");
 }
 header("Location: inicio1.php");

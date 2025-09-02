@@ -27,11 +27,11 @@ session_start();
     <form action="../inicio2.php" method="post">
         <div class="container mt-5">
             <div class="form-container">
-                <label for="exampleInputEmail1">Correo electronico</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="ejemplo@gmail.com" name="email">
-    
-                <label for="exampleInputPassword1">Contraseña</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="contraseña" name=contraseña>
+                <label for="email">Correo electronico</label>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="ejemplo@gmail.com" name="email">
+
+                <label for="password">Contraseña</label>
+                <input type="password" class="form-control" id="password" placeholder="contraseña" name="contraseña">
                 <br>
                 <select name="perfil" >
                 <option value="" disabled selected>Selecciona un perfil</option>
