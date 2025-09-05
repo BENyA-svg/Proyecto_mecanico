@@ -3,7 +3,7 @@
  $Servidor = "26.196.49.52";
  $Usuario = "wolfcrew";
  $pass = "";
- $bd = "mecanico";
+ $bd = "mecanico-2";
  $port="3306";
  $con = mysqli_connect($Servidor, $Usuario, $pass, $bd, $port);
  if (!$con) {

@@ -38,6 +38,8 @@ include ('../conexionbd.php');
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'admin'): ?>   
                 <a href="aautos.php" class="text-white">Agregar vehículo</a> |
                 <a href="insumos.php" class="text-white">Insumos</a> |
+                <a href= "allusr/usuarios.php" class="text-white">Usuarios</a> |
+
             <?php endif; ?>
             <?php if (!isset($_SESSION['email'])): ?>
                 <a class="text-white" href="registro.php">Iniciar sesión</a>
@@ -58,11 +60,17 @@ include ('../conexionbd.php');
                 data-vehiculo="<?php echo ($servicio['vehiculo']); ?>"
                 data-fecha="<?php echo ($servicio['fecha'] ?? ''); ?>"
                 data-tipo="<?php echo ($servicio['tipo'] ?? ''); ?>"
-                data-desc="<?php echo ($servicio['desc'] ?? ''); ?>"
+                data-desc="<?php echo ($servicio['descripcion'] ?? ''); ?>"
                 data-estado="<?php echo ($servicio['estado'] ?? ''); ?>">
                 <h5><?php echo ($servicio['vehiculo']); ?></h5>
                 <p><?php echo ($servicio['fecha'] ?? ''); ?></p>
-                </button>
+                data-desc="<?php echo ($servicio['matricula'] ?? ''); ?>"
+                  </button>
+
+
+    
+
+
             <?php endforeach; ?>
         </div>
     </div>
@@ -73,13 +81,32 @@ include ('../conexionbd.php');
             <p id="popup-vehiculo"></p>
             <p id="popup-tipo"></p>
             <p id="popup-fecha"></p>
-            <p id="popup-desc"></p>
+            <p id="popup-descripcion"></p>
             <p id="popup-estado"></p>
+             <p id="popup-matricula"></p>
             <button class="btn btn-primary" id="btn-confirmar">Confirmar Servicio</button>
         </div>
     </div>
+     <?php
 
-
+    $sel = "SELECT * FROM servicios";    
+    $res = $con->query($sel);
+    if ($res->num_rows > 0) {
+        echo "<table>";
+        echo "<tr><th>Vehiculo</th><th>Fecha</th><th>Estado</th><th>Descripcion</th><th>Matricula</th><th>Ma</th></tr>";
+        while($fila = $res->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . $fila["fecha_service"] . "</td>";
+            echo "<td>" . $fila["fecha"] . "</td>";
+            echo "<td>" . $fila["estado"] . "</td>";
+            echo "<td>" . $fila["descripcion"] . "</td>";
+             echo "<td>" . $fila["matricula"] . "</td>";
+            echo "</tr>";
+    
+        echo "</table>";
+        }
+    }
+?>
     <script src="popup.js"></script>
 </body>
-</html>
+</html> 

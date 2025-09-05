@@ -1,5 +1,6 @@
 <?php
 include 'conexionbd.php';
+
 session_start();
 
 if (isset($_POST['cerrar'])) {
@@ -8,10 +9,10 @@ if (isset($_POST['cerrar'])) {
     header("Location: inicio1.php");
     exit();
 }
-
+if (!empty($_POST['submit'])){
 if (empty($_POST['email']) || empty($_POST['contraseña'])) {
    echo "No se proporcionaron email o contraseña.";
-    exit();
+   exit();
 }
 if (isset($_REQUEST['email']) && isset($_REQUEST['contraseña'])) {
     $email = $_REQUEST['email'];
@@ -34,6 +35,7 @@ if (isset($_REQUEST['email']) && isset($_REQUEST['contraseña'])) {
  }else {
     echo "Error: No se proporcionaron email o contraseña.";
    exit();
+}
 }
 if (isset($_REQUEST['perfil'])) {
     $_SESSION['perfil'] = $_REQUEST['perfil'];
