@@ -52,10 +52,16 @@ include '../conexionbd.php';
         <div class="tabla">
         <?php  
     $sel = "SELECT * FROM usuario";    
+    $sel2 = "SELECT correo FROM clientes";
+    $sel3 = "SELECT correo FROM centros";
+    $sel4 = "SELECT correo FROM ventas";
+$resventas = $con->query($sel4);
+$rescentros = $con->query($sel3);
+$resclientes = $con->query($sel2);
 $res = $con->query($sel);
 if ($res->num_rows > 0) {
     echo "<table>";
-    echo "<tr><th>CI</th><th>Nombre</th><th>Apellido</th><th>Correo</th><th>Telefono</th></tr>";
+    echo "<tr><th>CI</th><th>Nombre</th><th>Apellido</th><th>Correo</th><th>Telefono</th><th>Cargo</th></tr>";
     while($fila = $res->fetch_assoc()) {
         echo "<tr>";
         echo "<td>" . $fila["ci"] . "</td>";
@@ -63,7 +69,16 @@ if ($res->num_rows > 0) {
         echo "<td>" . $fila["apellido"] . "</td>";
         echo "<td>" . $fila["correo"] . "</td>";
         echo "<td>" . $fila["telefono"] . "</td>";
-         
+   
+}
+ if( $fila["correo"] == ($resventas->fetch_assoc()["correo"] )){
+        echo "<td>Vendedor</td>";
+        echo "</tr>";
+    }elseif( $fila["correo"] == ($rescentros->fetch_assoc()["correo"] )){
+        echo "<td>Centro</td>";
+        echo "</tr>";
+    }elseif( $fila["correo"] == ($resclientes->fetch_assoc()["correo"])){
+        echo "<td>Cliente</td>";
         echo "</tr>";
     }
     echo "</table>";
@@ -82,17 +97,40 @@ if ($res->num_rows > 0) {
         <option value="centro">Centro</option>
     </select>
 
-    <button type="submit">Actualizar rango</button>
+    <button name="accion"  type="submit">Actualizar rango</button>
 </form>
 
     <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario = $_POST['usuario'];
             $perfil = $_POST['perfil'];
-            
-          }  
+              $select =" SELECT ci FROM usuario WHERE correo = '$usuario'";
+    $res = $con->query($select);
+    if ($res->num_rows > 0) {
+     $sesion = $res->fetch_assoc();
+
+       $ci_usuario = $sesion["ci"];
+      
+
+    }
+             if (isset($_POST['accion'])&& $_POST['perfil'] == 'admin') {
+           $sql1 = "INSERT INTO ventas(ci_of, correo) VALUES ($ci_usuario, '$usuario')";
+        $sql2 = "DELETE FROM clientes WHERE correo ='$usuario'";
+        }elseif (isset($_POST['accion'])&& $_POST['perfil'] == 'centro') {
+                $sql1 = "INSERT INTO centros(ci_centro, correo) VALUES ($ci_usuario, '$usuario')";
+        $sql2 = "DELETE FROM clientes WHERE correo ='$usuario'";
+        }
+           if ($con->query($sql1) === TRUE) {
+        if (isset($sql2)) {
+            $con->query($sql2);
+        }
+        echo "<div class='alert alert-primary'>Rango actualizado correctamente.</div>";
+    }
+        } 
           
           ?>
          
     </body>
+</html>
+
 </html>
