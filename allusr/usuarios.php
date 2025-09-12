@@ -52,12 +52,7 @@ include '../conexionbd.php';
         <div class="tabla">
         <?php  
     $sel = "SELECT * FROM usuario";    
-    $sel2 = "SELECT correo FROM clientes";
-    $sel3 = "SELECT correo FROM centros";
-    $sel4 = "SELECT correo FROM ventas";
-$resventas = $con->query($sel4);
-$rescentros = $con->query($sel3);
-$resclientes = $con->query($sel2);
+    
 $res = $con->query($sel);
 if ($res->num_rows > 0) {
     echo "<table>";
@@ -69,20 +64,31 @@ if ($res->num_rows > 0) {
         echo "<td>" . $fila["apellido"] . "</td>";
         echo "<td>" . $fila["correo"] . "</td>";
         echo "<td>" . $fila["telefono"] . "</td>";
-   
+        $sel2 = "SELECT correo, 'cliente' AS cargo
+        FROM clientes
+        WHERE correo = '" . $fila["correo"] . "'
+        UNION
+        SELECT correo, 'centros' AS cargo
+        FROM centros
+        WHERE correo = '" . $fila["correo"] . "' 
+        UNION
+        SELECT correo, 'ventas' AS cargo
+        FROM ventas
+        WHERE correo = '".$fila["correo"]."'
+        LIMIT 1;";
+        $res2 = $con->query($sel2);
+        if ($res2->num_rows > 0) {
+            $fila2 = $res2->fetch_assoc();
+            echo "<td>" . $fila2["cargo"] . "</td>";
+        } else {
+            echo "<td>Desconocido</td>";
+        }
+        echo "</tr>";
 }
- if( $fila["correo"] == ($resventas->fetch_assoc()["correo"] )){
-        echo "<td>Vendedor</td>";
-        echo "</tr>";
-    }elseif( $fila["correo"] == ($rescentros->fetch_assoc()["correo"] )){
-        echo "<td>Centro</td>";
-        echo "</tr>";
-    }elseif( $fila["correo"] == ($resclientes->fetch_assoc()["correo"])){
-        echo "<td>Cliente</td>";
-        echo "</tr>";
-    }
+}
+
     echo "</table>";
-}
+
 ?>
         </div>
     </div>

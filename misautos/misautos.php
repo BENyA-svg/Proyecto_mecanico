@@ -45,6 +45,8 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'admin'): ?>   
                 <a href="/aautos/aautos.php" class="text-white">Agregar vehículo</a> |
                 <a href="/insumos/insumos.php" class="text-white">Insumos</a> |
+                <a href= "allusr/usuarios.php" class="text-white">Usuarios</a> |
+
             <?php endif; ?>
             <?php if (!isset($_SESSION['email'])): ?>
                 <a class="text-white" href="/login/registro.php">Iniciar sesión</a>
@@ -60,26 +62,39 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
     <div class="container mt-5">
         <h3 class="form-title">Mis Vehículos</h3>
         <div class="form-container">
-            <?php 
-            if (isset($_SESSION['mis_autos']) && !empty($_SESSION['mis_autos'])): 
-            ?>
-                <?php foreach ($_SESSION['mis_autos'] as $auto): ?>
-                    <div class="card mb-3">
-                        <div class="card-body d-flex align-items-center">
-                            <img src="./images/ford_focus.jpeg" alt="Ford Focus" class="auto-imagen me-3">
-                            <div>
-                                <h5 class="card-title"><?php echo ($auto['marca'] . ' ' . $auto['modelo']); ?></h5>
-                                <p class="card-text"><strong>Propietario:</strong> <?php echo ($auto['usuario']); ?></p>
-                                <p class="card-text"><strong>Fecha de Compra:</strong> <?php echo ($auto['fecha_compra']); ?></p>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p class="text-center">No tienes vehículos registrados.</p>
-            <?php endif; ?>
-        </div>
-    </div>
+
+        <!-- ACA VAMOS A TRABAJAR AHORA-->
+ <?php  
+$sel = "SELECT * FROM auto WHERE ci_cliente=".$_SESSION['ci'].";";    
+$res = $con->query($sel);
+if ($res->num_rows > 0) {
+
+    while($fila = $res->fetch_assoc()) {
+        ?><div class="card mb-3">
+            <div class="card-body d-flex align-items-center">
+                <img src="./images/ford_focus.jpeg" alt="Ford Focus" class="auto-imagen me-3">
+                <div>
+        <?php
+             echo "<h5 class=\"card-title\">" . ($fila['marca'] . ' ' . $fila['modelo'] . ' ' . $fila['año']) . "</h5>";
+               echo "<p class=\"card-text\">" ."<strong>Matricula:</strong>" .($fila['matricula'] . 
+               '<br><strong>Numero de chasis:</strong> ' . $fila['n_chasis'].
+               ' <br><strong>Numero de motor:</strong>' . $fila['n_motor']) . 
+               ' <br><strong>Estado de garantia:</strong>' . $fila['estado_g'] . "</p>".
+               ' <br><strong>Fecha de compra:</strong>' . $fila['fecha_compra'] . "</p>";
+           ?></div>
+</div>
+</div>
+        <?php
+    }
+}else{
+    echo "<tr><td colspan='7'>No hay vehículos registrados.</td></tr>";
+}
+    echo "</table>";
+
+?>
+               
+        
+ 
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
