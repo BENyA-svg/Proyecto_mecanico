@@ -41,8 +41,32 @@ session_start();
             <?php endif; ?>
         </nav>
     </div>
-    <div class="insumo-btn-container">
-        <a href="#" class="btn-añadir-insumo"><i class="fa-solid fa-circle-plus"></i></a>
+
+    <!-- Formulario para agregar insumo -->
+    <div class="container mt-4">
+        <h4>Agregar Insumo</h4>
+        <form method="post" action="">
+            
+            <div class="mb-2">
+                <label for="precio">Precio:</label>
+                <input type="number" class="form-control" name="precio" required>
+            </div>
+            <div class="mb-2">
+                <label for="tipo">Tipo:</label>
+                <input type="text" class="form-control" name="tipo" required>
+            </div>
+            
+            <div class="mb-2">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" class="form-control" name="cantidad" required>
+            </div>
+            <div class="mb-2">
+                <label for="fecha_pedido">Fecha pedido:</label>
+                <input type="date" class="form-control" name="fecha_pedido" required>
+            </div>
+            <input type="hidden" name="accion" value="agregar">
+            <button type="submit" class="btn btn-success">Agregar Insumo</button>
+        </form>
     </div>
 
     <div class="border-container">
@@ -77,33 +101,7 @@ session_start();
         <div class="popup" id="popup">
             <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
             <h2>Informacion del insumo:</h2>
-            <form action="#" class="formulario">
-                <div class="info">
-                    <label  for="nombre">Nombre: </label>
-                    <input type="text" id="nombre" name="nombre" required>
-                </div>
-                <div class="info">
-                    <label  for="tipo">Tipo: </label>
-                    <input type="text" id="tipo" name="tipo" required>
-                </div>
-  
-                <div class="info">
-                    <label  for="cantidad">Cantidad: </label>
-                    <input type="number" id="cantidad" name="cantidad" required>
-                </div>
- 
-                <div class="info">
-                    <label for="precio">Precio: </label>
-                    <input type="number" id="precio" name="precio" required>
-                    <br>
-                </div>
-                <div class="info">
-                    <label for="asociar">Asociar a servicios: </label>
-                    <select id="asociar" name="asociar">
-                        <option value="">Seleccionar servicio</option>
-                        <option value="servicio1">servicio 1</option>
-                        <option value="servicio2">servicio 2</option>
-                    </select>   
+            
                     <a href="#" id="agregar-servicio" class="agregar-servicio"><i class="fa-solid fa-plus"></i></a>
                 </div>
                 <button class="btn btn-primary" id="btn-confirmar">Agregar insumo</button>
@@ -111,5 +109,51 @@ session_start();
         </div>
     </div>
     <script src="popup.js"></script>
+        
+
+<?php
+$sel = "SELECT * FROM insumos";
+
+$res = $con->query($sel);
+if ($res->num_rows > 0) {
+    echo "<table>";
+    echo "<tr><th>ID Insumo</th><th>Precio</th><th>Tipo</th><th>CI</th><th>Correo</th><th>Cantidad</th><th>Fecha pedido</th></tr>";
+    while($fila = $res->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $fila["id_insumos"] . "</td>";
+        echo "<td>" . $fila["precio"] . "</td>";
+        echo "<td>" . $fila["tipo"] . "</td>";
+        echo "<td>" . $fila["ci_of"] . "</td>";
+        echo "<td>" . $fila["correo_of"] . "</td>";
+        echo "<td>" . $fila["cantidad_pedida"] . "</td>";
+        echo "<td>" . $fila["fecha_pedido"] . "</td>";
+        echo "</tr>";
+    }
+    echo "</table>";
+}
+?>
+  <?php
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
+    
+    $precio = $_POST['precio'];
+    $tipo = $_POST['tipo'];
+    $cantidad_pedida = $_POST['cantidad_pedida'];
+    $fecha_pedido = $_POST['fecha_pedido'];
+    $numeroSeguro = random_int(1, 100);
+    $sql = "INSERT INTO insumos (id_insumos, precio, tipo, ci_of, correo_of, cantidad_pedida, fecha_pedido) 
+    VALUES ('$numeroSeguro', '$precio', '$tipo', '".$_SESSION['ci']."', '".$_SESSION['email']."', '$cantidad_pedida', '$fecha_pedido')";
+    if ($con->query($sql) === TRUE) {
+        echo '<div class="alert alert-success">Insumo agregado correctamente.</div>';
+        echo '<script>window.location = window.location.pathname;</script>';
+        exit();
+    } else {
+        echo '<div class="alert alert-danger">Error al agregar insumo: ' . $con->error . '</div>';
+    }
+}
+  }
+?>
+
+         
 </body>
 </html>
