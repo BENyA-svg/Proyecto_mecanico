@@ -43,7 +43,15 @@ session_start();
     </div>
 
     <!-- Formulario para agregar insumo -->
-    <div class="container mt-4">
+        <div class="insumo-btn-container">
+        <a href="#" class="btn-añadir-insumo"><i class="fa-solid fa-circle-plus"></i></a>
+    </div>
+
+    <div class="overlay" id="overlay">
+        <div class="popup" id="popup">
+            <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
+            <h2>Informacion del insumo:</h2>
+            <div class="container mt-4">
         <h4>Agregar Insumo</h4>
         <form method="post" action="">
             
@@ -64,48 +72,13 @@ session_start();
                 <label for="fecha_pedido">Fecha pedido:</label>
                 <input type="date" class="form-control" name="fecha_pedido" required>
             </div>
+              <a href="#" id="agregar-servicio" class="agregar-servicio"><i class="fa-solid fa-plus"></i></a>
             <input type="hidden" name="accion" value="agregar">
             <button type="submit" class="btn btn-success">Agregar Insumo</button>
         </form>
-    </div>
-
-    <div class="border-container">
-        <div class="card">
-            <img src="imagenes\aceite.png" class="card-img-top" alt="Aceite">
-            <div class="card-body">
-                <h5 class="card-title">Aceite</h5>
-                <p class="card-text"></p>
-                <a href="#" class="btn btn-primary btn-editar"
-                data-nombre="Aceite"
-                data-tipo="Lubricante"
-                data-cantidad="10"
-                data-precio="500">Editar</a>
-            </div>
-        </div>
-
-        <div class="card">
-            <img src="imagenes\aceite.png" class="card-img-top" alt="Aceite">
-            <div class="card-body">
-                <h5 class="card-title">Aceite</h5>
-                <p class="card-text"></p>
-                <a href="#" class="btn btn-primary btn-editar"
-                data-nombre="Aceite"
-                data-tipo="Lubricante"
-                data-cantidad="10"
-                data-precio="500">Editar</a>
-            </div>
-        </div>
-    </div> <!-- Cierra el div con class="border-container" --> 
-
-    <div class="overlay" id="overlay">
-        <div class="popup" id="popup">
-            <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
-            <h2>Informacion del insumo:</h2>
-            
-                    <a href="#" id="agregar-servicio" class="agregar-servicio"><i class="fa-solid fa-plus"></i></a>
                 </div>
-                <button class="btn btn-primary" id="btn-confirmar">Agregar insumo</button>
-            </form>
+                </div> 
+               
         </div>
     </div>
     <script src="popup.js"></script>
@@ -116,20 +89,31 @@ $sel = "SELECT * FROM insumos";
 
 $res = $con->query($sel);
 if ($res->num_rows > 0) {
-    echo "<table>";
-    echo "<tr><th>ID Insumo</th><th>Precio</th><th>Tipo</th><th>CI</th><th>Correo</th><th>Cantidad</th><th>Fecha pedido</th></tr>";
+echo '<div class="cards-container">';
     while($fila = $res->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . $fila["id_insumos"] . "</td>";
-        echo "<td>" . $fila["precio"] . "</td>";
-        echo "<td>" . $fila["tipo"] . "</td>";
-        echo "<td>" . $fila["ci_of"] . "</td>";
-        echo "<td>" . $fila["correo_of"] . "</td>";
-        echo "<td>" . $fila["cantidad_pedida"] . "</td>";
-        echo "<td>" . $fila["fecha_pedido"] . "</td>";
-        echo "</tr>";
+        /* echo "<tr>";
+        /* echo "<td>" . $fila["id_insumos"] . "</td>";
+        /* echo "<td>" . $fila["precio"] . "</td>";
+        /* echo "<td>" . $fila["tipo"] . "</td>";
+        /* echo "<td>" . $fila["ci_of"] . "</td>";
+        /* echo "<td>" . $fila["correo_of"] . "</td>";
+        /* echo "<td>" . $fila["cantidad_pedida"] . "</td>"; 
+        /* echo "<td>" . $fila["fecha_pedido"] . "</td>"; 
+        /* echo "</tr>"; */
+        echo "<div class=\"border-container\">";
+        echo "<div class=\"card\">";
+        echo "<img src=\"imagenes\\aceite.png\" class=\"card-img-top\" alt=\"aceite\">";
+        echo "<div class=\"card-body\">";
+        echo "<h5 class=\"card-title\">".$fila["tipo"]."</h5>";
+        echo "<p class=\"card-text\">Precio: $".$fila["precio"]."</p>";
+        echo "<p class=\"card-text\">Cantidad: ".$fila["cantidad_pedida"]."</p>";
+        echo "<p class=\"card-text\"></p>";
+        echo "<a href=\"#\" class=\"btn btn-primary btn-editar\"\">Editar</a>";
+        echo "</div>";
+        echo "</div>";
+        echo "</div>";
     }
-    echo "</table>";
+echo '</div>';
 }
 ?>
   <?php
@@ -138,11 +122,11 @@ if (isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
     
     $precio = $_POST['precio'];
     $tipo = $_POST['tipo'];
-    $cantidad_pedida = $_POST['cantidad_pedida'];
+    $cantidad = $_POST['cantidad'];
     $fecha_pedido = $_POST['fecha_pedido'];
     $numeroSeguro = random_int(1, 100);
     $sql = "INSERT INTO insumos (id_insumos, precio, tipo, ci_of, correo_of, cantidad_pedida, fecha_pedido) 
-    VALUES ('$numeroSeguro', '$precio', '$tipo', '".$_SESSION['ci']."', '".$_SESSION['email']."', '$cantidad_pedida', '$fecha_pedido')";
+    VALUES ('$numeroSeguro', '$precio', '$tipo', '".$_SESSION['ci']."', '".$_SESSION['email']."', '$cantidad', '$fecha_pedido')";
     if ($con->query($sql) === TRUE) {
         echo '<div class="alert alert-success">Insumo agregado correctamente.</div>';
         echo '<script>window.location = window.location.pathname;</script>';
