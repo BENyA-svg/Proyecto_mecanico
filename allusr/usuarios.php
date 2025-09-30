@@ -25,23 +25,23 @@ include '../conexionbd.php';
         <p>Tu mejor opción para vehículos y servicios automotrices.</p>
         
         <nav>
-            <a href="inicio1.php" class="text-white">Inicio</a> | 
+            <a href="../inicio1.php" class="text-white">Inicio</a> | 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro'): ?>  
-                <a href="serviciospendientes/spendientes.php" class="text-white">Servicios pendientes</a> | 
+                <a href="../serviciospendientes/spendientes.php" class="text-white">Servicios pendientes</a> | 
             <?php endif; ?>
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'cliente'): ?>  
-                <a href="solservicio/servicios.php" class="text-white">Servicios</a> | 
-                <a href="misautos/misautos.php" class="text-white">Mis autos</a> | 
+                <a href="../solservicio/servicios.php" class="text-white">Servicios</a> | 
+                <a href="../misautos/misautos.php" class="text-white">Mis autos</a> | 
             <?php endif; ?>
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'admin'): ?>   
-                <a href="aautos/aautos.php" class="text-white">Agregar vehículo</a> |
-                <a href="insumos/insumos.php" class="text-white">Insumos</a> |
-                <a href= "allusr/usuarios.php" class="text-white">Usuarios</a> |
+                <a href="../aautos/aautos.php" class="text-white">Agregar vehículo</a> |
+                <a href="../insumos/insumos.php" class="text-white">Insumos</a> |
+                <a href= "../allusr/usuarios.php" class="text-white">Usuarios</a> |
              <?php endif; ?>
             <?php if (!isset($_SESSION['email'])): ?>
-                <a class="text-white" href="login/registro.php">Iniciar sesión</a>
+                <a class="text-white" href="../login/registro.php">Iniciar sesión</a>
             <?php else: ?>
-                <form action="inicio2.php" method="post" class="d-inline"> 
+                <form action="../inicio2.php" method="post" class="d-inline"> 
                     <input type="hidden" name="cerrar" value="1">
                     <button class="btn btn-link text-white p-0" type="submit">Cerrar sesión</button>
                 </form>
@@ -123,8 +123,10 @@ if ($res->num_rows > 0) {
            $sql1 = "INSERT INTO ventas(ci_of, correo) VALUES ($ci_usuario, '$usuario')";
         $sql2 = "DELETE FROM clientes WHERE correo ='$usuario'";
         }elseif (isset($_POST['accion'])&& $_POST['perfil'] == 'centro') {
-                $sql1 = "INSERT INTO centros(ci_centro, correo) VALUES ($ci_usuario, '$usuario')";
+                $sql1 = "INSERT INTO centros(ci_centro, correo, ci_of, correo_of) VALUES ($ci_usuario, '$usuario','$_SESSION[ci]','$_SESSION[email]')";
         $sql2 = "DELETE FROM clientes WHERE correo ='$usuario'";
+        }elseif (isset($_POST['accion'])&& $_POST['perfil'] == 'cliente') {
+            $sql1 = "INSERT INTO clientes(ci_cliente, correo, ci_of, correo_of) VALUES ($ci_usuario, '$usuario','$_SESSION[ci]','$_SESSION[email]')";
         }
            if ($con->query($sql1) === TRUE) {
         if (isset($sql2)) {

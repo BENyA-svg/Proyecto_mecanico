@@ -28,7 +28,15 @@ session_start();
     <form action="../inicio2.php" method="post">
         <div class="container mt-5">
             <div class="form-container">
-                
+                  <?php if (isset($_GET['error'])): ?>
+    <div class="alert alert-danger">
+        <?php
+            if ($_GET['error'] == 1) echo "Datos incorrectos.";
+            if ($_GET['error'] == 2) echo "Faltan datos obligatorios para el registro.";
+ 
+        ?>
+    </div>
+<?php endif; ?>
                 <label for="email">Correo electronico</label>
                 <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="ejemplo@gmail.com" name="email">
 
@@ -43,7 +51,7 @@ session_start();
                 </select>
 
                 <p>¿No tienes cuenta? 
-                <a href="registrarse.php">registrarse</a></p>
+                <a href="../register/registrarse.php">registrarse</a></p>
                 <button name="submit" type="submit" class="btn btn-primary">Submit</button>
 
             </div>

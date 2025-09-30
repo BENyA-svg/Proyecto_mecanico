@@ -21,9 +21,23 @@ session_start();
         </nav>
     </div> 
 
-    <form action="inicio2.php" method="post">
+    <form action="procesar_registro.php" method="post">
         <div class="container mt-5">
             <div class="form-container">
+                <?php if (isset($_GET['creado'])): ?>
+    <div class="alert alert-success">
+        Usuario registrado exitosamente, avance a <a href="../login/registro.php">iniciar sesión</a>.
+    </div>
+<?php endif; ?>
+                <?php if (isset($_GET['error'])): ?>
+    <div class="alert alert-danger">
+        <?php
+            if ($_GET['error'] == 1) echo "Error al registrar usuario. Intenta nuevamente.";
+            if ($_GET['error'] == 2) echo "Faltan datos obligatorios para el registro.";
+            if ($_GET['error'] == 3) echo "El correo o la cédula ya están registrados.";
+        ?>
+    </div>
+<?php endif; ?>
                 <label for="exampleInputEmail1">Nombre</label>
                 <input type="Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Diego" name="Usuario">
 
@@ -38,9 +52,6 @@ session_start();
    
                 <label for="exampleInputEmail1">Telefono</label>
                 <input type="tel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="012495115" name="telefono">
-
-                <label for="exampleInputemail">nacimiento</label>
-                <input type="date" class="form-control" id="exampleInputemail" name="nacimiento">
     
                 <label for="exampleInputPassword1">Contraseña</label>
                 <input type="password" class="form-control" id="exampleInputPassword1" placeholder="contraseña" name=contraseña>  
