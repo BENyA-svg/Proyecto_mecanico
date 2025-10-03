@@ -12,6 +12,7 @@ if (isset($_POST['cerrar'])) {
 
 if (empty($_POST['email']) || empty($_POST['contraseña'])) {
    echo "No se proporcionaron email o contraseña.";
+    header("Location: ./login/registro.php?error=2");
    exit();
 }
 if (isset($_REQUEST['email']) && isset($_REQUEST['contraseña'])) {
@@ -28,6 +29,7 @@ if (isset($_REQUEST['email']) && isset($_REQUEST['contraseña'])) {
 echo "hola";
     }else{
        echo "Error: Usuario o contraseña incorrectos.";
+        header("Location: ./login/registro.php?error=1");
         exit();
     }
 

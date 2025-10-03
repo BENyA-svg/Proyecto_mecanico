@@ -30,6 +30,7 @@ session_start();
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'admin'): ?>   
                 <a href="../aautos/aautos.php" class="text-white">Agregar vehículo</a> |
                 <a href="insumos.php" class="text-white">Insumos</a> |
+                <a href= "../allusr/usuarios.php" class="text-white">Usuarios</a> |
             <?php endif; ?>
             <?php if (!isset($_SESSION['email'])): ?>
                 <a class="text-white" href="registro.php">Iniciar sesión</a>
