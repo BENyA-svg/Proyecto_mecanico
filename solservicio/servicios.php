@@ -30,7 +30,7 @@ include ('../conexionbd.php');
                 <a href="servicios.php" class="text-white">Servicios</a> |
                 <a href="../misautos/misautos.php" class="text-white">Mis autos</a> | 
             <?php endif; ?>
-            <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'admin'): ?>   
+            <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'ventas'): ?>   
                 <a href="aautos.php" class="text-white">Agregar vehículo</a> |
             <?php endif; ?>
             <?php if (!isset($_SESSION['email'])): ?>
@@ -49,14 +49,10 @@ include ('../conexionbd.php');
             <div class="form-container">
                 <label for="marca">Marca:</label>
                 <select class="form-control" name="marca" id="marca">
-                    <option value="toyota">Toyota</option>
-                    <option value="ford">Ford</option>
-                    <option value="chevrolet">Chevrolet</option>
-                    <option value="bmw">Bmw</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="Byd">Byd Electrico</option>
-                    <option value="maserati">Maserati</option>
-                    <option value="Porsche">Porsche</option>
+            <?php 
+            $sel="SELECT * FROM auto WHERE correo= '..'";
+            
+            ?>
                 </select>
                 <label for="modelo">Modelo:</label>
                 <input type="text" class="form-control" name="modelo" id="modelo" required>

@@ -24,7 +24,7 @@ session_start();
                 <a href="servicios.php" class="text-white">Servicios</a>
                 <a href="#" class="text-white">Mis autos</a> | 
             <?php endif; ?> 
-            <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'admin'): ?>   
+            <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'ventas'): ?>   
                 <a href="aautos.php" class="text-white">Agregar vehiculo</a> |
                 <a href="../insumos/insumos.php" class="text-white">Insumos</a> |
                 <a href= "allusr/usuarios.php" class="text-white">Usuarios</a> |

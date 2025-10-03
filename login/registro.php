@@ -43,15 +43,8 @@ session_start();
                 <label for="password">Contraseña</label>
                 <input type="password" class="form-control" id="password" placeholder="contraseña" name="contraseña">
                 <br>
-                <select name="perfil" >
-                <option value="" disabled selected>Selecciona un perfil</option>
-                    <option value="admin">Admin</option>
-                    <option value="centro">Centro</option>
-                    <option value="cliente">Cliente</option>
-                </select>
-
-                <p>¿No tienes cuenta? 
-                <a href="../register/registrarse.php">registrarse</a></p>
+               
+               
                 <button name="submit" type="submit" class="btn btn-primary">Submit</button>
 
             </div>

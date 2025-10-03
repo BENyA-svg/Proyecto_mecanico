@@ -2,7 +2,7 @@
 include 'conexionbd.php';
 
 session_start();
-
+$_SESSION['perfil'] = $cargoRow['cargo'];
 if (isset($_POST['cerrar'])) {
     session_unset();
     session_destroy();
@@ -11,14 +11,14 @@ if (isset($_POST['cerrar'])) {
 }
 
 if (empty($_POST['email']) || empty($_POST['contraseña'])) {
-   echo "No se proporcionaron email o contraseña.";
-    header("Location: ./login/registro.php?error=2");
+   header("Location: ./login/registro.php?error=2");
    exit();
 }
+
 if (isset($_REQUEST['email']) && isset($_REQUEST['contraseña'])) {
     $email = $_REQUEST['email'];
     $contraseña = $_REQUEST['contraseña'];
-    $sql =" SELECT * FROM usuario WHERE correo = '".$email."' AND contraseña = '".$contraseña."'";
+    $sql ="SELECT * FROM usuario WHERE correo = '".$email."' AND contraseña = '".$contraseña."'";
     $res = $con->query($sql);
     if ($res->num_rows > 0) {
         $row = $res->fetch_assoc();
@@ -26,47 +26,36 @@ if (isset($_REQUEST['email']) && isset($_REQUEST['contraseña'])) {
         $_SESSION['nombre'] = $row["nombre"];
         $_SESSION['apellido'] = $row["apellido"];
         $_SESSION['email'] = $row["correo"];
-echo "hola";
-    }else{
-       echo "Error: Usuario o contraseña incorrectos.";
+
+        // Consulta para definir el perfil/cargo automáticamente
+        $sel2 = "SELECT correo, 'cliente' AS cargo
+            FROM clientes
+            WHERE correo = '" . $row["correo"] . "'
+            UNION
+            SELECT correo, 'centro' AS cargo
+            FROM centros
+            WHERE correo = '" . $row["correo"] . "' 
+            UNION
+            SELECT correo, 'ventas' AS cargo
+            FROM ventas
+            WHERE correo = '".$row["correo"]."'
+            LIMIT 1;";
+        $res2 = $con->query($sel2);
+
+        if ($res2 && $res2->num_rows > 0) {
+            $cargoRow = $res2->fetch_assoc();
+            $_SESSION['perfil'] = $cargoRow['cargo'];
+        } else {
+            $_SESSION['perfil'] = 'usuario'; // Valor por defecto si no se encuentra
+        }
+
+    } else {
         header("Location: ./login/registro.php?error=1");
         exit();
     }
-
- }else {
-    echo "Error: No se proporcionaron email o contraseña.";
+} else {
    exit();
 }
-
-if (isset($_REQUEST['perfil'])) {
-    $_SESSION['perfil'] = $_REQUEST['perfil'];
-}
-if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro' && !isset($_SESSION['servicios'])) {
-    $_SESSION['servicios'] = [
-        [
-            'vehiculo' => 'Chevrolet Onix',
-            'fecha' => '15/08/2025',
-            'tipo' => '10000km',
-            'desc' => 'Cambio de aceite y revisión general.',
-            'estado' => 'Pendiente'
-        ],
-        [
-            'vehiculo' => 'Toyota Corolla',
-            'fecha' => '20/08/2025',
-            'tipo' => '20000km',
-            'desc' => 'Cambio de pastillas de freno y alineación.',
-            'estado' => 'Pendiente'
-        ],
-         [
-            'vehiculo' => 'Ford Raptor',
-            'fecha' => '30/08/2025',
-            'tipo' => '30000km',
-            'desc' => 'Cambio de pastillas de freno, aceite y alineación.',
-            'estado' => 'Pendiente'
-        ]
-    ];
-}
-
 
 header("Location: inicio1.php");
 ?>

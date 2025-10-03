@@ -27,7 +27,7 @@ session_start();
         
         <nav>
             <a href="../inicio1.php" class="text-white">Inicio</a> | 
-            <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'admin'): ?>   
+            <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'ventas'): ?>   
                 <a href="../aautos/aautos.php" class="text-white">Agregar vehículo</a> |
                 <a href="insumos.php" class="text-white">Insumos</a> |
                 <a href= "../allusr/usuarios.php" class="text-white">Usuarios</a> |
