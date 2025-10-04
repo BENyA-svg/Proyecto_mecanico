@@ -40,36 +40,84 @@ session_start();
         </nav>
     </div>
     <div class="container mt-5">
-        <div class="form-container">
-            <form action="" method="post">
-                <label for="usuario">Usuario:</label>
-                <br>
-                <select  required name="usuario">
-                    <option value="" disabled selected>Selecciona un usuario</option>
-                    <option value="José">José</option>
-                    <option value="Martín">Martín</option>
-                    <option value="Marcos">Marcos</option>
-                    <option value="Tito">Titocalderon</option>
-                </select>
-                <br>
-       
-                <label for="marca">Marca:</label>
-                <br>
-                <select required name="marca" id="">
-                    <option value="" disabled selected>Selecciona una marca</option>
-                    <option value="toyota">Toyota</option>
-                    <option value="ford">Ford</option>
-                    <option value="chevrolet">Chevrolet</option>
-                </select>
-                <br>
-                <label for="modelo">Modelo:</label>
-                <br>
-                <input type="text" name="modelo" id="" required>
-                <br>
-                <label for="fecha">Fecha de compra:</label>
-                <br>
-                <input type="datetime-local" name="fecha" id="">
+                <div class="form-container">
+                     <form action="" method="post">
+                        <?php $usuarios= "SELECT correo FROM usuario" ;
+
+                         $resusr = $con->query($usuarios);
+                         if ($resusr->num_rows > 0) 
+                        ?>
+
+
+                    <label for="correo">Correo del cliente:</label>
+                    <input  type="text" name="correo" id="correo" required> <br> <br>
+
+               
+                    <label for="num_chasis">Número de chasis:</label>
+                    <input  type="text" name="num_chasis" id="num_chasis" required> <br> <br>
+              
+
+               
+                    <label for="num_motor">Número de motor:</label>
+                    <input  type="text" name="num_motor" id="num_motor" required> <br> <br>
+             
+
+                
+                    <label for="marca">Marca:</label>
+                    <input  type="text" name="marca" id="marca" required> <br> <br>
+              
+
+                
+                    <label for="modelo">Modelo:</label>
+                    <input  type="text" name="modelo" id="modelo" required> <br> <br>
+               
+
+             
+                    <label for="anio">Año:</label>
+                    <input  type="number" name="anio" id="anio" min="1886" max="2100" required> <br> <br>
+                
+
+                    <label for="fecha_compra">Fecha de compra:</label>
+                    <input  type="date" name="fecha_compra" id="fecha_compra" required> <br> <br>
+                </div>
+
+    
+
                 <button type="submit">Enviar</button>
+            </form>
+
+        </div>
+    </div>
+                <?php
+// Procesamiento del formulario de "Agregar autos"
+if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['num_chasis'], $_POST['num_motor'], $_POST['marca'], $_POST['modelo'], $_POST['año'], $_POST['correo'], $_POST['fecha_compra'])) {
+    $num_chasis =$_POST['num_chasis'];
+    $num_motor = $_POST['num_motor'];
+    $marca = ($_POST['marca']);
+    $modelo = $_POST['modelo'];
+    $año = $_POST['año'];
+    $correo = $_POST['correo'];
+    $fecha_compra = $_POST['fecha_compra'];
+
+    // Validación mínima
+    if ($num_chasis === '' || $num_motor === '' || $marca === '' || $modelo === '' || $año <= 0 || $correo === '') {
+        echo '<div class="alert alert-danger">Por favor completa todos los campos obligatorios correctamente.</div>';
+    } else {
+        $sql = "INSERT INTO autos (num_chasis, num_motor, marca, modelo, anio, correo_cliente, fecha_compra) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        if ($res = $con->prepare($sql) == TRUE) {
+           echo '<div class="alert alert-success">Vehículo agregado exitosamente.</div>';
+            }
+             else {
+                echo '<div class="alert alert-danger">Error al agregar el vehículo:</div>';
+            }
+        }
+    }
+?>    
+
+
+
+    <br>         
+              
             </form>
 
         </div>
