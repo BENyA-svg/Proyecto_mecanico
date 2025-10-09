@@ -117,23 +117,15 @@ if ($res->num_rows > 0) {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario = $_POST['usuario'];
             $perfil = $_POST['perfil'];
-              $select =" SELECT ci FROM usuario WHERE correo = '$usuario'";
-    $res = $con->query($select);
-    if ($res->num_rows > 0) {
-     $sesion = $res->fetch_assoc();
-
-       $ci_usuario = $sesion["ci"];
       
-
-    }
              if (isset($_POST['accion'])&& $_POST['perfil'] == 'admin') {
-           $sql1 = "INSERT INTO ventas(ci_of, correo) VALUES ($ci_usuario, '$usuario')";
+           $sql1 = "INSERT INTO ventas(correo) VALUES ('$usuario')";
         $sql2 = "DELETE FROM clientes WHERE correo ='$usuario'";
         }elseif (isset($_POST['accion'])&& $_POST['perfil'] == 'centro') {
-                $sql1 = "INSERT INTO centros(ci_centro, correo, ci_of, correo_of) VALUES ($ci_usuario, '$usuario','$_SESSION[ci]','$_SESSION[email]')";
+                $sql1 = "INSERT INTO centros(correo, correo_of) VALUES ('$usuario','$_SESSION[email]')";
         $sql2 = "DELETE FROM clientes WHERE correo ='$usuario'";
         }elseif (isset($_POST['accion'])&& $_POST['perfil'] == 'cliente') {
-            $sql1 = "INSERT INTO clientes(ci_cliente, correo, ci_of, correo_of) VALUES ($ci_usuario, '$usuario','$_SESSION[ci]','$_SESSION[email]')";
+            $sql1 = "INSERT INTO clientes( correo, correo_of) VALUES ( '$usuario','$_SESSION[email]')";
         }
            if ($con->query($sql1) === TRUE) {
         if (isset($sql2)) {

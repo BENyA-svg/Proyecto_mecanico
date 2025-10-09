@@ -55,23 +55,32 @@ include ('../conexionbd.php');
     <h3 class="form-title">Servicios Pendientes</h3>
     <div class="container">
         <div class="service">
-            <?php foreach ($_SESSION['servicios'] as $servicio): ?>
-                <button class="btn-abrir-popup"
-                data-vehiculo="<?php echo ($servicio['vehiculo']); ?>"
-                data-fecha="<?php echo ($servicio['fecha'] ?? ''); ?>"
-                data-tipo="<?php echo ($servicio['tipo'] ?? ''); ?>"
-                data-desc="<?php echo ($servicio['descripcion'] ?? ''); ?>"
-                data-estado="<?php echo ($servicio['estado'] ?? ''); ?>">
-                <h5><?php echo ($servicio['vehiculo']); ?></h5>
-                <p><?php echo ($servicio['fecha'] ?? ''); ?></p>
-                data-desc="<?php echo ($servicio['matricula'] ?? ''); ?>"
-                  </button>
+          <?php
 
+    $sel = "SELECT a.*, s.*
+FROM auto a
+JOIN reciben r ON a.n_chasis = r.n_chasis
+JOIN servicios s ON s.id_service = r.id_service;";    
+    $res = $con->query($sel);
+    if ($res->num_rows > 0) {
+        echo "<table>";
+        echo "<tr><th>Vehiculo</th><th>Fecha</th><th>Estado</th><th>Descripcion</th><th>chasis</th><th>costos</th></tr>";
+        while($fila = $res->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . $fila["marca"] . " " . $fila["modelo"] . " " . $fila["año"] . "</td>";
+            echo "<td>" . $fila["fecha_service"] . "</td>";
+            echo "<td>" . $fila["estado_g"] . "</td>";
+            echo "<td>" . $fila["descripcion"] . "</td>";
+             echo "<td>" . $fila["n_chasis"] . "</td>";
+                   echo "<td>$" . $fila["costos"] . "</td>";
 
+             
+            echo "</tr>";
     
-
-
-            <?php endforeach; ?>
+        echo "</table>";
+        }
+    }
+?>
         </div>
     </div>
     <div class="overlay" id="overlay">
@@ -87,26 +96,7 @@ include ('../conexionbd.php');
             <button class="btn btn-primary" id="btn-confirmar">Confirmar Servicio</button>
         </div>
     </div>
-     <?php
-
-    $sel = "SELECT * FROM servicios";    
-    $res = $con->query($sel);
-    if ($res->num_rows > 0) {
-        echo "<table>";
-        echo "<tr><th>Vehiculo</th><th>Fecha</th><th>Estado</th><th>Descripcion</th><th>Matricula</th><th>Ma</th></tr>";
-        while($fila = $res->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>" . $fila["fecha_service"] . "</td>";
-            echo "<td>" . $fila["fecha"] . "</td>";
-            echo "<td>" . $fila["estado"] . "</td>";
-            echo "<td>" . $fila["descripcion"] . "</td>";
-             echo "<td>" . $fila["matricula"] . "</td>";
-            echo "</tr>";
-    
-        echo "</table>";
-        }
-    }
-?>
+   
     <script src="popup.js"></script>
 </body>
 </html> 
