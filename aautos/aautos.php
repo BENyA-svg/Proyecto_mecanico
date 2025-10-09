@@ -42,15 +42,18 @@ session_start();
     <div class="container mt-5">
                 <div class="form-container">
                      <form action="" method="post">
-                        <?php $usuarios= "SELECT correo FROM usuario" ;
-
-                         $resusr = $con->query($usuarios);
-                         if ($resusr->num_rows > 0) 
-                        ?>
-
-
-                    <label for="correo">Correo del cliente:</label>
-                    <input  type="text" name="correo" id="correo" required> <br> <br>
+                       
+                                <label for="myUsuario">Usuario:</label>
+                                <input list="usuarios" id="myUsuario" name="myUsuario" placeholder="Selecciona un usuario" />
+                                <datalist id="usuarios">
+                                    <?php
+                                    $selectUsuarios = "SELECT correo FROM usuario";
+                                    $result = $con->query($selectUsuarios);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['correo'] . '"></option>';
+                                    }
+                                    ?>
+                                </datalist><br><br>
 
                
                     <label for="num_chasis">Número de chasis:</label>
@@ -73,8 +76,8 @@ session_start();
                
 
              
-                    <label for="anio">Año:</label>
-                    <input  type="number" name="anio" id="anio" min="1886" max="2100" required> <br> <br>
+                    <label for="año">Año:</label>
+                    <input  type="number" name="año" id="año" min="1886" max="2100" required> <br> <br>
                 
 
                     <label for="fecha_compra">Fecha de compra:</label>
@@ -90,21 +93,30 @@ session_start();
     </div>
                 <?php
 // Procesamiento del formulario de "Agregar autos"
-if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['num_chasis'], $_POST['num_motor'], $_POST['marca'], $_POST['modelo'], $_POST['año'], $_POST['correo'], $_POST['fecha_compra'])) {
+if ($_SERVER["REQUEST_METHOD"] == 'POST') { 
     $num_chasis =$_POST['num_chasis'];
     $num_motor = $_POST['num_motor'];
     $marca = ($_POST['marca']);
     $modelo = $_POST['modelo'];
     $año = $_POST['año'];
-    $correo = $_POST['correo'];
+    $correo = $_POST['myUsuario'];
     $fecha_compra = $_POST['fecha_compra'];
 
+    echo "Datos recibidos: <br>";
+    echo "Número de chasis: " . $num_chasis . "<br>";
+    echo "Número de motor: " . $num_motor . "<br>";
+    echo "Marca: " . $marca . "<br>";
+    echo "Modelo: " . $modelo . "<br>";
+    echo "Año: " . $año . "<br>";
+    echo "Correo del cliente: " . $correo . "<br>";
+    echo "Fecha de compra: " . $fecha_compra . "<br>";
+
     // Validación mínima
-    if ($num_chasis === '' || $num_motor === '' || $marca === '' || $modelo === '' || $año <= 0 || $correo === '') {
+    if (empty($num_chasis) || empty($num_motor) || empty($marca) || empty($modelo) || empty($año) || empty($correo) || empty($fecha_compra)) {
         echo '<div class="alert alert-danger">Por favor completa todos los campos obligatorios correctamente.</div>';
     } else {
-        $sql = "INSERT INTO autos (num_chasis, num_motor, marca, modelo, anio, correo_cliente, fecha_compra) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        if ($res = $con->prepare($sql) == TRUE) {
+        $sql = "INSERT INTO auto (n_chasis, n_motor, marca, modelo, año, correo, fecha_compra, correo_of) VALUES ('".$num_chasis."', '".$num_motor."', '".$marca."', '".$modelo."', '".$año."', '".$correo."', '".$fecha_compra."','".$_SESSION['email']."')";
+        if ($res = $con->query($sql) == TRUE) {
            echo '<div class="alert alert-success">Vehículo agregado exitosamente.</div>';
             }
              else {
