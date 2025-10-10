@@ -54,3 +54,21 @@ nav form button {
     display: inline;
     vertical-align: baseline;
 }
+table {
+    border: 2px solid black; /* Borde para toda la tabla */
+    border-collapse: separate; /* Une los bordes de celdas */
+    border-spacing: 0;
+    width: 100%; /* opcional */
+    border-radius: 10px; /* Bordes redondeados */
+    overflow: hidden; 
+
+}
+th {
+    background-color: #007bff;
+    color: white;
+}
+th, td {
+    border: 1px solid black; /* Bordes para cada celda */
+    padding: 8px; /* Espaciado interno */
+    text-align: center; /* Alineación */
+}

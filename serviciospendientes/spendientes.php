@@ -52,15 +52,78 @@ include ('../conexionbd.php');
         </nav>
 
     </div>
+     <form action="#" method="post" >
+        <div class="container mt-5">
+            <div class="form-container">
+         
+             <!-- busca auto a partir de usuario -->
+                                <label for="myUsuario">Usuario:</label>
+                                <input class="form-control" list="usuarios" id="myUsuario" name="myUsuario" placeholder="Selecciona un usuario" />
+                                <datalist id="usuarios">
+                                    <?php
+                                    $selectusr = "SELECT correo FROM clientes";
+                                    $result = $con->query($selectusr);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['correo'] . '"></option>';
+                                    }
+                                    ?>
+                                </datalist>
+                                <input type="submit" value="Buscar autos" class="btn btn-primary mt-2" onclick="fetchAutos(); return false;">
+                                </form>
+                                
+                                <!-- muestra autos del usuario seleccionado -->
+                                <?php if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['myUsuario'])) { 
+                                    echo "<form action='' method='post'>";
+                                        $selectauto = "SELECT marca, modelo, año FROM auto";
+                                        $result = $con->query($selectauto);
+                                ?>
+                                <br>
+                                <label for="autoUsuario">Auto:</label>
+                                <select class="form-control" id="autoUsuario" name="autoUsuario">
+                                    <option value="">Selecciona un auto</option>
+                                    <?php
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['n_chasis'] . '">' . $row['marca'] . ' ' . $row['modelo'] . ' (' . $row['año'] . ')</option>';
+                                    }
+                                    ?>
+                                </select>
+                <label for="fecha">Fecha preferida:</label>
+                <input type="datetime-local" class="form-control" name="fecha" id="fecha">
+                 <label for="myservice">Service:</label>
+                        <input class="form-control" list="servicios" id="myservice" name="myservice" placeholder="Selecciona un servicio" />
+                        <datalist id="servicios">
+                        <?php
+                            $selectservice = "SELECT * FROM servicios";
+                        $result = $con->query($selectservice);
+                            while ($row = $result->fetch_assoc()) {
+                            echo '<option value="' . $row['nombre'] .'"></option>';
+                                    }
+                                    ?>
+                                </datalist>
+                <br>
+
+                <button type="submit" name="solicitar" class="btn btn-primary">Solicitar</button>
+            </div>
+        </div>
+        <?php } ?>
+           <?php if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['solicitar'])) { 
+               $usuario = $_POST['myUsuario'];
+               $auto = $_POST['autoUsuario'];
+               $fecha = $_POST['fecha'];
+               $service = $_POST['myservice'];
+
+            
+                
+           } ?>
+    </form>
     <h3 class="form-title">Servicios Pendientes</h3>
     <div class="container">
         <div class="service">
           <?php
 
-    $sel = "SELECT a.*, s.*
-FROM auto a
-JOIN reciben r ON a.n_chasis = r.n_chasis
-JOIN servicios s ON s.id_service = r.id_service;";    
+    $sel = "SELECT a.*, s.*, r.fecha, r.estado FROM auto a 
+    JOIN reciben r ON a.n_chasis = r.n_chasis 
+    JOIN servicios s ON s.id_service = r.id_service;";    
     $res = $con->query($sel);
     if ($res->num_rows > 0) {
         echo "<table>";
@@ -68,8 +131,8 @@ JOIN servicios s ON s.id_service = r.id_service;";
         while($fila = $res->fetch_assoc()) {
             echo "<tr>";
             echo "<td>" . $fila["marca"] . " " . $fila["modelo"] . " " . $fila["año"] . "</td>";
-            echo "<td>" . $fila["fecha_service"] . "</td>";
-            echo "<td>" . $fila["estado_g"] . "</td>";
+            echo "<td>" . $fila["fecha"] . "</td>";
+            echo "<td>" . $fila["estado"] . "</td>";
             echo "<td>" . $fila["descripcion"] . "</td>";
              echo "<td>" . $fila["n_chasis"] . "</td>";
                    echo "<td>$" . $fila["costos"] . "</td>";
@@ -77,8 +140,9 @@ JOIN servicios s ON s.id_service = r.id_service;";
              
             echo "</tr>";
     
-        echo "</table>";
+    
         }
+            echo "</table>";
     }
 ?>
         </div>

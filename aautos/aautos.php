@@ -82,15 +82,43 @@ session_start();
 
                     <label for="fecha_compra">Fecha de compra:</label>
                     <input  type="date" name="fecha_compra" id="fecha_compra" required> <br> <br>
+                    <button type="submit">Enviar</button>
                 </div>
 
     
 
-                <button type="submit">Enviar</button>
+                
             </form>
-
+            </div>
+            <br>
+     <?php  
+    $sel = "SELECT * FROM auto";    
+    
+$res = $con->query($sel);
+if ($res->num_rows > 0) {
+    echo "<table>";
+    echo "<tr><th>Correo</th><th>numero de chasis</th><th>numero de motor</th><th>matricula</th><th>Marca</th><th>Modelo</th><th>Año</th><th>Fecha de compra</th><th>Estado de garantia</th><th>Persona que lo registro</th></tr>";
+    while($fila = $res->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $fila["correo"] . "</td>";
+        echo "<td>" . $fila["n_chasis"] . "</td>";
+        echo "<td>" . $fila["n_motor"] . "</td>";
+        echo "<td>" . $fila["matricula"] . "</td>";
+        echo "<td>" . $fila["marca"] . "</td>";
+        echo "<td>" . $fila["modelo"] . "</td>";
+        echo "<td>" . $fila["año"] . "</td>";
+        echo "<td>" . $fila["fecha_compra"] . "</td>";
+        echo "<td>" . $fila["estado_g"] . "</td>";
+        echo "<td>" . $fila["correo_of"] . "</td>";
+        echo "</tr>";
+    }
+    echo "</table>";
+} else {
+    echo "No se encontraron resultados.";
+}
+?>
+            </div>
         </div>
-    </div>
                 <?php
 // Procesamiento del formulario de "Agregar autos"
 if ($_SERVER["REQUEST_METHOD"] == 'POST') { 
@@ -102,15 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $correo = $_POST['myUsuario'];
     $fecha_compra = $_POST['fecha_compra'];
 
-    echo "Datos recibidos: <br>";
-    echo "Número de chasis: " . $num_chasis . "<br>";
-    echo "Número de motor: " . $num_motor . "<br>";
-    echo "Marca: " . $marca . "<br>";
-    echo "Modelo: " . $modelo . "<br>";
-    echo "Año: " . $año . "<br>";
-    echo "Correo del cliente: " . $correo . "<br>";
-    echo "Fecha de compra: " . $fecha_compra . "<br>";
-
+  
     // Validación mínima
     if (empty($num_chasis) || empty($num_motor) || empty($marca) || empty($modelo) || empty($año) || empty($correo) || empty($fecha_compra)) {
         echo '<div class="alert alert-danger">Por favor completa todos los campos obligatorios correctamente.</div>';

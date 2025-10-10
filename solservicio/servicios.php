@@ -47,31 +47,54 @@ include ('../conexionbd.php');
     <form action="#" method="post" >
         <div class="container mt-5">
             <div class="form-container">
-                <label for="marca">Marca:</label>
-                <select class="form-control" name="marca" id="marca">
-            <?php 
-            $sel="SELECT * FROM auto WHERE correo= '..'";
-            
-            ?>
-                </select>
-                <label for="modelo">Modelo:</label>
-                <input type="text" class="form-control" name="modelo" id="modelo" required>
+
+
+                                <label for="auto">Auto:</label>
+                                <input class="form-control" list="autos" id="auto" name="auto" placeholder="Selecciona un auto" />
+                                <datalist id="autos">
+                                    <?php
+                                    $selectauto = "SELECT marca, modelo, año FROM auto";
+                                    $result = $con->query($selectauto);
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['marca'] . ' ' . $row['modelo'] . ' ' . $row['año'] . '"></option>';
+                                    }
+                                    ?>
+                                </datalist>    
+                             
+
                 <label for="fecha">Fecha preferida:</label>
                 <input type="datetime-local" class="form-control" name="fecha" id="fecha">
-                <label for="servicio">servicio:</label>
-                <select class="form-control" name="servicio" id="servicio">
-                    <option value="10000">10000km</option>
-                    <option value="20000">20000km</option>
-                    <option value="30000">30000km</option>
-                    <option value="40000">40000km</option>
-                    <option value="50000">50000km</option>
-                    <option value="60000">60000km</option>
-                    <option value="70000">70000km</option>
-                    <option value="80000">80000km</option>
-                </select>
+                 <label for="myservice">Service:</label>
+                        <input class="form-control" list="servicios" id="myservice" name="myservice" placeholder="Selecciona un servicio" />
+                        <datalist id="servicios">
+                        <?php
+                            $selectservice = "SELECT * FROM servicios";
+                        $result = $con->query($selectservice);
+                            while ($row = $result->fetch_assoc()) {
+                            echo '<option value="' . $row['nombre'] .'"></option>';
+                                    }
+                                    ?>
+                                </datalist>
                 <br>
-            
-                <button type="submit" class="btn btn-primary">Solicitar</button>
+                <button type="submit" name="solicitar" class="btn btn-primary">Solicitar</button>
+                <?php
+            if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['solicitar'])) {
+                $auto = "Select n_chasis from auto where concat(marca, ' ', modelo, ' ', año) = '".$_POST['auto']."'";
+                $result = $con->query($auto);
+                $row = $result->fetch_assoc();
+                $fecha = $_POST['fecha'];
+                $service ="Select id_service from servicios where nombre = '".$_POST['myservice']."'";
+                $result = $con->query($service);
+                $rowService = $result->fetch_assoc();
+                $insertService = "INSERT INTO reciben (n_chasis, fecha, id_service, estado) VALUES ('".$row['n_chasis']."', '$fecha', '".$rowService['id_service']."', 'activo')";
+                if ($con->query($insertService) === TRUE) {
+                    echo "<p class='text-success'>Servicio solicitado con éxito.</p>";
+                } else {
+                    echo "<p class='text-danger'>Error al solicitar el servicio: " . $con->error . "</p>";
+                }
+
+            }
+            ?>
             </div>
         </div>
     </form>
