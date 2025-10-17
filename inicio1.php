@@ -74,10 +74,12 @@
                  data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa-solid fa-circle-user"></i>
               </a>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="login/registro.php">Iniciar sesión</a>
                 <?php else: ?>
+                    <a class="dropdown-item" href="infousr/infousr.php">Mi perfil</a>
+                    <hr class="dropdown-divider">
                   <form action="inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
                     <button class="dropdown-item" type="submit">Cerrar sesión</button>

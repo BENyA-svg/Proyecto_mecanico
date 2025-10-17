@@ -1,8 +1,26 @@
 .header-section {
-    background-color: #007bff;
+    background-color: #84BFA0;
     color: white;
     padding: 20px;
-    text-align: center;
+    text-align: left;
+      font-family: "Mitr", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.opciones-inicio{
+    color: white;
+    padding: 20px;
+    text-align: right;
+      font-family: "Mitr", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+
+}.li{
+    display: flex;
+    flex-direction: row;
 }
 .header-section h2 {
     margin: 0;
@@ -10,6 +28,49 @@
 }
 .header-section p {
     margin: 10px 0;
+}
+.mitr-extralight {
+  font-family: "Mitr", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.mitr-light {
+  font-family: "Mitr", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.mitr-regular {
+  font-family: "Mitr", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.mitr-medium {
+  font-family: "Mitr", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.mitr-semibold {
+  font-family: "Mitr", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.mitr-bold {
+  font-family: "Mitr", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+.logo-container{
+    display: flex;
+    width: 100px;
+    height: 100px;
+    
+      text-align: left;
+      float: left;
 }
 nav {
     margin-top: 15px;

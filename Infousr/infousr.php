@@ -1,6 +1,5 @@
 <?php
 include ('../conexionbd.php');
-
 session_start();
 ?>
 
@@ -9,14 +8,15 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina 1</title>
-       <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>JuancitoMotores - Usuario</title>
+
+      <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
         <script src="https://kit.fontawesome.com/16aa28c921.js" crossorigin="anonymous"></script>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="registro.css">
+    <link rel="stylesheet" href="infousr.css">
 </head>
 <body>
  <div class="header-section text-center text-white py-3">
@@ -91,34 +91,36 @@ session_start();
       </div>
     </nav>
   </div>
+  
+    <div class="container mt-5">
+        <h2>Información de usuario</h2>
+      <?php
+      $sql = "SELECT * FROM usuario WHERE correo = '" . $_SESSION['email'] . "'";
+        $result = $con->query($sql);
+        if ($result->num_rows > 0) {
+            $user = $result->fetch_assoc();
+            echo "<p><strong>Nombre:</strong> " . htmlspecialchars($user['nombre']) . "</p>";
+            echo "<p><strong>Apellido:</strong> " . htmlspecialchars($user['apellido']) . "</p>";
+            echo "<p><strong>Correo:</strong> " . htmlspecialchars($user['correo']) . "</p>";
+            echo "<p><strong>Teléfono:</strong> " . htmlspecialchars($user['telefono']) . "</p>";
+            if ($_SESSION['perfil']=='cliente') {
+                // Información adicional para clientes
+                $sqlCliente = "SELECT direccion, fecha_nacimiento FROM clientes WHERE correo = '" . $_SESSION['email'] . "'";
+                $resultCliente = $con->query($sqlCliente);
+                if ($resultCliente->num_rows > 0) {
+                    $cliente = $resultCliente->fetch_assoc();
+                    echo "<p><strong>Dirección:</strong> " . htmlspecialchars($cliente['direccion']) . "</p>";
+                    echo "<p><strong>Fecha de Nacimiento:</strong> " . htmlspecialchars($cliente['fecha_nacimiento']) . "</p>";
+                }
+            }
+        } elseif($_SESSION['perfil']=='centro') {
+         
+        }
+      ?>
 
-    <form action="../inicio2.php" method="post">
-        <div class="container mt-5">
-            <div class="form-container">
-                  <?php if (isset($_GET['error'])): ?>
-    <div class="alert alert-danger">
-        <?php
-            if ($_GET['error'] == 1) echo "Datos incorrectos.";
-            if ($_GET['error'] == 2) echo "Faltan datos obligatorios para el registro.";
- 
-        ?>
-    </div>
-<?php endif; ?>
-                <label for="email">Correo electronico</label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="ejemplo@gmail.com" name="email">
-
-                <label for="password">Contraseña</label>
-                <input type="password" class="form-control" id="password" placeholder="contraseña" name="contraseña">
-                <br>
-               <p>¿No tienes cuenta? 
-                <a href="../register/registrarse.php">registrarse</a></p>
-                <button name="submit" type="submit" class="btn btn-primary">Submit</button>
-
-            </div>
-        </div>
-    </form>
-     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+</html>
