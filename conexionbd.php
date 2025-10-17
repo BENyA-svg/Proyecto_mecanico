@@ -1,7 +1,7 @@
 <?php
  
- $Servidor = "26.196.49.52";
- $Usuario = "wolfcrew";
+ $Servidor = "localhost";
+ $Usuario = "root";
  $pass = "";
  $bd = "mecanico-2";
  $port="3306";

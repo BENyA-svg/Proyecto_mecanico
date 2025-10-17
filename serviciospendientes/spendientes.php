@@ -52,7 +52,7 @@ include ('../conexionbd.php');
         </nav>
 
     </div>
-     <form action="#" method="post" >
+     <form action="" method="post" >
         <div class="container mt-5">
             <div class="form-container">
          
@@ -74,7 +74,8 @@ include ('../conexionbd.php');
                                 <!-- muestra autos del usuario seleccionado -->
                                 <?php if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['myUsuario'])) { 
                                     echo "<form action='' method='post'>";
-                                        $selectauto = "SELECT marca, modelo, año FROM auto";
+
+                                        $selectauto = "SELECT marca, modelo, año, n_chasis FROM auto";
                                         $result = $con->query($selectauto);
                                 ?>
                                 <br>
@@ -101,7 +102,9 @@ include ('../conexionbd.php');
                                     ?>
                                 </datalist>
                 <br>
-
+                <?php
+                   echo   "<input type='hidden' name='myUsuario' value='".$_POST['myUsuario']."'>";
+                ?>
                 <button type="submit" name="solicitar" class="btn btn-primary">Solicitar</button>
             </div>
         </div>
@@ -112,18 +115,41 @@ include ('../conexionbd.php');
                $fecha = $_POST['fecha'];
                $service = $_POST['myservice'];
 
-            
+            $insertar = "INSERT INTO reciben (n_chasis, id_service, fecha, estado) values (
+                (SELECT n_chasis FROM auto WHERE n_chasis = '$auto'),
+                (SELECT id_service FROM servicios WHERE nombre = '$service'),
+                '$fecha',
+                'pendiente'
+            )";
+               if ($con->query($insertar) === TRUE) {
+                   echo "<p class='text-success'>Servicio solicitado con éxito.</p>";
+               } else {
+                   echo "<p class='text-danger'>Error al solicitar el servicio: " . $con->error . "</p>";
+               }
                 
            } ?>
     </form>
     <h3 class="form-title">Servicios Pendientes</h3>
     <div class="container">
         <div class="service">
+      
           <?php
 
-    $sel = "SELECT a.*, s.*, r.fecha, r.estado FROM auto a 
+   $sel = "SELECT a.*, s.*, r.fecha, r.estado FROM auto a 
     JOIN reciben r ON a.n_chasis = r.n_chasis 
-    JOIN servicios s ON s.id_service = r.id_service;";    
+    JOIN servicios s ON s.id_service = r.id_service
+    ";
+    ?>
+     <form action="" method="post">
+                <input type="hidden" name="todo" value="todos">
+                <button type="submit" class="btn btn-primary">Mostrar todos</button>
+            </form>
+        <?php
+if (!isset($_POST['todo'])) {
+    $sel .= " WHERE estado = 'pendiente'";
+ 
+} 
+$sel .= " ORDER BY fecha ASC";
     $res = $con->query($sel);
     if ($res->num_rows > 0) {
         echo "<table>";
@@ -163,4 +189,4 @@ include ('../conexionbd.php');
    
     <script src="popup.js"></script>
 </body>
-</html> 
+</html>
