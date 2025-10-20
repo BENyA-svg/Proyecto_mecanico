@@ -130,7 +130,7 @@ nav form button {
 .card {
     width: 18rem;
     transition: transform 0.3s, box-shadow 0.3s;
-  
+    overflow: hidden;
 }
 .card:hover {
     transform: translateY(-10px) scale(1.05);
@@ -271,4 +271,15 @@ th, td {
     margin-top: 30px;
     margin-left: 10px;
     margin-right: 10px;
+}
+.card-img {
+    width: 100%;
+    height: 300px;  /* Altura fija para todas las imágenes */
+    object-fit: contain; /* Mantiene la proporción sin recortar */
+    background-color: #ffffff; /* Fondo blanco para las imágenes */
+    padding: 15px; /* Espacio alrededor de la imagen */
+}
+.card-body {
+    padding: 1.25rem;
+    background-color: #fff;
 }

@@ -103,7 +103,7 @@ session_start();
             <h2>Informacion del insumo:</h2>
             <div class="container mt-4">
         <h4>Agregar Insumo</h4>
-        <form method="post" action="">
+        <form method="post" action="" enctype="multipart/form-data">
             
             <div class="mb-2">
                 <label for="precio">Precio:</label>
@@ -121,6 +121,10 @@ session_start();
             <div class="mb-2">
                 <label for="fecha_pedido">Fecha pedido:</label>
                 <input type="date" class="form-control" name="fecha_pedido" required>
+            </div>
+            <div class="mb-2">
+                <label for="imagen">Imagen:</label>
+          <input type="file" name="foto" id="foto">
             </div>
               <a href="#" id="agregar-servicio" class="agregar-servicio"><i class="fa-solid fa-plus"></i></a>
             <input type="hidden" name="accion" value="agregar">
@@ -141,18 +145,9 @@ $res = $con->query($sel);
 if ($res->num_rows > 0) {
 echo '<div class="cards-container">';
     while($fila = $res->fetch_assoc()) {
-        /* echo "<tr>";
-        /* echo "<td>" . $fila["id_insumos"] . "</td>";
-        /* echo "<td>" . $fila["precio"] . "</td>";
-        /* echo "<td>" . $fila["tipo"] . "</td>";
-        /* echo "<td>" . $fila["ci_of"] . "</td>";
-        /* echo "<td>" . $fila["correo_of"] . "</td>";
-        /* echo "<td>" . $fila["cantidad_pedida"] . "</td>"; 
-        /* echo "<td>" . $fila["fecha_pedido"] . "</td>"; 
-        /* echo "</tr>"; */
         echo "<div class=\"border-container\">";
         echo "<div class=\"card\">";
-        echo "<img src=\"imagenes\\aceite.png\" class=\"card-img-top\" alt=\"aceite\">";
+        echo "<img src='data:image/jpeg;base64," . base64_encode($fila["imagen"]) . "' class='card-img' alt='Imagen del auto'>";
         echo "<div class=\"card-body\">";
         echo "<h5 class=\"card-title\">".$fila["tipo"]."</h5>";
         echo "<p class=\"card-text\">Precio: $".$fila["precio"]."</p>";
@@ -175,8 +170,11 @@ if (isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
     $cantidad = $_POST['cantidad'];
     $fecha_pedido = $_POST['fecha_pedido'];
     $numeroSeguro = random_int(1, 100);
-    $sql = "INSERT INTO insumos (id_insumos, precio, tipo, ci_of, correo_of, cantidad_pedida, fecha_pedido) 
-    VALUES ('$numeroSeguro', '$precio', '$tipo', '".$_SESSION['ci']."', '".$_SESSION['email']."', '$cantidad', '$fecha_pedido')";
+      $imagen = $_FILES['foto']['name'];
+   $imgData = file_get_contents($_FILES['foto']['tmp_name']);
+    $imgData = $con->real_escape_string($imgData);
+    $sql = "INSERT INTO insumos (id_insumos, precio, tipo, correo_of, cantidad_pedida, fecha_pedido, imagen) 
+    VALUES ('$numeroSeguro', '$precio', '$tipo', '".$_SESSION['email']."', '$cantidad', '$fecha_pedido', '$imgData')";
     if ($con->query($sql) === TRUE) {
         echo '<div class="alert alert-success">Insumo agregado correctamente.</div>';
         echo '<script>window.location = window.location.pathname;</script>';

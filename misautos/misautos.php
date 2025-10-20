@@ -117,14 +117,16 @@ if ($res->num_rows > 0) {
     while($fila = $res->fetch_assoc()) {
         ?><div class="card mb-3">
             <div class="card-body d-flex align-items-center">
-                <img src="./images/ford_focus.jpeg" alt="Ford Focus" class="auto-imagen me-3">
+<div class="card-img-container">
+                <?php echo "<td><img src='data:image/jpeg;base64," . base64_encode($fila["imagen"]) . "' class='card-img' alt='Imagen del auto'></td>"; ?>
+</div>
                 <div>
         <?php
              echo "<h5 class=\"card-title\">" . ($fila['marca'] . ' ' . $fila['modelo'] . ' ' . $fila['año']) . "</h5>";
                echo "<p class=\"card-text\">" ."<strong>Matricula:</strong>" .($fila['matricula'] . 
                '<br><strong>Numero de chasis:</strong> ' . $fila['n_chasis'].
                ' <br><strong>Numero de motor:</strong>' . $fila['n_motor']) . 
-               ' <br><strong>Estado de garantia:</strong>' . $fila['estado_g'] . "</p>".
+               ' <br><strong>Estado de garantia:</strong>' . $fila['estado_g'] .
                ' <br><strong>Fecha de compra:</strong>' . $fila['fecha_compra'] . "</p>";
            ?></div>
 </div>

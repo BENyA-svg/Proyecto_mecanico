@@ -92,7 +92,7 @@ session_start();
   </div>
     <div class="container mt-5">
                 <div class="form-container">
-                     <form action="" method="post">
+                     <form action="" method="post" enctype="multipart/form-data">
                        
                                 <label for="myUsuario">Usuario:</label>
                                 <input list="usuarios" id="myUsuario" name="myUsuario" placeholder="Selecciona un usuario" />
@@ -133,12 +133,14 @@ session_start();
 
                     <label for="fecha_compra">Fecha de compra:</label>
                     <input  type="date" name="fecha_compra" id="fecha_compra" required> <br> <br>
+
+                       <label for="foto">Imagen:</label>
+    <input type="file" name="foto" id="foto"> <br> <br>
                     <button type="submit">Enviar</button>
                 </div>
 
-    
+ 
 
-                
             </form>
             </div>
             <br>
@@ -148,7 +150,7 @@ session_start();
 $res = $con->query($sel);
 if ($res->num_rows > 0) {
     echo "<table>";
-    echo "<tr><th>Correo</th><th>numero de chasis</th><th>numero de motor</th><th>matricula</th><th>Marca</th><th>Modelo</th><th>Año</th><th>Fecha de compra</th><th>Estado de garantia</th><th>Persona que lo registro</th></tr>";
+    echo "<tr><th>Correo</th><th>numero de chasis</th><th>numero de motor</th><th>matricula</th><th>Marca</th><th>Modelo</th><th>Año</th><th>Fecha de compra</th><th>Estado de garantia</th><th>Persona que lo registro</th><th>Imagen</th></tr>";
     while($fila = $res->fetch_assoc()) {
         echo "<tr>";
         echo "<td>" . $fila["correo"] . "</td>";
@@ -161,6 +163,7 @@ if ($res->num_rows > 0) {
         echo "<td>" . $fila["fecha_compra"] . "</td>";
         echo "<td>" . $fila["estado_g"] . "</td>";
         echo "<td>" . $fila["correo_of"] . "</td>";
+        echo "<td><img src='data:image/jpeg;base64," . base64_encode($fila["imagen"]) . "' width='100' class='card-img' alt='Imagen del auto'></td>";
         echo "</tr>";
     }
     echo "</table>";
@@ -180,14 +183,16 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $año = $_POST['año'];
     $correo = $_POST['myUsuario'];
     $fecha_compra = $_POST['fecha_compra'];
-
-  
+    $imagen = $_FILES['foto']['name'];
+   $imgData = file_get_contents($_FILES['foto']['tmp_name']);
+    $imgData = $con->real_escape_string($imgData);
     // Validación mínima
-    if (empty($num_chasis) || empty($num_motor) || empty($marca) || empty($modelo) || empty($año) || empty($correo) || empty($fecha_compra)) {
+    if (empty($num_chasis) || empty($num_motor) || empty($marca) || empty($modelo) || empty($año) || empty($correo) || empty($fecha_compra) || empty($imagen)) {
         echo '<div class="alert alert-danger">Por favor completa todos los campos obligatorios correctamente.</div>';
     } else {
-        $sql = "INSERT INTO auto (n_chasis, n_motor, marca, modelo, año, correo, fecha_compra, correo_of) VALUES ('".$num_chasis."', '".$num_motor."', '".$marca."', '".$modelo."', '".$año."', '".$correo."', '".$fecha_compra."','".$_SESSION['email']."')";
-        if ($res = $con->query($sql) == TRUE) {
+        $sql = "INSERT INTO auto (n_chasis, n_motor, marca, modelo, año, correo, fecha_compra, correo_of, imagen) VALUES ('".$num_chasis."', '".$num_motor."', '".$marca."', '".$modelo."', '".$año."', '".$correo."', '".$fecha_compra."','".$_SESSION['email']."', '".$imgData."')";
+        $res = $con->query($sql);
+        if ($res == TRUE) {
            echo '<div class="alert alert-success">Vehículo agregado exitosamente.</div>';
             }
              else {

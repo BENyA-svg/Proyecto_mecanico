@@ -103,7 +103,7 @@ include ('../conexionbd.php');
                                 <input class="form-control" list="autos" id="auto" name="auto" placeholder="Selecciona un auto" />
                                 <datalist id="autos">
                                     <?php
-                                    $selectauto = "SELECT marca, modelo, año FROM auto";
+                                    $selectauto = "SELECT marca, modelo, año FROM auto  where correo='" . $_SESSION['email'] . "';";
                                     $result = $con->query($selectauto);
                                     while ($row = $result->fetch_assoc()) {
                                         echo '<option value="' . $row['marca'] . ' ' . $row['modelo'] . ' ' . $row['año'] . '"></option>';
