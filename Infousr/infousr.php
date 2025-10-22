@@ -1,6 +1,23 @@
 <?php
-include ('../conexionbd.php');
+include '../conexionbd.php';
 session_start();
+
+// Verificar si el usuario está logueado
+if (!isset($_SESSION['ci'])) {
+    header("Location: login/registro.php");
+    exit();
+}
+
+// Obtener datos actuales del usuario
+$ci = $_SESSION['ci'];
+$sql = "SELECT * FROM usuario WHERE ci = '$ci'";
+$result = $con->query($sql);
+if ($result->num_rows > 0) {
+    $usuario = $result->fetch_assoc();
+} else {
+    echo "Usuario no encontrado.";
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -8,15 +25,15 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JuancitoMotores - Usuario</title>
-
-      <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>Actualizar Usuario - JuancitoMotores</title>
+     <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
         <script src="https://kit.fontawesome.com/16aa28c921.js" crossorigin="anonymous"></script>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="infousr.css">
+
+      <link rel="stylesheet" href="infousr.css">
 </head>
 <body>
  <div class="header-section text-center text-white py-3">
@@ -77,7 +94,7 @@ session_start();
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="../login/registro.php">Iniciar sesión</a>
                 <?php else: ?>
-                     <a class="dropdown-item" href="#">Mi perfil</a>
+                     <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
@@ -91,34 +108,78 @@ session_start();
       </div>
     </nav>
   </div>
-  
-    <div class="container mt-5">
-        <h2>Información de usuario</h2>
-      <?php
-      $sql = "SELECT * FROM usuario WHERE correo = '" . $_SESSION['email'] . "'";
-        $result = $con->query($sql);
-        if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
-            echo "<p><strong>Nombre:</strong> " . htmlspecialchars($user['nombre']) . "</p>";
-            echo "<p><strong>Apellido:</strong> " . htmlspecialchars($user['apellido']) . "</p>";
-            echo "<p><strong>Correo:</strong> " . htmlspecialchars($user['correo']) . "</p>";
-            echo "<p><strong>Teléfono:</strong> " . htmlspecialchars($user['telefono']) . "</p>";
-            if ($_SESSION['perfil']=='cliente') {
-                // Información adicional para clientes
-                $sqlCliente = "SELECT direccion, fecha_nacimiento FROM clientes WHERE correo = '" . $_SESSION['email'] . "'";
-                $resultCliente = $con->query($sqlCliente);
-                if ($resultCliente->num_rows > 0) {
-                    $cliente = $resultCliente->fetch_assoc();
-                    echo "<p><strong>Dirección:</strong> " . htmlspecialchars($cliente['direccion']) . "</p>";
-                    echo "<p><strong>Fecha de Nacimiento:</strong> " . htmlspecialchars($cliente['fecha_nacimiento']) . "</p>";
-                }
-            }
-        } elseif($_SESSION['perfil']=='centro') {
-         
-        }
-      ?>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <form action="procesar-act.php" method="post">
+        <div class="container mt-5">
+            <div class="form-container">
+                <?php if (isset($_GET['error'])): ?>
+                    <div class="alert alert-danger">
+                        <?php
+                        if ($_GET['error'] == 1) echo "Error al actualizar usuario. Intenta nuevamente.";
+                        if ($_GET['error'] == 2) echo "Faltan datos obligatorios.";
+                        if ($_GET['error'] == 3) echo "El correo ya está registrado por otro usuario.";
+                        ?>
+                    </div>
+                <?php endif; ?>
+                <?php if (isset($_GET['success'])): ?>
+                    <div class="alert alert-success">
+                        Usuario actualizado exitosamente.
+                    </div>
+                <?php endif; ?>
+
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" placeholder="Diego" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" required>
+
+                <label for="apellido">Apellido</label>
+                <input type="text" class="form-control" id="apellido" placeholder="Peña" name="apellido" value="<?php echo htmlspecialchars($usuario['apellido']); ?>" required>
+
+                <label for="email">Correo electrónico</label>
+                <input type="email" class="form-control" id="email" placeholder="ejemplo@gmail.com" name="email" value="<?php echo htmlspecialchars($usuario['correo']); ?>" required>
+
+                <label for="telefono">Teléfono</label>
+                <input type="tel" class="form-control" id="telefono" placeholder="012495115" name="telefono" value="<?php echo htmlspecialchars($usuario['telefono']); ?>" required>
+
+                <label for="contraseña">Contraseña</label>
+                <input type="password" class="form-control" id="contraseña" placeholder="Nueva contraseña" name="contraseña" >
+
+              
+                <?php
+                if($_SESSION['perfil']=='cliente'){
+                    $selcliente="SELECT * FROM clientes WHERE correo='$_SESSION[email]'";
+                    $rescliente=$con->query($selcliente);
+                    if($rescliente->num_rows>0){
+                        $dataCliente = $rescliente->fetch_assoc(); // Obtener los datos como array asociativo
+                ?>
+                        <label for="direccion">Dirección</label>
+                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" name="direccion" 
+                               value="<?php echo isset($dataCliente['direccion']) ? htmlspecialchars($dataCliente['direccion']) : ''; ?>">
+                               <label for="nacimiento">Fecha de Nacimiento</label>
+                        <input type="date" class="form-control" id="nacimiento" name="nacimiento" 
+                               value="<?php echo isset($dataCliente['fecha_nacimiento']) ? htmlspecialchars($dataCliente['fecha_nacimiento']) : ''; ?>">
+                <?php
+                    }
+                }elseif($_SESSION['perfil']=='centro'){
+                    $selcentro="SELECT * FROM centros WHERE correo='$_SESSION[email]'";
+                    $rescentro=$con->query($selcentro);
+                    if($rescentro->num_rows>0){
+                        $dataCentro = $rescentro->fetch_assoc(); // Obtener los datos como array asociativo
+                ?>
+                        <label for="n_centro">Nombre del centro</label>
+                        <input type="text" class="form-control" id="n_centro" placeholder="Nombre del centro" name="n_centro" 
+                               value="<?php echo isset($dataCentro['nom_centro']) ? htmlspecialchars($dataCentro['nom_centro']) : ''; ?>">
+                        <label for="ubicacion_c">Ubicacion del centro</label>
+                        <input type="text" class="form-control" id="ubicacion_c" placeholder="Ubicacion del centro" name="ubicacion_c" 
+                               value="<?php echo isset($dataCentro['ubicacion']) ? htmlspecialchars($dataCentro['ubicacion']) : ''; ?>">
+                <?php
+                    }
+                }
+                ?>
+                <br>
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+            </div>
+        </div>
+    </form>
+       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

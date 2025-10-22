@@ -113,7 +113,7 @@ include ('../conexionbd.php');
                              
 
                 <label for="fecha">Fecha preferida:</label>
-                <input type="datetime-local" class="form-control" name="fecha" id="fecha">
+                <input type="date" class="form-control" name="fecha" id="fecha">
                  <label for="myservice">Service:</label>
                         <input class="form-control" list="servicios" id="myservice" name="myservice" placeholder="Selecciona un servicio" />
                         <datalist id="servicios">

@@ -117,7 +117,7 @@ include ('../conexionbd.php');
                                 <?php if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['myUsuario'])) { 
                                     echo "<form action='' method='post'>";
 
-                                        $selectauto = "SELECT marca, modelo, año, n_chasis FROM auto";
+                                        $selectauto = "SELECT marca, modelo, año, n_chasis FROM auto where correo='" . $_POST['myUsuario'] . "';";
                                         $result = $con->query($selectauto);
                                 ?>
                                 <br>
@@ -131,7 +131,7 @@ include ('../conexionbd.php');
                                     ?>
                                 </select>
                 <label for="fecha">Fecha preferida:</label>
-                <input type="datetime-local" class="form-control" name="fecha" id="fecha">
+                <input type="date" class="form-control" name="fecha" id="fecha">
                  <label for="myservice">Service:</label>
                         <input class="form-control" list="servicios" id="myservice" name="myservice" placeholder="Selecciona un servicio" />
                         <datalist id="servicios">
