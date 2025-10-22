@@ -65,10 +65,9 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
 
         <!-- ACA VAMOS A TRABAJAR AHORA-->
  <?php  
-$sel = "SELECT * FROM auto WHERE ci_cliente=".$_SESSION['ci'].";";    
+$sel = "SELECT * FROM auto WHERE correo='".$_SESSION['email']."';";    
 $res = $con->query($sel);
 if ($res->num_rows > 0) {
-
     while($fila = $res->fetch_assoc()) {
         ?><div class="card mb-3">
             <div class="card-body d-flex align-items-center">

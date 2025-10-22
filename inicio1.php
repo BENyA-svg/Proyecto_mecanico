@@ -81,6 +81,7 @@
                   <form action="inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
                     <button class="dropdown-item" type="submit">Cerrar sesión</button>
+                    <a href="actualizarusuario.php" button class="dropdown-item">Editar perfil</a>
                   </form>
                 <?php endif; ?>
               </div>
