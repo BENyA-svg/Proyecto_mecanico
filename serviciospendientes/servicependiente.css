@@ -191,34 +191,10 @@ form {
     font-family: 'Segoe UI', Roboto, sans-serif;
 }/* visualizacion tabla */
 .container {
-    max-width: 1200px; /* Ancho máximo del contenedor */
-    margin: 0 auto; /* Centrar el contenedor */
-    padding: 0 15px; /* Espaciado interno */
-      margin-top: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    margin-top: 30px;
 }
-.tabla{
-    display: flex;
-    flex-direction: column;
-    background-color: #f8f9fa; /* Color de fondo */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
-    padding: 2rem; /* Espaciado interno */ 
-}
-table {
-    border: 2px solid black; /* Borde para toda la tabla */
-    border-collapse: separate; /* Une los bordes de celdas */
-    border-spacing: 0;
-    width: 100%; /* opcional */
-    border-radius: 10px; /* Bordes redondeados */
-    overflow: hidden; 
 
-}
-th {
-    background-color: #007bff;
-    color: white;
-}
-th, td {
-    border: 1px solid black; /* Bordes para cada celda */
-    padding: 8px; /* Espaciado interno */
-    text-align: center; /* Alineación */
-}
+

@@ -193,28 +193,50 @@ if (!isset($_POST['todo'])) {
 } 
 $sel .= " ORDER BY fecha ASC";
     $res = $con->query($sel);
-    if ($res->num_rows > 0) {
-        echo "<table>";
-        echo "<tr><th>Vehiculo</th><th>Fecha</th><th>Estado</th><th>Descripcion</th><th>chasis</th><th>costos</th></tr>";
-        while($fila = $res->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>" . $fila["marca"] . " " . $fila["modelo"] . " " . $fila["año"] . "</td>";
-            echo "<td>" . $fila["fecha"] . "</td>";
-            echo "<td>" . $fila["estado"] . "</td>";
-            echo "<td>" . $fila["descripcion"] . "</td>";
-             echo "<td>" . $fila["n_chasis"] . "</td>";
-                   echo "<td>$" . $fila["costos"] . "</td>";
-
-             
-            echo "</tr>";
     
-    
-        }
-            echo "</table>";
-    }
-?>
+    if ($res->num_rows > 0) { ?>
+      <div class="container py-5">
+        <h2 class="text-center mb-4">Servicios Pendientes</h2>
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Auto</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Chasis</th>
+                <th scope="col">Costo</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php while($fila = $res->fetch_assoc()) { ?>
+                <tr>
+                  <td><?php echo htmlspecialchars($fila["marca"] . " " . $fila["modelo"] . " " . $fila["año"]); ?></td>
+                  <td><?php echo htmlspecialchars($fila["fecha"]); ?></td>
+                  <td><?php echo htmlspecialchars($fila["estado"]); ?></td>
+                  <td><?php echo htmlspecialchars($fila["descripcion"]); ?></td>
+                  <td><?php echo htmlspecialchars($fila["n_chasis"]); ?></td>
+                  <td>$<?php echo htmlspecialchars($fila["costos"]); ?></td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" onclick="editarServicio('<?php echo $fila['n_chasis']; ?>')">
+                      <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarServicio('<?php echo $fila['n_chasis']; ?>')">
+                      <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                    <button class="btn btn-warning btn-sm" onclick="eliminarServicio('<?php echo $fila['n_chasis']; ?>')">
+                      <i class="fa-solid fa-xmark"></i> Cancelar
+                    </button>
+                  </td>
+                </tr>
+              <?php } ?>
+            </tbody>
+          </table>
         </div>
-    </div>
+      </div>
+    <?php } ?>
     <div class="overlay" id="overlay">
         <div class="popup" id="popup">
             <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
@@ -230,7 +252,6 @@ $sel .= " ORDER BY fecha ASC";
     </div>
            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="popup.js"></script>
 </body>
