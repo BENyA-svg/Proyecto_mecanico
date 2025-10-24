@@ -180,7 +180,6 @@ include ('../conexionbd.php');
     </div>
     </div>
     </div>
-    <h3 class="form-title">Servicios Pendientes</h3>
     <div class="container">
         <div class="service">
       
@@ -242,14 +241,14 @@ $sel .= " ORDER BY fecha ASC";
                   <td>$<?php echo htmlspecialchars($fila["costos"]); ?></td>
                   <td>
                      <form method="post" style="display:inline;">
-        <input type="hidden" name="accion" value="expandir">
-          <input type="hidden" name="n_chasis" value="<?php echo $fila['n_chasis']; ?>">
+    <input type="hidden" name="accion" value="expandir">
+    <input type="hidden" name="n_chasis" value="<?php echo $fila['n_chasis']; ?>">
     <input type="hidden" name="id_service" value="<?php echo $fila['id_service']; ?>">
     <input type="hidden" name="fecha" value="<?php echo $fila['fecha']; ?>">
-        <button type="submit" class="btn btn-primary btn-sm">
-            <i class="fas fa-edit"></i> Expandir
-        </button>
-    </form>
+    <button type="submit" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#serviceModal">
+        <i class="fas fa-edit"></i> Expandir
+    </button>
+</form>
          <form method="post" style="display:inline;">
     <input type="hidden" name="accion" value="eliminar">
     <input type="hidden" name="n_chasis" value="<?php echo $fila['n_chasis']; ?>">
@@ -308,7 +307,8 @@ $sel .= " ORDER BY fecha ASC";
              WHERE n_chasis = '$n_chasis' 
                AND id_service = '$id_service' 
                AND fecha = '$fecha';";
-       if ($con->query($cancelar) === TRUE) {
+               $cambiarmembresia= "UPDATE auto SET estado = 'inactivo' WHERE n_chasis = '$n_chasis'";
+       if ($con->query($cancelar) === TRUE && $con->query($cambiarmembresia) === TRUE) {
            echo "<p class='text-success'>Servicio cancelado con éxito.</p>";
        } else {
            echo "<p class='text-danger'>Error al cancelar el servicio: " . $con->error . "</p>";
@@ -317,9 +317,62 @@ $sel .= " ORDER BY fecha ASC";
 
 }
   ?>
+           <!-- Modal para mostrar información del service -->
+<div class="modal fade" id="serviceModal" tabindex="-1" aria-labelledby="serviceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="serviceModalLabel">Detalles del Servicio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <?php
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['accion'] == 'expandir') {
+            $n_chasis = $_POST['n_chasis'];
+            $id_service = $_POST['id_service'];
+            $fecha = $_POST['fecha'];
+            
+            $query = "SELECT a.*, s.*, r.fecha, r.estado, u.nombre, u.apellido 
+                     FROM auto a 
+                     JOIN reciben r ON a.n_chasis = r.n_chasis 
+                     JOIN servicios s ON s.id_service = r.id_service
+                     JOIN usuario u ON a.correo = u.correo
+                     WHERE a.n_chasis = '$n_chasis' 
+                     AND s.id_service = '$id_service' 
+                     AND r.fecha = '$fecha'";
+            
+            $result = $con->query($query);
+            
+            if ($row = $result->fetch_assoc()) {
+                echo "<p><strong>Cliente:</strong> " . htmlspecialchars($row['nombre'] . " " . $row['apellido']) . "</p>";
+                echo "<p><strong>Vehículo:</strong> " . htmlspecialchars($row['marca'] . " " . $row['modelo'] . " (" . $row['año'] . ")") . "</p>";
+                echo "<p><strong>Número de Chasis:</strong> " . htmlspecialchars($row['n_chasis']) . "</p>";
+                echo "<p><strong>Servicio:</strong> " . htmlspecialchars($row['nombre']) . "</p>";
+                echo "<p><strong>Descripción:</strong> " . htmlspecialchars($row['descripcion']) . "</p>";
+                echo "<p><strong>Fecha programada:</strong> " . htmlspecialchars($row['fecha']) . "</p>";
+                echo "<p><strong>Estado:</strong> " . htmlspecialchars($row['estado']) . "</p>";
+                echo "<p><strong>Costo:</strong> $" . htmlspecialchars($row['costos']) . "</p>";
+            }
+        }
+        ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="popup.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    <?php if(isset($_POST['accion']) && $_POST['accion'] == 'expandir'): ?>
+        var modal = new bootstrap.Modal(document.getElementById('serviceModal'));
+        modal.show();
+    <?php endif; ?>
+});
+</script>
 </body>
 </html>

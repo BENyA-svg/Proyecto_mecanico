@@ -15,3 +15,4 @@ btnCerrarPopup.addEventListener("click", function() {
     overlay.classList.remove("active");
     popup.classList.remove("active");
 });
+

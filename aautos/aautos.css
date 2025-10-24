@@ -161,6 +161,12 @@ nav form button {
     opacity: 0;
     transition: 0.3s ease all;
     transform: scale(0.7);
+    /* Agregado: limitar alto y permitir scroll interno en pantallas pequeñas */
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Un pequeño padding-right para que el contenido no quede oculto tras la barra */
+    padding-right: 18px;
 }
 
 .popup.active {
