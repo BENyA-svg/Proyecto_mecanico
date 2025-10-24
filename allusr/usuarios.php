@@ -97,44 +97,55 @@ include '../conexionbd.php';
 
             <!-- a explicar en la presentacion -->
         <?php  
-    $sel = "SELECT * FROM usuario";    
+  $sel = "SELECT * FROM usuario";    
     
-$res = $con->query($sel);
-if ($res->num_rows > 0) {
-    echo "<table>";
-    echo "<tr><th>CI</th><th>Nombre</th><th>Apellido</th><th>Correo</th><th>Telefono</th><th>Cargo</th></tr>";
+  $res = $con->query($sel);
+  if ($res->num_rows > 0) {
+  // Usar el mismo formato que la tabla de servicios pendientes
+  echo '<div class="container py-5">';
+  echo '<h2 class="text-center mb-4">Usuarios</h2>';
+  echo '<div class="table-responsive">';
+  echo '<table class="table table-striped table-hover">';
+  echo '<thead class="table-dark"><tr><th scope="col">CI</th><th scope="col">Nombre</th><th scope="col">Apellido</th><th scope="col">Correo</th><th scope="col">Telefono</th><th scope="col">Cargo</th><th scope="col">Acciones</th></tr></thead>';
+  echo '<tbody>';
     while($fila = $res->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . $fila["ci"] . "</td>";
-        echo "<td>" . $fila["nombre"] . "</td>";
-        echo "<td>" . $fila["apellido"] . "</td>";
-        echo "<td>" . $fila["correo"] . "</td>";
-        echo "<td>" . $fila["telefono"] . "</td>";
-        $sel2 = "SELECT correo, 'cliente' AS cargo
-        FROM clientes
-        WHERE correo = '" . $fila["correo"] . "'
-        UNION
-        SELECT correo, 'centros' AS cargo
-        FROM centros
-        WHERE correo = '" . $fila["correo"] . "' 
-        UNION
-        SELECT correo, 'ventas' AS cargo
-        FROM ventas
-        WHERE correo = '".$fila["correo"]."'
-        LIMIT 1;";
-        $res2 = $con->query($sel2);
-        if ($res2->num_rows > 0) {
-            $fila2 = $res2->fetch_assoc();
-            echo "<td>" . $fila2["cargo"] . "</td>";
-        } else {
-            echo "<td>Desconocido</td>";
-        }
-        echo "</tr>";
-}
-}
-
-
-    echo "</table>";
+      echo "<tr>";
+      echo "<td>" . htmlspecialchars($fila["ci"]) . "</td>";
+      echo "<td>" . htmlspecialchars($fila["nombre"]) . "</td>";
+      echo "<td>" . htmlspecialchars($fila["apellido"]) . "</td>";
+      echo "<td>" . htmlspecialchars($fila["correo"]) . "</td>";
+      echo "<td>" . htmlspecialchars($fila["telefono"]) . "</td>";
+      $sel2 = "SELECT correo, 'cliente' AS cargo
+      FROM clientes
+      WHERE correo = '" . $fila["correo"] . "'
+      UNION
+      SELECT correo, 'centros' AS cargo
+      FROM centros
+      WHERE correo = '" . $fila["correo"] . "' 
+      UNION
+      SELECT correo, 'ventas' AS cargo
+      FROM ventas
+      WHERE correo = '".$fila["correo"]."'
+      LIMIT 1;";
+      $res2 = $con->query($sel2);
+      if ($res2->num_rows > 0) {
+        $fila2 = $res2->fetch_assoc();
+        $cargo = $fila2["cargo"];
+        echo "<td>" . htmlspecialchars($cargo) . "</td>";
+      } else {
+        $cargo = 'Desconocido';
+        echo "<td>Desconocido</td>";
+      }
+      // Columna de acciones: botón que rellena el formulario de abajo
+      $correo_js = addslashes($fila["correo"]);
+      $cargo_js = addslashes($cargo);
+      echo '<td><button type="button" class="btn btn-sm btn-primary" onclick="editarUsuario(\'' . $correo_js . '\', \'' . $cargo_js . '\')">Editar</button></td>';
+      echo "</tr>";
+    }
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
+  }
 
 ?>
     <!-- a explicar en la presentacion -->
@@ -179,6 +190,25 @@ if ($res->num_rows > 0) {
         } 
           
           ?>
+      <script>
+      function editarUsuario(email, cargo) {
+        var usuarioInput = document.getElementById('usuario');
+        var perfilSelect = document.getElementById('perfil');
+        if (usuarioInput) usuarioInput.value = email;
+        if (perfilSelect && cargo) {
+          var buscado = cargo.toLowerCase();
+          for (var i = 0; i < perfilSelect.options.length; i++) {
+            if (perfilSelect.options[i].value.toLowerCase() === buscado) {
+              perfilSelect.selectedIndex = i;
+              break;
+            }
+          }
+        }
+        // desplazar hasta el formulario
+        var form = document.querySelector('form[action=""]');
+        if (form) form.scrollIntoView({behavior: 'smooth', block: 'center'});
+      }
+      </script>
           <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
