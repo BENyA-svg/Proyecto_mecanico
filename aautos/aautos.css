@@ -120,21 +120,85 @@ nav form button {
     display: inline;
     vertical-align: baseline;
 }
-table {
-    border: 2px solid black; /* Borde para toda la tabla */
-    border-collapse: separate; /* Une los bordes de celdas */
-    border-spacing: 0;
-    width: 100%; /* opcional */
-    border-radius: 10px; /* Bordes redondeados */
-    overflow: hidden; 
 
+.service {
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
 }
-th {
-    background-color: #007bff;
-    color: white;
+
+.overlay {
+    background: rgba(0, 0, 0,.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex; /* Cambiar de display: none a display: flex */
+    align-items: center;
+    justify-content: center;
+    visibility: hidden; /* Usar visibility en lugar de display */
 }
-th, td {
-    border: 1px solid black; /* Bordes para cada celda */
-    padding: 8px; /* Espaciado interno */
-    text-align: center; /* Alineación */
+
+.overlay.active {
+    visibility: visible; /* Usar visibility en lugar de display */
+}
+
+.popup {
+    background: #F8F8F8;
+    width: 600px;
+    padding: 20px;
+    border-radius: 3px;
+    position: relative;
+    z-index: 1100;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    opacity: 0;
+    transition: 0.3s ease all;
+    transform: scale(0.7);
+}
+
+.popup.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.btn-añadir-auto {     
+    background: transparent;
+    cursor: pointer;
+  color: #84BFA0;
+    font-size: 60px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: inline-block;
+}
+
+.btn-añadir-auto:hover {
+    transform: scale(1.20);
+}
+
+.auto-btn-container {
+    border-radius: 50%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 50px 0 50px;
+    text-align: right;
+    margin: 20px;
+}
+
+.btn-cerrar-popup {
+    font-size: 16px;
+    line-height: 16px;
+    display: block;
+    text-align: right;
+    color: #BBBBBB;
+    transition: .3s ease all;
+}
+
+.btn-cerrar-popup:hover {
+    color: #000;
 }

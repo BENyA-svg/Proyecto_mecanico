@@ -93,11 +93,16 @@ include ('../conexionbd.php');
         </div>
       </div>
     </nav>
-  </div>
+  </div>  <div class="auto-btn-container">
+            <a href="#" class="btn-abrir-popup"><i class="fa-solid fa-circle-plus"></i></a>
+        </div>
+        <div class="overlay" id="overlay">
+        <div class="popup" id="popup">
      <form action="" method="post" >
         <div class="container mt-5">
             <div class="form-container">
-         
+             
+            <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
              <!-- busca auto a partir de usuario -->
                                 <label for="myUsuario">Usuario:</label>
                                 <input class="form-control" list="usuarios" id="myUsuario" name="myUsuario" placeholder="Selecciona un usuario" />
@@ -171,6 +176,10 @@ include ('../conexionbd.php');
                 
            } ?>
     </form>
+       </div>
+    </div>
+    </div>
+    </div>
     <h3 class="form-title">Servicios Pendientes</h3>
     <div class="container">
         <div class="service">
@@ -180,17 +189,29 @@ include ('../conexionbd.php');
    $sel = "SELECT a.*, s.*, r.fecha, r.estado FROM auto a 
     JOIN reciben r ON a.n_chasis = r.n_chasis 
     JOIN servicios s ON s.id_service = r.id_service
+    join realizan re on re.n_chasis = a.n_chasis
+    WHERE re.correo_elec = '".$_SESSION['email']."'
     ";
     ?>
+    <div class="d-flex gap-2 mb-3">
      <form action="" method="post">
                 <input type="hidden" name="todo" value="todos">
                 <button type="submit" class="btn btn-primary">Mostrar todos</button>
+            </form><br>
+            <form action="" method="post">
+                <input type="hidden" name="todo" value="recargar">
+                <button type="submit" class="btn btn-primary">Recargar Pagina</button>
             </form>
+          </div>  
         <?php
 if (!isset($_POST['todo'])) {
-    $sel .= " WHERE estado = 'pendiente'";
+    $sel .= " AND estado = 'pendiente'";
  
 } 
+if(isset($_POST['todo']) && $_POST['todo'] == 'recargar'){
+    echo "<meta http-equiv='refresh' content='0'>";
+}
+$sel .= " AND estado != 'cancelado' AND estado != 'eliminado'";
 $sel .= " ORDER BY fecha ASC";
     $res = $con->query($sel);
     
@@ -220,15 +241,33 @@ $sel .= " ORDER BY fecha ASC";
                   <td><?php echo htmlspecialchars($fila["n_chasis"]); ?></td>
                   <td>$<?php echo htmlspecialchars($fila["costos"]); ?></td>
                   <td>
-                    <button class="btn btn-primary btn-sm" onclick="editarServicio('<?php echo $fila['n_chasis']; ?>')">
-                      <i class="fas fa-edit"></i> Editar
-                    </button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarServicio('<?php echo $fila['n_chasis']; ?>')">
-                      <i class="fas fa-trash"></i> Eliminar
-                    </button>
-                    <button class="btn btn-warning btn-sm" onclick="eliminarServicio('<?php echo $fila['n_chasis']; ?>')">
-                      <i class="fa-solid fa-xmark"></i> Cancelar
-                    </button>
+                     <form method="post" style="display:inline;">
+        <input type="hidden" name="accion" value="expandir">
+          <input type="hidden" name="n_chasis" value="<?php echo $fila['n_chasis']; ?>">
+    <input type="hidden" name="id_service" value="<?php echo $fila['id_service']; ?>">
+    <input type="hidden" name="fecha" value="<?php echo $fila['fecha']; ?>">
+        <button type="submit" class="btn btn-primary btn-sm">
+            <i class="fas fa-edit"></i> Expandir
+        </button>
+    </form>
+         <form method="post" style="display:inline;">
+    <input type="hidden" name="accion" value="eliminar">
+    <input type="hidden" name="n_chasis" value="<?php echo $fila['n_chasis']; ?>">
+    <input type="hidden" name="id_service" value="<?php echo $fila['id_service']; ?>">
+    <input type="hidden" name="fecha" value="<?php echo $fila['fecha']; ?>">
+    <button type="submit" class="btn btn-danger btn-sm">
+        <i class="fas fa-trash"></i> Eliminar
+    </button>
+</form>
+                   <form method="post" style="display:inline;">
+        <input type="hidden" name="accion" value="cancelar">
+            <input type="hidden" name="n_chasis" value="<?php echo $fila['n_chasis']; ?>">
+    <input type="hidden" name="id_service" value="<?php echo $fila['id_service']; ?>">
+    <input type="hidden" name="fecha" value="<?php echo $fila['fecha']; ?>">
+        <button type="submit" class="btn btn-warning btn-sm">
+            <i class="fa-solid fa-xmark"></i> Cancelar
+        </button>
+    </form>
                   </td>
                 </tr>
               <?php } ?>
@@ -237,19 +276,47 @@ $sel .= " ORDER BY fecha ASC";
         </div>
       </div>
     <?php } ?>
-    <div class="overlay" id="overlay">
-        <div class="popup" id="popup">
-            <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
-            <h2>Detalles del Servicio</h2>
-            <p id="popup-vehiculo"></p>
-            <p id="popup-tipo"></p>
-            <p id="popup-fecha"></p>
-            <p id="popup-descripcion"></p>
-            <p id="popup-estado"></p>
-             <p id="popup-matricula"></p>
-            <button class="btn btn-primary" id="btn-confirmar">Confirmar Servicio</button>
-        </div>
-    </div>
+   
+    <?php
+   if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion'])) {
+    $n_chasis = $_POST['n_chasis'];
+        $id_service = $_POST['id_service'];
+        $fecha = $_POST['fecha'];
+
+    if ($_POST['accion'] == 'expandir') {
+      
+   }elseif ($_POST['accion'] == 'eliminar') {
+     $n_chasis = $_POST['n_chasis'];
+        $id_service = $_POST['id_service'];
+        $fecha = $_POST['fecha'];
+       $eliminar = "UPDATE reciben 
+             SET estado = 'eliminado' 
+             WHERE n_chasis = '$n_chasis' 
+               AND id_service = '$id_service' 
+               AND fecha = '$fecha';";
+       if ($con->query($eliminar) === TRUE) {
+           echo "<p class='text-success'>Servicio eliminado con éxito.</p>";
+       } else {
+           echo "<p class='text-danger'>Error al eliminar el servicio: " . $con->error . "</p>";
+       }
+  }elseif ($_POST['accion'] == 'cancelar') {
+       $n_chasis = $_POST['n_chasis'];
+       $id_service = $_POST['id_service'];
+        $fecha = $_POST['fecha'];
+       $cancelar = "UPDATE reciben 
+             SET estado = 'cancelado' 
+             WHERE n_chasis = '$n_chasis' 
+               AND id_service = '$id_service' 
+               AND fecha = '$fecha';";
+       if ($con->query($cancelar) === TRUE) {
+           echo "<p class='text-success'>Servicio cancelado con éxito.</p>";
+       } else {
+           echo "<p class='text-danger'>Error al cancelar el servicio: " . $con->error . "</p>";
+       }
+   }
+
+}
+  ?>
            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

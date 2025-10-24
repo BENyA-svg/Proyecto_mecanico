@@ -91,86 +91,121 @@ session_start();
     </nav>
   </div>
     <div class="container mt-5">
-                <div class="form-container">
-                     <form action="" method="post" enctype="multipart/form-data">
-                       
-                                <label for="myUsuario">Usuario:</label>
-                                <input list="usuarios" id="myUsuario" name="myUsuario" placeholder="Selecciona un usuario" />
-                                <datalist id="usuarios">
-                                    <?php
-                                    $selectUsuarios = "SELECT correo FROM usuario";
-                                    $result = $con->query($selectUsuarios);
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<option value="' . $row['correo'] . '"></option>';
-                                    }
-                                    ?>
-                                </datalist><br><br>
+        <div class="auto-btn-container">
+            <a href="#" class="btn-añadir-auto"><i class="fa-solid fa-circle-plus"></i></a>
+        </div>
 
-               
-                    <label for="num_chasis">Número de chasis:</label>
-                    <input  type="text" name="num_chasis" id="num_chasis" required> <br> <br>
-              
+        <div class="overlay" id="overlay">
+            <div class="popup" id="popup">
+                <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
+                <h2>Información del vehículo:</h2>
+                <div class="container mt-4">
+                    <h4>Agregar Vehículo</h4>
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <div class="mb-2">
+                            <label for="myUsuario">Usuario:</label>
+                            <input list="usuarios" class="form-control" id="myUsuario" name="myUsuario" placeholder="Selecciona un usuario" />
+                            <datalist id="usuarios">
+                                <?php
+                                $selectUsuarios = "SELECT correo FROM usuario";
+                                $result = $con->query($selectUsuarios);
+                                while ($row = $result->fetch_assoc()) {
+                                    echo '<option value="' . $row['correo'] . '"></option>';
+                                }
+                                ?>
+                            </datalist>
+                        </div>
 
-               
-                    <label for="num_motor">Número de motor:</label>
-                    <input  type="text" name="num_motor" id="num_motor" required> <br> <br>
-             
+                        <div class="mb-2">
+                            <label for="num_chasis">Número de chasis:</label>
+                            <input type="text" class="form-control" name="num_chasis" id="num_chasis" required>
+                        </div>
 
-                
-                    <label for="marca">Marca:</label>
-                    <input  type="text" name="marca" id="marca" required> <br> <br>
-              
+                        <div class="mb-2">
+                            <label for="num_motor">Número de motor:</label>
+                            <input type="text" class="form-control" name="num_motor" id="num_motor" required>
+                        </div>
 
-                
-                    <label for="modelo">Modelo:</label>
-                    <input  type="text" name="modelo" id="modelo" required> <br> <br>
-               
+                        <div class="mb-2">
+                            <label for="marca">Marca:</label>
+                            <input type="text" class="form-control" name="marca" id="marca" required>
+                        </div>
 
-             
-                    <label for="año">Año:</label>
-                    <input  type="number" name="año" id="año" min="1886" max="2100" required> <br> <br>
-                
+                        <div class="mb-2">
+                            <label for="modelo">Modelo:</label>
+                            <input type="text" class="form-control" name="modelo" id="modelo" required>
+                        </div>
 
-                    <label for="fecha_compra">Fecha de compra:</label>
-                    <input  type="date" name="fecha_compra" id="fecha_compra" required> <br> <br>
+                        <div class="mb-2">
+                            <label for="año">Año:</label>
+                            <input type="number" class="form-control" name="año" id="año" min="1886" max="2100" required>
+                        </div>
 
-                       <label for="foto">Imagen:</label>
-    <input type="file" name="foto" id="foto"> <br> <br>
-                    <button type="submit">Enviar</button>
+                        <div class="mb-2">
+                            <label for="fecha_compra">Fecha de compra:</label>
+                            <input type="date" class="form-control" name="fecha_compra" id="fecha_compra" required>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="foto">Imagen:</label>
+                            <input type="file" class="form-control" name="foto" id="foto">
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Agregar Vehículo</button>
+                    </form>
                 </div>
-
- 
-
-            </form>
             </div>
+        </div>
+
+
             <br>
      <?php  
     $sel = "SELECT * FROM auto";    
     
 $res = $con->query($sel);
-if ($res->num_rows > 0) {
-    echo "<table>";
-    echo "<tr><th>Correo</th><th>numero de chasis</th><th>numero de motor</th><th>matricula</th><th>Marca</th><th>Modelo</th><th>Año</th><th>Fecha de compra</th><th>Estado de garantia</th><th>Persona que lo registro</th><th>Imagen</th></tr>";
-    while($fila = $res->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . $fila["correo"] . "</td>";
-        echo "<td>" . $fila["n_chasis"] . "</td>";
-        echo "<td>" . $fila["n_motor"] . "</td>";
-        echo "<td>" . $fila["matricula"] . "</td>";
-        echo "<td>" . $fila["marca"] . "</td>";
-        echo "<td>" . $fila["modelo"] . "</td>";
-        echo "<td>" . $fila["año"] . "</td>";
-        echo "<td>" . $fila["fecha_compra"] . "</td>";
-        echo "<td>" . $fila["estado_g"] . "</td>";
-        echo "<td>" . $fila["correo_of"] . "</td>";
-        echo "<td><img src='data:image/jpeg;base64," . base64_encode($fila["imagen"]) . "' width='100' class='card-img' alt='Imagen del auto'></td>";
-        echo "</tr>";
-    }
-    echo "</table>";
-} else {
-    echo "No se encontraron resultados.";
-}
-?>
+if ($res->num_rows > 0) { ?>
+    <div class="container py-5">
+        <h2 class="text-center mb-4">Vehículos Registrados</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Correo</th>
+                        <th>Número de chasis</th>
+                        <th>Número de motor</th>
+                        <th>Matrícula</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Año</th>
+                        <th>Fecha de compra</th>
+                        <th>Estado de garantía</th>
+                        <th>Persona que lo registró</th>
+                        <th>Imagen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while($fila = $res->fetch_assoc()) { ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($fila["correo"]); ?></td>
+                            <td><?php echo htmlspecialchars($fila["n_chasis"]); ?></td>
+                            <td><?php echo htmlspecialchars($fila["n_motor"]); ?></td>
+                            <td><?php echo htmlspecialchars($fila["matricula"]); ?></td>
+                            <td><?php echo htmlspecialchars($fila["marca"]); ?></td>
+                            <td><?php echo htmlspecialchars($fila["modelo"]); ?></td>
+                            <td><?php echo htmlspecialchars($fila["año"]); ?></td>
+                            <td><?php echo htmlspecialchars($fila["fecha_compra"]); ?></td>
+                            <td><?php echo htmlspecialchars($fila["estado_g"]); ?></td>
+                            <td><?php echo htmlspecialchars($fila["correo_of"]); ?></td>
+                            <td><img src='data:image/jpeg;base64,<?php echo base64_encode($fila["imagen"]); ?>' width='100' class='img-fluid' alt='Imagen del auto'></td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php } else {
+    echo "<p class='text-center'>No se encontraron resultados.</p>";
+} ?>
             </div>
         </div>
                 <?php
@@ -190,7 +225,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     if (empty($num_chasis) || empty($num_motor) || empty($marca) || empty($modelo) || empty($año) || empty($correo) || empty($fecha_compra) || empty($imagen)) {
         echo '<div class="alert alert-danger">Por favor completa todos los campos obligatorios correctamente.</div>';
     } else {
-        $sql = "INSERT INTO auto (n_chasis, n_motor, marca, modelo, año, correo, fecha_compra, correo_of, imagen) VALUES ('".$num_chasis."', '".$num_motor."', '".$marca."', '".$modelo."', '".$año."', '".$correo."', '".$fecha_compra."','".$_SESSION['email']."', '".$imgData."')";
+        $sql = "INSERT INTO auto (n_chasis, n_motor, marca, modelo, año, correo, fecha_compra, correo_of, imagen, estado_g) VALUES ('".$num_chasis."', '".$num_motor."', '".$marca."', '".$modelo."', '".$año."', '".$correo."', '".$fecha_compra."','".$_SESSION['email']."', '".$imgData."', 'activo')";
         $res = $con->query($sql);
         if ($res == TRUE) {
            echo '<div class="alert alert-success">Vehículo agregado exitosamente.</div>';
@@ -216,7 +251,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="popup.js"></script>
 </body>
 </html>
 

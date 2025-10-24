@@ -126,6 +126,20 @@ include ('../conexionbd.php');
                                     ?>
                                 </datalist>
                 <br>
+                <label for="centro">Centro que lo realiza:</label>
+                <input class="form-control" list="centros" id="centro" name="centro" placeholder="Selecciona un centro" />
+                <datalist id="centros">
+                    <?php
+                    $selectcentro = "SELECT DISTINCT nom_centro FROM centros 
+                                     WHERE nom_centro IS NOT NULL AND TRIM(nom_centro) <> ''
+                                     ORDER BY nom_centro";
+                    $result = $con->query($selectcentro);
+                    while ($row = $result->fetch_assoc()) {
+                        echo '<option value="' . $row['nom_centro'] .'"></option>';
+                    }
+                    ?>
+                </datalist>
+                <br>
                 <button type="submit" name="solicitar" class="btn btn-primary">Solicitar</button>
                 <?php
             if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['solicitar'])) {
@@ -136,9 +150,18 @@ include ('../conexionbd.php');
                 $service ="Select id_service from servicios where nombre = '".$_POST['myservice']."'";
                 $result = $con->query($service);
                 $rowService = $result->fetch_assoc();
-                $insertService = "INSERT INTO reciben (n_chasis, fecha, id_service, estado) VALUES ('".$row['n_chasis']."', '$fecha', '".$rowService['id_service']."', 'activo')";
+                $insertService = "INSERT INTO reciben (n_chasis, fecha, id_service, estado) VALUES ('".$row['n_chasis']."', '$fecha', '".$rowService['id_service']."', 'pendiente')";
                 if ($con->query($insertService) === TRUE) {
                     echo "<p class='text-success'>Servicio solicitado con éxito.</p>";
+                    $correo_elec = "Select correo from centros where nom_centro = '".$_POST['centro']."'";
+                    $result = $con->query($correo_elec);
+                    $rowCorreo = $result->fetch_assoc();
+                    $insertrealizan = "INSERT INTO realizan (n_chasis, id_service, correo_elec) VALUES ('".$row['n_chasis']."', '".$rowService['id_service']."', '".$rowCorreo['correo']."')";
+                    if ($con->query($insertrealizan) === TRUE) {
+                        echo "<p class='text-success'>Centro asignado con éxito.</p>";
+                    } else {
+                        echo "<p class='text-danger'>Error al asignar el centro: " . $con->error . "</p>";
+                    }
                 } else {
                     echo "<p class='text-danger'>Error al solicitar el servicio: " . $con->error . "</p>";
                 }
