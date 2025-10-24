@@ -212,6 +212,28 @@ text-align: center;
     margin: 0 auto; 
     color: gray; 
 }
+.logo-footer {
+  display: inline-block;
+  width: 100px;
+  margin: 0 18px;
+}
+
+.logo-footer img {
+  width: 60px;
+  height: 60px;
+  display: block;
+  margin: 0 auto px;
+}
+
+
+.logo-footer p {
+  font-family: "Mitr", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 10px;
+  color: #333;
+  margin: 0;
+}
 
 nav {
     margin-top: 15px;
