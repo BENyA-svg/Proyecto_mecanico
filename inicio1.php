@@ -150,9 +150,33 @@
             <div class="logo-marca"><img src="imagenes-inicio/mitsubishi.png" alt="Mitsubishi"></div>
             <div class="logo-marca"><img src="imagenes-inicio/toyota.png" alt="toyota"></div>
         </div>
-
-        <h1><div class="titulo">¿Porque nosotros?</div></h1>
-                    </span>
+        <div class="background">
+            <section class="benefits-strip">
+              <h2>¿Por qué nosotros?</h2>
+              <div class="benefit">
+                <img src="imagenes-inicio/original.png" alt="Vehículos certificados">
+                <p>Solo vehículos certificados</p>
+              </div>
+              <div class="benefit">
+                <img src="imagenes-inicio/rayo.png" alt="Tramitación rápida">
+                <p>Tramitación rápida</p>
+              </div>
+              <div class="benefit">
+                <img src="imagenes-inicio/auto 2d.png" alt="Las mejores marcas">
+                <p>Las mejores marcas</p>
+              </div>
+            </section>
+        </div>
+        <footer class="bg-dark text-white text-center py-3 mt-4">
+           <h2 class="h2">¡Vení a visitarnos!</h2>
+           <h1 class="h1">Y salí manejando tu auto como nuevo</h1><br><br>
+           <p class="contacto">Contctanos</p>  
+           <div class=""><img src="imagenes-inicio/sobre.png"></div>
+           <div class="map-container">
+<iframe src="https://www.google.com/maps/d/embed?mid=1D5wIMA1yVUlnLwtHoJxZn0xdCQCUDMc&ehbc=2E312F" width="640" height="480"></iframe>
+          </div>
+          <p>&copy; 2024 JuancitoMotores. Todos los derechos reservados.</p>
+        </footer>
 
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

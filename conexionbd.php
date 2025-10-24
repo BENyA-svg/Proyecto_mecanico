@@ -2,7 +2,7 @@
  $Servidor = "localhost";
  $Usuario = "root";
  $pass = "";
- $bd = "mecanico";
+ $bd = "mecanico-2";
  $port="3306";
  $con = mysqli_connect($Servidor, $Usuario, $pass, $bd, $port);
  if (!$con) {
