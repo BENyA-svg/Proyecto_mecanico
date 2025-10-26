@@ -153,33 +153,21 @@ form {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
     padding: 2rem; /* Espaciado interno */ 
 }
+.auto-btn-container {
+    border-radius: 50%;
+    display: flex;
+    justify-content: flex-end; /* derecha */
+    padding: 5px 50px 0 50px; /* ajusta según tu diseño */
+}
 .btn-abrir-popup {
-   background-color: #ffffff; /* Color de fondo de la tarjeta */
-    border: 1px solid #dee2e6; /* Borde de la tarjeta */
-    border-radius: 8px; /* Bordes redondeados */
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Transición suave */
-    margin: 5px; 
+    background: transparent;
+    cursor: pointer;
+    color: #84BFA0;
+    font-size: 60px;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 .btn-abrir-popup:hover {
-    transform: translateY(-5px); /* Levantar la tarjeta al pasar el mouse */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
-}
-.btn-abrir-popup h5 {
-    color: #2c3e50;                
-    font-size: 1.1rem;          
-    font-weight: 700;         
-    margin-bottom: 0.75rem;          
-    line-height: 1.3;            
-    position: relative;              
-    display: inline-block;
-    padding-bottom: 5px;   
-}
-.btn-abrir-popup p {
-    color: #333333;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    font-family: 'Segoe UI', Roboto, sans-serif;
+    transform: scale(1.20);
 }
 .form-title {
     margin-top: 3rem !important;

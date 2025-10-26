@@ -1,6 +1,16 @@
 <?php
 include ('../conexionbd.php');
 session_start();
+// Manejo PRG: si se solicita expandir via GET, cargar datos en sesión y redirigir para evitar reenvío al recargar
+if (isset($_GET['expandir'])) {
+  $id = $con->real_escape_string($_GET['expandir']);
+  $resX = $con->query("SELECT * FROM insumos WHERE id_insumos = '$id' LIMIT 1");
+  if ($resX && $rowX = $resX->fetch_assoc()) {
+    $_SESSION['insumo_edit'] = $rowX;
+  }
+  header('Location: ' . $_SERVER['PHP_SELF']);
+  exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -135,7 +145,7 @@ session_start();
                
         </div>
     </div>
-   
+    <script src="popup.js"></script>
         
 
 <?php
@@ -147,13 +157,17 @@ echo '<div class="cards-container">';
     while($fila = $res->fetch_assoc()) {
         echo "<div class=\"border-container\">";
         echo "<div class=\"card\">";
-        echo "<img src='data:image/jpeg;base64," . base64_encode($fila["imagen"]) . "' class='card-img' alt='Imagen del auto'>";
+  echo "<img src='data:image/jpeg;base64," . base64_encode($fila["imagen"]) . "' class='card-img img-fluid' alt='Imagen del auto'>";
         echo "<div class=\"card-body\">";
         echo "<h5 class=\"card-title\">".$fila["tipo"]."</h5>";
         echo "<p class=\"card-text\">Precio: $".$fila["precio"]."</p>";
         echo "<p class=\"card-text\">Cantidad: ".$fila["cantidad_pedida"]."</p>";
-        echo "<p class=\"card-text\"></p>";
-        echo "<a href=\"#\" class=\"btn btn-primary btn-editar\"\">Editar</a>";
+  echo "<p class=\"card-text\"></p>";
+  // Botón que abre modal para ver/editar insumo (usamos GET + PRG para evitar reenvío al recargar)
+  echo '<form method="get" class="d-inline">';
+  echo '<input type="hidden" name="expandir" value="' . htmlspecialchars($fila["id_insumos"]) . '">';
+  echo '<button type="submit" class="btn btn-primary btn-editar btn-sm">Editar</button>';
+  echo '</form>';
         echo "</div>";
         echo "</div>";
         echo "</div>";
@@ -161,6 +175,83 @@ echo '<div class="cards-container">';
 echo '</div>';
 }
 ?>
+
+<!-- Modal para mostrar detalles del insumo -->
+<div class="modal fade" id="insumoModal" tabindex="-1" aria-labelledby="insumoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="insumoModalLabel">Detalles del Insumo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+    <div class="modal-body">
+    <?php
+    // Mostrar formulario de edición si hay datos cargados en sesión (PRG)
+    $showModal = false;
+    if (isset($_SESSION['insumo_edit'])) {
+      $row = $_SESSION['insumo_edit'];
+      $showModal = true;
+      // limpia la sesión para que al recargar no vuelva a aparecer
+      unset($_SESSION['insumo_edit']);
+      // Formulario para editar
+      ?>
+        <form method="post" enctype="multipart/form-data">
+          <input type="hidden" name="accion" value="actualizar">
+          <input type="hidden" name="id_insumos" value="<?php echo htmlspecialchars($row['id_insumos']); ?>">
+          <div class="mb-2">
+            <label for="tipo_edit">Tipo:</label>
+            <input type="text" class="form-control" id="tipo_edit" name="tipo" value="<?php echo htmlspecialchars($row['tipo']); ?>" required>
+          </div>
+          <div class="mb-2">
+            <label for="precio_edit">Precio:</label>
+            <input type="number" step="0.01" class="form-control" id="precio_edit" name="precio" value="<?php echo htmlspecialchars($row['precio']); ?>" required>
+          </div>
+          <div class="mb-2">
+            <label for="cantidad_actual">Cantidad actual (no editable):</label>
+            <input type="number" class="form-control" id="cantidad_actual" name="cantidad_actual" value="<?php echo htmlspecialchars($row['cantidad_pedida']); ?>" readonly>
+          </div>
+          <div class="mb-2">
+            <label for="agregar_cantidad">Agregar cantidad (número a sumar):</label>
+            <input type="number" class="form-control" id="agregar_cantidad" name="agregar_cantidad" value="0" min="0">
+          </div>
+          <div class="mb-2">
+            <label for="fecha_edit">Fecha pedido:</label>
+            <input type="date" class="form-control" id="fecha_edit" name="fecha_pedido" value="<?php echo htmlspecialchars($row['fecha_pedido']); ?>" required>
+          </div>
+          <div class="mb-2">
+            <label for="imagen_edit">Imagen (dejar vacío para no cambiar):</label>
+            <input type="file" class="form-control" id="imagen_edit" name="foto">
+          </div>
+          <div class="mb-2">
+            <label for="correo_of_edit">Ofrecido por:</label>
+            <input type="email" class="form-control" id="correo_of_edit" name="correo_of" value="<?php echo htmlspecialchars($row['correo_of'] ?? ''); ?>">
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-success">Guardar cambios</button>
+          </div>
+        </form>
+        <?php
+      } else {
+        echo "<p>Detalles no disponibles.</p>";
+      }
+    
+    ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  <?php if(isset($showModal) && $showModal): ?>
+    var modal = new bootstrap.Modal(document.getElementById('insumoModal'));
+    modal.show();
+  <?php endif; ?>
+});
+</script>
   <?php
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if (isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
@@ -184,12 +275,57 @@ if (isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
     }
 }
   }
+  
+// Procesar actualización de insumo desde el modal
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion']) && $_POST['accion'] == 'actualizar') {
+  $id_insumo = $con->real_escape_string($_POST['id_insumos']);
+  $tipo = $con->real_escape_string($_POST['tipo']);
+  $precio = $con->real_escape_string($_POST['precio']);
+  // Se calcula la nueva cantidad sumando la existente y la cantidad a agregar
+  $agregar = isset($_POST['agregar_cantidad']) ? intval($_POST['agregar_cantidad']) : 0;
+  // Obtener cantidad actual desde la base
+  $res_q = $con->query("SELECT cantidad_pedida FROM insumos WHERE id_insumos = '$id_insumo' LIMIT 1");
+  $current_qty = 0;
+  if ($res_q && $rq = $res_q->fetch_assoc()) {
+    $current_qty = intval($rq['cantidad_pedida']);
+  }
+  $new_qty = $current_qty + $agregar;
+  $fecha_pedido = $con->real_escape_string($_POST['fecha_pedido']);
+  $correo_of = isset($_POST['correo_of']) ? $con->real_escape_string($_POST['correo_of']) : null;
+
+  $update_fields = [];
+  $update_fields[] = "tipo = '$tipo'";
+  $update_fields[] = "precio = '$precio'";
+  $update_fields[] = "cantidad_pedida = '$new_qty'";
+  $update_fields[] = "fecha_pedido = '$fecha_pedido'";
+  if ($correo_of !== null) {
+    $update_fields[] = "correo_of = '$correo_of'";
+  }
+
+  // Si se subió una nueva imagen, procesarla
+  if (isset($_FILES['foto']) && isset($_FILES['foto']['tmp_name']) && $_FILES['foto']['tmp_name'] != '') {
+    $imgData = file_get_contents($_FILES['foto']['tmp_name']);
+    $imgData = $con->real_escape_string($imgData);
+    $update_fields[] = "imagen = '$imgData'";
+  }
+
+  if (!empty($update_fields)) {
+    $sql_up = "UPDATE insumos SET " . implode(', ', $update_fields) . " WHERE id_insumos = '$id_insumo'";
+    if ($con->query($sql_up) === TRUE) {
+      echo "<div class='alert alert-success'>Insumo actualizado correctamente.</div>";
+      // Recargar para ver cambios y evitar reenvío del formulario
+      echo "<script>setTimeout(function(){ window.location = window.location.pathname; }, 700);</script>";
+      exit();
+    } else {
+      echo "<div class='alert alert-danger'>Error al actualizar insumo: " . $con->error . "</div>";
+    }
+  }
+}
 ?>
 
          <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>  
-         <script src="popup.js"></script>
 </body>
 </html>
