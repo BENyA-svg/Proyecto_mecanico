@@ -126,6 +126,7 @@ nav form button {
 }
 .btn-añadir-insumo:hover {
     transform: scale(1.20);
+   color: #1D7546;
 }
 .card {
     width: 18rem;
