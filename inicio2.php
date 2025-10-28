@@ -1,17 +1,17 @@
 <?php
-include 'conexionbd.php';
-
 session_start();
-$_SESSION['perfil'] = $cargoRow['cargo'];
+include 'conexionbd.php';
+include 'lang.php';
 if (isset($_POST['cerrar'])) {
+    $current_lang = isset($_SESSION['lang']) ? $_SESSION['lang'] : 'es';
     session_unset();
     session_destroy();
-    header("Location: inicio1.php");
+    header("Location: inicio1.php?lang=" . $current_lang);
     exit();
 }
 
 if (empty($_POST['email']) || empty($_POST['contraseña'])) {
-   header("Location: ./login/registro.php?error=2");
+   header("Location: ./login/registro.php?error=2&lang=" . (isset($_SESSION['lang']) ? $_SESSION['lang'] : 'es'));
    exit();
 }
 
@@ -49,15 +49,20 @@ if (isset($_REQUEST['email']) && isset($_REQUEST['contraseña'])) {
             $_SESSION['perfil'] = 'usuario'; // Valor por defecto si no se encuentra
         }
 
+        // Ensure language is set in session after login
+        if (!isset($_SESSION['lang'])) {
+            $_SESSION['lang'] = 'es';
+        }
+
     } else {
-        header("Location: ./login/registro.php?error=1");
+        header("Location: ./login/registro.php?error=1&lang=" . (isset($_SESSION['lang']) ? $_SESSION['lang'] : 'es'));
         exit();
     }
 } else {
    exit();
 }
 
-header("Location: inicio1.php");
+header("Location: inicio1.php?lang=" . (isset($_SESSION['lang']) ? $_SESSION['lang'] : 'es'));
 ?>
   <footer class="bg-dark text-white text-center py-3 mt-4">
            <h2 class="h2">¡Vení a visitarnos!</h2>

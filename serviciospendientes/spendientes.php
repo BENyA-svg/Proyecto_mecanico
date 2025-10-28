@@ -11,8 +11,7 @@ include ('../conexionbd.php');
     <title>JuancitoMotores - Inicio</title>
 
      <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
-        <script src="https://kit.fontawesome.com/16aa28c921.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -185,10 +184,10 @@ include ('../conexionbd.php');
       
           <?php
 
-   $sel = "SELECT a.*, s.*, r.fecha, r.estado FROM auto a 
-    JOIN reciben r ON a.n_chasis = r.n_chasis 
+   $sel = "SELECT a.*, s.*, r.fecha, r.estado FROM auto a
+    JOIN reciben r ON a.n_chasis = r.n_chasis
     JOIN servicios s ON s.id_service = r.id_service
-    join realizan re on re.n_chasis = a.n_chasis
+    JOIN realizan re ON re.n_chasis = r.n_chasis AND re.id_service = r.id_service
     WHERE re.correo_elec = '".$_SESSION['email']."'
     ";
     ?>
@@ -332,19 +331,20 @@ $sel .= " ORDER BY fecha ASC";
             $id_service = $_POST['id_service'];
             $fecha = $_POST['fecha'];
             
-            $query = "SELECT a.*, s.*, r.fecha, r.estado, u.nombre, u.apellido 
-                     FROM auto a 
-                     JOIN reciben r ON a.n_chasis = r.n_chasis 
+            $query = "SELECT a.*, s.*, r.fecha, r.estado, u.nombre, u.apellido, u.telefono
+                     FROM auto a
+                     JOIN reciben r ON a.n_chasis = r.n_chasis
                      JOIN servicios s ON s.id_service = r.id_service
                      JOIN usuario u ON a.correo = u.correo
-                     WHERE a.n_chasis = '$n_chasis' 
-                     AND s.id_service = '$id_service' 
+                     WHERE a.n_chasis = '$n_chasis'
+                     AND s.id_service = '$id_service'
                      AND r.fecha = '$fecha'";
             
             $result = $con->query($query);
             
             if ($row = $result->fetch_assoc()) {
                 echo "<p><strong>Cliente:</strong> " . htmlspecialchars($row['nombre'] . " " . $row['apellido']) . "</p>";
+                echo "<p><strong>Teléfono:</strong> " . htmlspecialchars($row['telefono']) . "</p>";
                 echo "<p><strong>Vehículo:</strong> " . htmlspecialchars($row['marca'] . " " . $row['modelo'] . " (" . $row['año'] . ")") . "</p>";
                 echo "<p><strong>Número de Chasis:</strong> " . htmlspecialchars($row['n_chasis']) . "</p>";
                 echo "<p><strong>Servicio:</strong> " . htmlspecialchars($row['nombre']) . "</p>";
@@ -362,8 +362,6 @@ $sel .= " ORDER BY fecha ASC";
     </div>
   </div>
 </div>
-           <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="popup.js"></script>
     <script>
@@ -384,15 +382,15 @@ document.addEventListener('DOMContentLoaded', function() {
            <p class="contacto">Contactanos </p>
            <div class="d-flex justify-content-between align-items-center flex-wrap px-3">
              <div class="d-flex align-items-center">
-               <div class="logo-footer me-2"><img src="imagenes-inicio/sobre.png"></div>
+               <div class="logo-footer me-2"><img src="../imagenes-inicio/sobre.png"></div>
                <p class="logo-footer p">wolfcrewcontact@gmail.com</p>
              </div>
              <div class="d-flex align-items-center">
-               <div class="logo-footer me-2"><img src="imagenes-inicio/telefono.png"></div>
+               <div class="logo-footer me-2"><img src="../imagenes-inicio/telefono.png"></div>
                <p class="logo-footer p">+598 099 456 220</p>
              </div>
              <div class="d-flex align-items-center">
-               <div class="logo-footer me-2"><img src="imagenes-inicio/pinubicacion.png"></div>
+               <div class="logo-footer me-2"><img src="../imagenes-inicio/pinubicacion.png"></div>
                <p class="logo-footer p">Con.José Pedro Varela 2737</p>
              </div>
            </div>
@@ -402,19 +400,5 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
           <p>&copy; 2024 JuancitoMotores. Todos los derechos reservados.</p>
         </footer>
-
-
-              <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="popup.js"></script>
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    <?php if(isset($_POST['accion']) && $_POST['accion'] == 'expandir'): ?>
-        var modal = new bootstrap.Modal(document.getElementById('serviceModal'));
-        modal.show();
-    <?php endif; ?>
-});
-</script>
     </body>
     </html>

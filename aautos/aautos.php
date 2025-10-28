@@ -1,13 +1,14 @@
 <?php
 include ('../conexionbd.php');
+include ('../lang.php');
 session_start();
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo $lang; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina 1</title>
+    <title><?php echo t('title_add_vehicles'); ?></title>
      <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
         <script src="https://kit.fontawesome.com/16aa28c921.js" crossorigin="anonymous"></script>
@@ -36,33 +37,33 @@ session_start();
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav d-flex flex-row align-items-center gap-3">
             <li class="nav-item">
-              <a class="nav-link text-white" href="../inicio1.php">Inicio</a>
+              <a class="nav-link text-white" href="../inicio1.php?lang=<?php echo $lang; ?>"><?php echo t('nav_inicio'); ?></a>
             </li>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php">Servicios pendientes</a>
+                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios_pendientes'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'cliente'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../solservicio/servicios.php">Servicios</a>
+                <a class="nav-link text-white" href="../solservicio/servicios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../misautos/misautos.php">Mis autos</a>
+                <a class="nav-link text-white" href="../misautos/misautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_mis_autos'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'ventas'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../aautos/aautos.php">Agregar vehículo</a>
+                <a class="nav-link text-white" href="../aautos/aautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_vehiculo'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../insumos/insumos.php">Insumos</a>
+                <a class="nav-link text-white" href="../insumos/insumos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_insumos'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
+                <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -74,13 +75,13 @@ session_start();
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
                 <?php if (!isset($_SESSION['email'])): ?>
-                  <a class="dropdown-item" href="../login/registro.php">Iniciar sesión</a>
+                  <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                     <a class="dropdown-item" href="#">Mi perfil</a>
+                     <a class="dropdown-item" href="#"><?php echo t('mi_perfil'); ?></a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
-                    <button class="dropdown-item" type="submit">Cerrar sesión</button>
+                    <button class="dropdown-item" type="submit"><?php echo t('cerrar_sesion'); ?></button>
                   </form>
                 <?php endif; ?>
               </div>
@@ -98,13 +99,13 @@ session_start();
         <div class="overlay" id="overlay">
             <div class="popup" id="popup">
                 <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
-                <h2>Información del vehículo:</h2>
+                <h2><?php echo t('vehicle_information'); ?></h2>
                 <div class="container mt-4">
-                    <h4>Agregar Vehículo</h4>
+                    <h4><?php echo t('add_vehicle'); ?></h4>
                     <form action="" method="post" enctype="multipart/form-data">
                         <div class="mb-2">
-                            <label for="myUsuario">Usuario:</label>
-                            <input list="usuarios" class="form-control" id="myUsuario" name="myUsuario" placeholder="Selecciona un usuario" />
+                            <label for="myUsuario"><?php echo t('user'); ?>:</label>
+                            <input list="usuarios" class="form-control" id="myUsuario" name="myUsuario" placeholder="<?php echo t('selecciona_auto'); ?>" />
                             <datalist id="usuarios">
                                 <?php
                                 $selectUsuarios = "SELECT correo FROM usuario";
@@ -117,41 +118,41 @@ session_start();
                         </div>
 
                         <div class="mb-2">
-                            <label for="num_chasis">Número de chasis:</label>
+                            <label for="num_chasis"><?php echo t('chassis_number'); ?>:</label>
                             <input type="text" class="form-control" name="num_chasis" id="num_chasis" required>
                         </div>
 
                         <div class="mb-2">
-                            <label for="num_motor">Número de motor:</label>
+                            <label for="num_motor"><?php echo t('engine_number'); ?>:</label>
                             <input type="text" class="form-control" name="num_motor" id="num_motor" required>
                         </div>
 
                         <div class="mb-2">
-                            <label for="marca">Marca:</label>
+                            <label for="marca"><?php echo t('brand'); ?>:</label>
                             <input type="text" class="form-control" name="marca" id="marca" required>
                         </div>
 
                         <div class="mb-2">
-                            <label for="modelo">Modelo:</label>
+                            <label for="modelo"><?php echo t('model'); ?>:</label>
                             <input type="text" class="form-control" name="modelo" id="modelo" required>
                         </div>
 
                         <div class="mb-2">
-                            <label for="año">Año:</label>
+                            <label for="año"><?php echo t('year'); ?>:</label>
                             <input type="number" class="form-control" name="año" id="año" min="1886" max="2100" required>
                         </div>
 
                         <div class="mb-2">
-                            <label for="fecha_compra">Fecha de compra:</label>
+                            <label for="fecha_compra"><?php echo t('purchase_date'); ?>:</label>
                             <input type="date" class="form-control" name="fecha_compra" id="fecha_compra" required>
                         </div>
 
                         <div class="mb-2">
-                            <label for="foto">Imagen:</label>
+                            <label for="foto"><?php echo t('image'); ?>:</label>
                             <input type="file" class="form-control" name="foto" id="foto">
                         </div>
 
-                        <button type="submit" class="btn btn-success">Agregar Vehículo</button>
+                        <button type="submit" class="btn btn-success"><?php echo t('add_vehicle_button'); ?></button>
                     </form>
                 </div>
             </div>
@@ -165,22 +166,22 @@ session_start();
 $res = $con->query($sel);
 if ($res->num_rows > 0) { ?>
     <div class="container py-5">
-        <h2 class="text-center mb-4">Vehículos Registrados</h2>
+        <h2 class="text-center mb-4"><?php echo t('registered_vehicles'); ?></h2>
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead class="table-dark">
                     <tr>
-                        <th>Correo</th>
-                        <th>Número de chasis</th>
-                        <th>Número de motor</th>
-                        <th>Matrícula</th>
-                        <th>Marca</th>
-                        <th>Modelo</th>
-                        <th>Año</th>
-                        <th>Fecha de compra</th>
-                        <th>Estado de garantía</th>
-                        <th>Persona que lo registró</th>
-                        <th>Imagen</th>
+                        <th><?php echo t('user'); ?></th>
+                        <th><?php echo t('chassis_number'); ?></th>
+                        <th><?php echo t('engine_number'); ?></th>
+                        <th><?php echo t('license_plate'); ?></th>
+                        <th><?php echo t('brand'); ?></th>
+                        <th><?php echo t('model'); ?></th>
+                        <th><?php echo t('year'); ?></th>
+                        <th><?php echo t('purchase_date'); ?></th>
+                        <th><?php echo t('warranty_status'); ?></th>
+                        <th><?php echo t('registered_by'); ?></th>
+                        <th><?php echo t('image'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -228,10 +229,10 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
         $sql = "INSERT INTO auto (n_chasis, n_motor, marca, modelo, año, correo, fecha_compra, correo_of, imagen, estado_g) VALUES ('".$num_chasis."', '".$num_motor."', '".$marca."', '".$modelo."', '".$año."', '".$correo."', '".$fecha_compra."','".$_SESSION['email']."', '".$imgData."', 'activo')";
         $res = $con->query($sql);
         if ($res == TRUE) {
-           echo '<div class="alert alert-success">Vehículo agregado exitosamente.</div>';
+           echo '<div class="alert alert-success">' . t('vehicle_added_successfully') . '</div>';
             }
              else {
-                echo '<div class="alert alert-danger">Error al agregar el vehículo:</div>';
+                echo '<div class="alert alert-danger">' . t('error_adding_vehicle') . '</div>';
             }
         }
     }

@@ -1,5 +1,6 @@
 <?php
 include '../conexionbd.php';
+include '../lang.php';
 session_start();
 
 // Verificar si el usuario está logueado
@@ -25,7 +26,7 @@ if ($result->num_rows > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actualizar Usuario - JuancitoMotores</title>
+    <title><?php echo t('title_profile'); ?></title>
      <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
         <script src="https://kit.fontawesome.com/16aa28c921.js" crossorigin="anonymous"></script>
@@ -54,33 +55,33 @@ if ($result->num_rows > 0) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav d-flex flex-row align-items-center gap-3">
             <li class="nav-item">
-              <a class="nav-link text-white" href="../inicio1.php">Inicio</a>
+              <a class="nav-link text-white" href="../inicio1.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Inicio</a>
             </li>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php">Servicios pendientes</a>
+                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Servicios pendientes</a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'cliente'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../solservicio/servicios.php">Servicios</a>
+                <a class="nav-link text-white" href="../solservicio/servicios.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Servicios</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../misautos/misautos.php">Mis autos</a>
+                <a class="nav-link text-white" href="../misautos/misautos.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Mis autos</a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'ventas'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../aautos/aautos.php">Agregar vehículo</a>
+                <a class="nav-link text-white" href="../aautos/aautos.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Agregar vehículo</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../insumos/insumos.php">Insumos</a>
+                <a class="nav-link text-white" href="../insumos/insumos.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Insumos</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
+                <a class="nav-link text-white" href="../allusr/usuarios.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Usuarios</a>
               </li>
             <?php endif; ?>
 
@@ -94,7 +95,7 @@ if ($result->num_rows > 0) {
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="../login/registro.php">Iniciar sesión</a>
                 <?php else: ?>
-                     <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
+                     <a class="dropdown-item" href="../Infousr/infousr.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Mi perfil</a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
@@ -112,34 +113,35 @@ if ($result->num_rows > 0) {
     <form action="procesar-act.php" method="post">
         <div class="container mt-5">
             <div class="form-container">
+                <h2><?php echo t('update_user'); ?></h2>
                 <?php if (isset($_GET['error'])): ?>
                     <div class="alert alert-danger">
                         <?php
-                        if ($_GET['error'] == 1) echo "Error al actualizar usuario. Intenta nuevamente.";
-                        if ($_GET['error'] == 2) echo "Faltan datos obligatorios.";
-                        if ($_GET['error'] == 3) echo "El correo ya está registrado por otro usuario.";
+                        if ($_GET['error'] == 1) echo t('error_updating_user');
+                        if ($_GET['error'] == 2) echo t('missing_required_data');
+                        if ($_GET['error'] == 3) echo t('email_already_registered');
                         ?>
                     </div>
                 <?php endif; ?>
                 <?php if (isset($_GET['success'])): ?>
                     <div class="alert alert-success">
-                        Usuario actualizado exitosamente.
+                        <?php echo t('user_updated_successfully'); ?>
                     </div>
                 <?php endif; ?>
 
-                <label for="nombre">Nombre</label>
+                <label for="nombre"><?php echo t('name'); ?></label>
                 <input type="text" class="form-control" id="nombre" placeholder="Diego" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" required>
 
-                <label for="apellido">Apellido</label>
+                <label for="apellido"><?php echo t('last_name'); ?></label>
                 <input type="text" class="form-control" id="apellido" placeholder="Peña" name="apellido" value="<?php echo htmlspecialchars($usuario['apellido']); ?>" required>
 
-                <label for="email">Correo electrónico</label>
+                <label for="email"><?php echo t('email'); ?></label>
                 <input type="email" class="form-control" id="email" placeholder="ejemplo@gmail.com" name="email" value="<?php echo htmlspecialchars($usuario['correo']); ?>" required>
 
-                <label for="telefono">Teléfono</label>
+                <label for="telefono"><?php echo t('phone'); ?></label>
                 <input type="tel" class="form-control" id="telefono" placeholder="012495115" name="telefono" value="<?php echo htmlspecialchars($usuario['telefono']); ?>" required>
 
-                <label for="contraseña">Contraseña</label>
+                <label for="contraseña"><?php echo t('password'); ?></label>
                 <input type="password" class="form-control" id="contraseña" placeholder="Nueva contraseña" name="contraseña" >
 
               
@@ -150,11 +152,11 @@ if ($result->num_rows > 0) {
                     if($rescliente->num_rows>0){
                         $dataCliente = $rescliente->fetch_assoc(); // Obtener los datos como array asociativo
                 ?>
-                        <label for="direccion">Dirección</label>
-                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" name="direccion" 
+                        <label for="direccion"><?php echo t('address'); ?></label>
+                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" name="direccion"
                                value="<?php echo isset($dataCliente['direccion']) ? htmlspecialchars($dataCliente['direccion']) : ''; ?>">
-                               <label for="nacimiento">Fecha de Nacimiento</label>
-                        <input type="date" class="form-control" id="nacimiento" name="nacimiento" 
+                               <label for="nacimiento"><?php echo t('birth_date'); ?></label>
+                        <input type="date" class="form-control" id="nacimiento" name="nacimiento"
                                value="<?php echo isset($dataCliente['fecha_nacimiento']) ? htmlspecialchars($dataCliente['fecha_nacimiento']) : ''; ?>">
                 <?php
                     }
@@ -164,44 +166,44 @@ if ($result->num_rows > 0) {
                     if($rescentro->num_rows>0){
                         $dataCentro = $rescentro->fetch_assoc(); // Obtener los datos como array asociativo
                 ?>
-                        <label for="n_centro">Nombre del centro</label>
-                        <input type="text" class="form-control" id="n_centro" placeholder="Nombre del centro" name="n_centro" 
+                        <label for="n_centro"><?php echo t('center_name'); ?></label>
+                        <input type="text" class="form-control" id="n_centro" placeholder="Nombre del centro" name="n_centro"
                                value="<?php echo isset($dataCentro['nom_centro']) ? htmlspecialchars($dataCentro['nom_centro']) : ''; ?>">
-                        <label for="ubicacion_c">Ubicacion del centro</label>
-                        <input type="text" class="form-control" id="ubicacion_c" placeholder="Ubicacion del centro" name="ubicacion_c" 
+                        <label for="ubicacion_c"><?php echo t('center_location'); ?></label>
+                        <input type="text" class="form-control" id="ubicacion_c" placeholder="Ubicacion del centro" name="ubicacion_c"
                                value="<?php echo isset($dataCentro['ubicacion']) ? htmlspecialchars($dataCentro['ubicacion']) : ''; ?>">
                 <?php
                     }
                 }
                 ?>
                 <br>
-                <button type="submit" class="btn btn-primary">Actualizar</button>
+                <button type="submit" class="btn btn-primary"><?php echo t('update'); ?></button>
             </div>
         </div>
     </form>
       <footer class="bg-dark text-white text-center py-3 mt-4">
-           <h2 class="h2">¡Vení a visitarnos!</h2>
-           <h1 class="h1">Y salí manejando tu auto como nuevo</h1><br><br>
-           <p class="contacto">Contactanos </p>
+           <h2 class="h2"><?php echo t('visit_us'); ?></h2>
+           <h1 class="h1"><?php echo t('drive_like_new'); ?></h1><br><br>
+           <p class="contacto"><?php echo t('contact_us'); ?> </p>
            <div class="d-flex justify-content-between align-items-center flex-wrap px-3">
              <div class="d-flex align-items-center">
                <div class="logo-footer me-2"><img src="imagenes-inicio/sobre.png"></div>
-               <p class="logo-footer p">wolfcrewcontact@gmail.com</p>
+               <p class="logo-footer p"><?php echo t('email_contact'); ?></p>
              </div>
              <div class="d-flex align-items-center">
                <div class="logo-footer me-2"><img src="imagenes-inicio/telefono.png"></div>
-               <p class="logo-footer p">+598 099 456 220</p>
+               <p class="logo-footer p"><?php echo t('phone_contact'); ?></p>
              </div>
              <div class="d-flex align-items-center">
                <div class="logo-footer me-2"><img src="imagenes-inicio/pinubicacion.png"></div>
-               <p class="logo-footer p">Con.José Pedro Varela 2737</p>
+               <p class="logo-footer p"><?php echo t('address_contact'); ?></p>
              </div>
            </div>
 
            <div class="map-container">
 <iframe src="https://www.google.com/maps/d/u/1/embed?mid=1_SIFaqqS37wGh6hIDiAiaXgrsSMJnGA&ehbc=2E312F" width="640" height="480"></iframe>
           </div>
-          <p>&copy; 2024 JuancitoMotores. Todos los derechos reservados.</p>
+          <p><?php echo t('all_rights_reserved'); ?></p>
         </footer>
 
 
