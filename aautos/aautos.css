@@ -1,9 +1,76 @@
 .header-section {
-    background-color: #007bff;
+    background-color: #84BFA0;
     color: white;
     padding: 20px;
-    text-align: center;
-    padding-bottom: 20px;
+    text-align: left;
+      font-family: "Mitr", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.opciones-inicio{
+    color: white;
+    padding: 20px;
+    text-align: right;
+      font-family: "Mitr", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+
+}.li{
+    display: flex;
+    flex-direction: row;
+}
+.header-section h2 {
+    margin: 0;
+    font-size: 2em;
+}
+.header-section p {
+    margin: 10px 0;
+}
+.mitr-extralight {
+  font-family: "Mitr", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.mitr-light {
+  font-family: "Mitr", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.mitr-regular {
+  font-family: "Mitr", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.mitr-medium {
+  font-family: "Mitr", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.mitr-semibold {
+  font-family: "Mitr", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.mitr-bold {
+  font-family: "Mitr", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+.logo-container{
+    display: flex;
+    width: 100px;
+    height: 100px;
+    
+      text-align: left;
+      float: left;
 }
 .form-container {
     background-color: #e4e4e6;
@@ -12,6 +79,10 @@
     padding-top: 30px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
 }
 .form-title {
     margin-bottom: 20px;
@@ -48,4 +119,205 @@ nav form {
 nav form button {
     display: inline;
     vertical-align: baseline;
+}
+
+.service {
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+.overlay {
+    background: rgba(0, 0, 0,.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex; /* Cambiar de display: none a display: flex */
+    align-items: center;
+    justify-content: center;
+    visibility: hidden; /* Usar visibility en lugar de display */
+}
+
+.overlay.active {
+    visibility: visible; /* Usar visibility en lugar de display */
+}
+
+.popup {
+    background: #F8F8F8;
+    width: 600px;
+    padding: 20px;
+    border-radius: 3px;
+    position: relative;
+    z-index: 1100;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    opacity: 0;
+    transition: 0.3s ease all;
+    transform: scale(0.7);
+    /* Agregado: limitar alto y permitir scroll interno en pantallas pequeñas */
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Un pequeño padding-right para que el contenido no quede oculto tras la barra */
+    padding-right: 18px;
+}
+
+.popup.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.btn-añadir-auto {     
+    background: transparent;
+    cursor: pointer;
+  color: #84BFA0;
+    font-size: 60px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: inline-block;
+}
+
+.btn-añadir-auto:hover {
+    transform: scale(1.20);
+}
+
+.auto-btn-container {
+    border-radius: 50%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 50px 0 50px;
+    text-align: right;
+    margin: 20px;
+}
+
+.btn-cerrar-popup {
+    font-size: 16px;
+    line-height: 16px;
+    display: block;
+    text-align: right;
+    color: #BBBBBB;
+    transition: .3s ease all;
+}
+
+.btn-cerrar-popup:hover {
+    color: #000;
+}
+
+.map-container {
+margin-top: 2rem;
+text-align: center;
+}
+.map-container iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+  border-radius: 0.5rem;
+}
+
+
+.benefit {
+  display: inline-block;
+  width: 150px;
+  margin: 0 15px;
+}
+
+.benefit img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+
+.benefit p {
+   font-family: "", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+}
+
+.logo-marca img {
+  max-width: 100%;
+  max-height: 100px;
+  height: auto;
+  object-fit: contain;
+}
+.titulo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  font-family: "", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 90px;
+  text-align: center;
+    margin: 0 auto;
+}
+.h2{
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  font-family: "Mitr", sans-serif;
+  font-weight: 500;
+  font-size: 90px;
+  text-align: center;
+    margin: 0 auto;
+
+}
+.h1{
+   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  font-family: "Mitr", sans-serif;
+  font-weight: 300;
+  font-size: 30px;
+  text-align: center;
+    margin: 0 auto;
+    color: gray;
+}
+.contacto{
+   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  font-family: "Mitr", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  text-align: center;
+    margin: 0 auto;
+    color: gray;
+}
+.logo-footer {
+  display: inline-block;
+  width: 100px;
+  margin: 0 18px;
+}
+
+.logo-footer img {
+  width: 60px;
+  height: 60px;
+  display: block;
+  margin: 0 auto px;
+}
+
+
+.logo-footer p {
+  font-family: "Mitr", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 10px;
+  color: #333;
+  margin: 0;
 }
