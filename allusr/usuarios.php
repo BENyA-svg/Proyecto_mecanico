@@ -65,6 +65,9 @@ include '../conexionbd.php';
               <li class="nav-item">
                 <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
               </li>
+              <li class="nav-item">
+                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+              </li>
             <?php endif; ?>
 
             <!-- Dropdown de perfil -->

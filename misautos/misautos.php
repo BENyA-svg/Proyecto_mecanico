@@ -77,6 +77,9 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
               <li class="nav-item">
                 <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
               </li>
+              <li class="nav-item">
+                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+              </li>
             <?php endif; ?>
 
             <!-- Dropdown de perfil -->
@@ -89,7 +92,7 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="../login/registro.php">Iniciar sesión</a>
                 <?php else: ?>
-                     <a class="dropdown-item" href="#">Mi perfil</a>
+                      <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">

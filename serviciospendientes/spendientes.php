@@ -68,6 +68,9 @@ include ('../conexionbd.php');
               <li class="nav-item">
                 <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
               </li>
+              <li class="nav-item">
+                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+              </li>
             <?php endif; ?>
 
             <!-- Dropdown de perfil -->
@@ -80,7 +83,7 @@ include ('../conexionbd.php');
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="../login/registro.php">Iniciar sesión</a>
                 <?php else: ?>
-                     <a class="dropdown-item" href="#">Mi perfil</a>
+                 <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
@@ -282,9 +285,7 @@ $sel .= " ORDER BY fecha ASC";
         $id_service = $_POST['id_service'];
         $fecha = $_POST['fecha'];
 
-    if ($_POST['accion'] == 'expandir') {
-      
-   }elseif ($_POST['accion'] == 'eliminar') {
+    if ($_POST['accion'] == 'eliminar') {
      $n_chasis = $_POST['n_chasis'];
         $id_service = $_POST['id_service'];
         $fecha = $_POST['fecha'];
@@ -332,14 +333,33 @@ $sel .= " ORDER BY fecha ASC";
             $id_service = $_POST['id_service'];
             $fecha = $_POST['fecha'];
             
-            $query = "SELECT a.*, s.*, r.fecha, r.estado, u.nombre, u.apellido 
-                     FROM auto a 
-                     JOIN reciben r ON a.n_chasis = r.n_chasis 
-                     JOIN servicios s ON s.id_service = r.id_service
-                     JOIN usuario u ON a.correo = u.correo
-                     WHERE a.n_chasis = '$n_chasis' 
-                     AND s.id_service = '$id_service' 
-                     AND r.fecha = '$fecha'";
+            $query = "SELECT 
+    a.*, 
+    s.*, 
+    r.fecha, 
+    r.estado, 
+    u.nombre, 
+    u.apellido,
+    e.id_etapa,
+    e.nombre AS nombre_etapa,
+    i.id_insumos,
+    i.tipo AS nombre_insumo,
+    n.cantidad
+FROM auto a
+JOIN reciben r ON a.n_chasis = r.n_chasis
+JOIN servicios s ON s.id_service = r.id_service
+JOIN usuario u ON a.correo = u.correo
+-- Relación entre servicio y etapa
+JOIN tienen_etapa_service tes ON s.id_service = tes.id_service
+JOIN etapa e ON e.id_etapa = tes.id_etapa
+-- Relación entre etapa e insumos
+JOIN necesitan n ON e.id_etapa = n.id_etapa
+JOIN insumos i ON n.id_insumo = i.id_insumos
+WHERE 
+    a.n_chasis = '$n_chasis' 
+    AND s.id_service = '$id_service' 
+    AND r.fecha = '$fecha'
+    AND e.tipo = 1;";
             
             $result = $con->query($query);
             
@@ -352,7 +372,13 @@ $sel .= " ORDER BY fecha ASC";
                 echo "<p><strong>Fecha programada:</strong> " . htmlspecialchars($row['fecha']) . "</p>";
                 echo "<p><strong>Estado:</strong> " . htmlspecialchars($row['estado']) . "</p>";
                 echo "<p><strong>Costo:</strong> $" . htmlspecialchars($row['costos']) . "</p>";
+                echo "<h5>Etapas e Insumos:</h5>";
+                echo "<ul>";
+                do {
+                    echo "<li><strong>Etapa:</strong> " . htmlspecialchars($row['nombre_etapa']) . " - <strong>Insumo:</strong> " . htmlspecialchars($row['nombre_insumo']) . " - <strong>Cantidad:</strong> " . htmlspecialchars($row['cantidad']) . "</li>";
+                } while ($row = $result->fetch_assoc());
             }
+            
         }
         ?>
       </div>
@@ -362,18 +388,6 @@ $sel .= " ORDER BY fecha ASC";
     </div>
   </div>
 </div>
-           <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="popup.js"></script>
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    <?php if(isset($_POST['accion']) && $_POST['accion'] == 'expandir'): ?>
-        var modal = new bootstrap.Modal(document.getElementById('serviceModal'));
-        modal.show();
-    <?php endif; ?>
-});
-</script>
 
     </div>
     </div>

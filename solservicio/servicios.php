@@ -67,6 +67,9 @@ include ('../conexionbd.php');
               <li class="nav-item">
                 <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+              </li>
             <?php endif; ?>
 
             <!-- Dropdown de perfil -->
@@ -79,7 +82,7 @@ include ('../conexionbd.php');
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="../login/registro.php">Iniciar sesión</a>
                 <?php else: ?>
-                     <a class="dropdown-item" href="#">Mi perfil</a>
+                     <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
@@ -172,10 +175,7 @@ include ('../conexionbd.php');
         </div>
     </form>
     
-     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
 </body>
   <footer class="bg-dark text-white text-center py-3 mt-4">
            <h2 class="h2">¡Vení a visitarnos!</h2>
