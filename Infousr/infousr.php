@@ -83,6 +83,9 @@ if ($result->num_rows > 0) {
               <li class="nav-item">
                 <a class="nav-link text-white" href="../allusr/usuarios.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Usuarios</a>
               </li>
+              <li class="nav-item">
+                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+              </li>
             <?php endif; ?>
 
             <!-- Dropdown de perfil -->

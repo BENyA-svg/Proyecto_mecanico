@@ -68,6 +68,9 @@ include ('../lang.php');
               <li class="nav-item">
                 <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
               </li>
+              <li class="nav-item">
+                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+              </li>
             <?php endif; ?>
 
             <!-- Dropdown de perfil -->
@@ -80,7 +83,7 @@ include ('../lang.php');
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                     <a class="dropdown-item" href="../infousr/infousr.php?lang=<?php echo $lang; ?>"><?php echo t('nav_mi_perfil'); ?></a>
+                 <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
@@ -282,9 +285,7 @@ $sel .= " ORDER BY fecha ASC";
         $id_service = $_POST['id_service'];
         $fecha = $_POST['fecha'];
 
-    if ($_POST['accion'] == 'expandir') {
-      
-   }elseif ($_POST['accion'] == 'eliminar') {
+    if ($_POST['accion'] == 'eliminar') {
      $n_chasis = $_POST['n_chasis'];
         $id_service = $_POST['id_service'];
         $fecha = $_POST['fecha'];
@@ -332,28 +333,52 @@ $sel .= " ORDER BY fecha ASC";
             $id_service = $_POST['id_service'];
             $fecha = $_POST['fecha'];
             
-            $query = "SELECT a.*, s.*, r.fecha, r.estado, u.nombre, u.apellido, u.telefono
-                     FROM auto a
-                     JOIN reciben r ON a.n_chasis = r.n_chasis
-                     JOIN servicios s ON s.id_service = r.id_service
-                     JOIN usuario u ON a.correo = u.correo
-                     WHERE a.n_chasis = '$n_chasis'
-                     AND s.id_service = '$id_service'
-                     AND r.fecha = '$fecha'";
+            $query = "SELECT 
+    a.*, 
+    s.*, 
+    r.fecha, 
+    r.estado, 
+    u.nombre, 
+    u.apellido,
+    e.id_etapa,
+    e.nombre AS nombre_etapa,
+    i.id_insumos,
+    i.tipo AS nombre_insumo,
+    n.cantidad
+FROM auto a
+JOIN reciben r ON a.n_chasis = r.n_chasis
+JOIN servicios s ON s.id_service = r.id_service
+JOIN usuario u ON a.correo = u.correo
+-- Relación entre servicio y etapa
+JOIN tienen_etapa_service tes ON s.id_service = tes.id_service
+JOIN etapa e ON e.id_etapa = tes.id_etapa
+-- Relación entre etapa e insumos
+JOIN necesitan n ON e.id_etapa = n.id_etapa
+JOIN insumos i ON n.id_insumo = i.id_insumos
+WHERE 
+    a.n_chasis = '$n_chasis' 
+    AND s.id_service = '$id_service' 
+    AND r.fecha = '$fecha'
+    AND e.tipo = 1;";
             
             $result = $con->query($query);
             
             if ($row = $result->fetch_assoc()) {
-                echo "<p><strong>" . t('cliente') . ":</strong> " . htmlspecialchars($row['nombre'] . " " . $row['apellido']) . "</p>";
-                echo "<p><strong>" . t('telefono') . ":</strong> " . htmlspecialchars($row['telefono']) . "</p>";
-                echo "<p><strong>" . t('vehiculo') . ":</strong> " . htmlspecialchars($row['marca'] . " " . $row['modelo'] . " (" . $row['año'] . ")") . "</p>";
-                echo "<p><strong>" . t('numero_de_chasis') . ":</strong> " . htmlspecialchars($row['n_chasis']) . "</p>";
-                echo "<p><strong>" . t('servicio') . ":</strong> " . htmlspecialchars($row['nombre']) . "</p>";
-                echo "<p><strong>" . t('descripcion') . ":</strong> " . htmlspecialchars($row['descripcion']) . "</p>";
-                echo "<p><strong>" . t('fecha_programada') . ":</strong> " . htmlspecialchars($row['fecha']) . "</p>";
-                echo "<p><strong>" . t('estado') . ":</strong> " . htmlspecialchars($row['estado']) . "</p>";
-                echo "<p><strong>" . t('costo') . ":</strong> $" . htmlspecialchars($row['costos']) . "</p>";
+                echo "<p><strong>Cliente:</strong> " . htmlspecialchars($row['nombre'] . " " . $row['apellido']) . "</p>";
+                echo "<p><strong>Vehículo:</strong> " . htmlspecialchars($row['marca'] . " " . $row['modelo'] . " (" . $row['año'] . ")") . "</p>";
+                echo "<p><strong>Número de Chasis:</strong> " . htmlspecialchars($row['n_chasis']) . "</p>";
+                echo "<p><strong>Servicio:</strong> " . htmlspecialchars($row['nombre']) . "</p>";
+                echo "<p><strong>Descripción:</strong> " . htmlspecialchars($row['descripcion']) . "</p>";
+                echo "<p><strong>Fecha programada:</strong> " . htmlspecialchars($row['fecha']) . "</p>";
+                echo "<p><strong>Estado:</strong> " . htmlspecialchars($row['estado']) . "</p>";
+                echo "<p><strong>Costo:</strong> $" . htmlspecialchars($row['costos']) . "</p>";
+                echo "<h5>Etapas e Insumos:</h5>";
+                echo "<ul>";
+                do {
+                    echo "<li><strong>Etapa:</strong> " . htmlspecialchars($row['nombre_etapa']) . " - <strong>Insumo:</strong> " . htmlspecialchars($row['nombre_insumo']) . " - <strong>Cantidad:</strong> " . htmlspecialchars($row['cantidad']) . "</li>";
+                } while ($row = $result->fetch_assoc());
             }
+            
         }
         ?>
       </div>
