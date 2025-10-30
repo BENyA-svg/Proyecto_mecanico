@@ -154,7 +154,7 @@ session_start();
                 $service ="Select id_service from servicios where nombre = '".$_POST['myservice']."'";
                 $result = $con->query($service);
                 $rowService = $result->fetch_assoc();
-                $insertService = "INSERT INTO reciben (n_chasis, fecha, id_service, estado) VALUES ('".$row['n_chasis']."', '$fecha', '".$rowService['id_service']."', 'pendiente')";
+                $insertService = "INSERT INTO reciben (n_chasis, fecha, id_service, estado) VALUES ('".$row['n_chasis']."', '$fecha', '".$rowService['id_service']."', '1')";
                 if ($con->query($insertService) === TRUE) {
                     echo "<p class='text-success'>" . t('servicio_solicitado_exito') . "</p>";
                     $correo_elec = "Select correo from centros where nom_centro = '".$_POST['centro']."'";

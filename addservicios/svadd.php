@@ -148,10 +148,6 @@ session_start();
                             <label for="duracion"><?php echo t('duration'); ?></label>
                             <input type="text" class="form-control" name="duracion" id="duracion" required>
                         </div>
-                        <div class="mb-2">
-                            <label for="tipo_etapa"><?php echo t('type'); ?></label>
-                            <input type="text" class="form-control" name="tipo_etapa" id="tipo_etapa" required>
-                        </div>
                         <button type="submit" class="btn btn-success"><?php echo t('add_stage_button'); ?></button>
                     </form>
                 </div>
@@ -282,16 +278,21 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     } elseif (isset($_POST['nombre_etapa'])) {
         $id_etapa = random_int(1, 10000);
         $nombre_etapa = $_POST['nombre_etapa'];
-        $tipo_etapa = $_POST['tipo_etapa'];
         $duracion_etapa = $_POST['duracion'];
-
+        $etapa_num="SELECT COUNT(*) AS etapa_num from tienen_etapa_service WHERE id_service='".$_POST['id_servicio']."';";
+        $result = $con->query($etapa_num);
+        if ($result && $row = $result->fetch_assoc()) {
+            $etapanueva = $row['etapa_num'] + 1;
+        } else {
+            $etapanueva = 1;
+        }
         // Validación
-        if (empty($nombre_etapa) || empty($tipo_etapa)) {
+        if (empty($nombre_etapa) || empty($duracion_etapa)) {
             echo '<div class="alert alert-danger">Por favor completa todos los campos obligatorios para la etapa.</div>';
         } else {
             $con->begin_transaction();
             try {
-                $con->query("INSERT INTO etapa (id_etapa, nombre, tipo, duracion) VALUES ('$id_etapa', '$nombre_etapa', '$tipo_etapa', '$duracion_etapa')");
+                $con->query("INSERT INTO etapa (id_etapa, nombre, orden, duracion) VALUES ('$id_etapa', '$nombre_etapa', ".$etapanueva.", '$duracion_etapa')");
                 $con->query("INSERT INTO tienen_etapa_service (id_service, id_etapa) VALUES ('".$_POST['id_servicio']."', '$id_etapa')");
                 $con->commit();
                 echo t('stage_added_successfully');

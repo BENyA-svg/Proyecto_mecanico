@@ -169,9 +169,11 @@ include ('../lang.php');
                 (SELECT n_chasis FROM auto WHERE n_chasis = '$auto'),
                 (SELECT id_service FROM servicios WHERE nombre = '$service'),
                 '$fecha',
-                'pendiente'
+                '1'
             )";
-               if ($con->query($insertar) === TRUE) {
+            $insertrealizan="INSERT INTO realizan (correo_elec, n_chasis, id_service) values ('".$_SESSION['email']."', '$auto', (SELECT id_service FROM servicios WHERE nombre = '$service'))";
+            
+               if ($con->query($insertar) === TRUE && $con->query($insertrealizan) === TRUE) {
                    echo "<p class='text-success'>" . t('servicio_solicitado_exito') . "</p>";
                } else {
                    echo "<p class='text-danger'>" . t('error_solicitar_servicio') . " " . $con->error . "</p>";
@@ -207,9 +209,9 @@ include ('../lang.php');
           </div>  
         <?php
 if (!isset($_POST['todo'])) {
-    $sel .= " AND estado = 'pendiente'";
+    $sel .= " AND estado REGEXP '^[0-9]+$'";
  
-} 
+}
 if(isset($_POST['todo']) && $_POST['todo'] == 'recargar'){
     echo "<meta http-equiv='refresh' content='0'>";
 }
@@ -335,31 +337,25 @@ $sel .= " ORDER BY fecha ASC";
             
             $query = "SELECT 
     a.*, 
+    s.nombre AS nombre_service,
     s.*, 
     r.fecha, 
     r.estado, 
     u.nombre, 
     u.apellido,
     e.id_etapa,
-    e.nombre AS nombre_etapa,
-    i.id_insumos,
-    i.tipo AS nombre_insumo,
-    n.cantidad
+    e.nombre AS nombre_etapa
 FROM auto a
 JOIN reciben r ON a.n_chasis = r.n_chasis
 JOIN servicios s ON s.id_service = r.id_service
 JOIN usuario u ON a.correo = u.correo
--- Relación entre servicio y etapa
 JOIN tienen_etapa_service tes ON s.id_service = tes.id_service
-JOIN etapa e ON e.id_etapa = tes.id_etapa
--- Relación entre etapa e insumos
-JOIN necesitan n ON e.id_etapa = n.id_etapa
-JOIN insumos i ON n.id_insumo = i.id_insumos
-WHERE 
-    a.n_chasis = '$n_chasis' 
-    AND s.id_service = '$id_service' 
-    AND r.fecha = '$fecha'
-    AND e.tipo = 1;";
+JOIN etapa e ON tes.id_etapa = e.id_etapa
+WHERE a.n_chasis = '$n_chasis'
+AND s.id_service = '$id_service'
+AND r.fecha = '$fecha'
+AND e.orden = r.estado;
+   ";
             
             $result = $con->query($query);
             
@@ -367,27 +363,137 @@ WHERE
                 echo "<p><strong>Cliente:</strong> " . htmlspecialchars($row['nombre'] . " " . $row['apellido']) . "</p>";
                 echo "<p><strong>Vehículo:</strong> " . htmlspecialchars($row['marca'] . " " . $row['modelo'] . " (" . $row['año'] . ")") . "</p>";
                 echo "<p><strong>Número de Chasis:</strong> " . htmlspecialchars($row['n_chasis']) . "</p>";
-                echo "<p><strong>Servicio:</strong> " . htmlspecialchars($row['nombre']) . "</p>";
+                echo "<p><strong>Servicio:</strong> " . htmlspecialchars($row['nombre_service']) . "</p>";
                 echo "<p><strong>Descripción:</strong> " . htmlspecialchars($row['descripcion']) . "</p>";
                 echo "<p><strong>Fecha programada:</strong> " . htmlspecialchars($row['fecha']) . "</p>";
                 echo "<p><strong>Estado:</strong> " . htmlspecialchars($row['estado']) . "</p>";
                 echo "<p><strong>Costo:</strong> $" . htmlspecialchars($row['costos']) . "</p>";
                 echo "<h5>Etapas e Insumos:</h5>";
                 echo "<ul>";
-                do {
-                    echo "<li><strong>Etapa:</strong> " . htmlspecialchars($row['nombre_etapa']) . " - <strong>Insumo:</strong> " . htmlspecialchars($row['nombre_insumo']) . " - <strong>Cantidad:</strong> " . htmlspecialchars($row['cantidad']) . "</li>";
-                } while ($row = $result->fetch_assoc());
+                $selinsumos = "SELECT i.*, n.cantidad
+FROM insumos i
+JOIN necesitan n ON n.id_insumo = i.id_insumos
+JOIN etapa e ON e.id_etapa = n.id_etapa
+WHERE e.id_etapa = ".$row['id_etapa'].";"
+;
+                $resinsumos = $con->query($selinsumos);
+                if ($resinsumos->num_rows > 0) {
+                    echo "<h6>" . htmlspecialchars($row['nombre_etapa']) . "</h6>";
+                     while ($rowinsumos = $resinsumos->fetch_assoc()) {
+                    echo "<li>" . htmlspecialchars($rowinsumos['tipo']) . " - Cantidad: " . htmlspecialchars($rowinsumos['cantidad']) . "</li>";
+                }
+                }else{
+                  echo "esta etapa no requiere insumos";
+                }
+                echo "</ul>";
             }
             
         }
         ?>
       </div>
       <div class="modal-footer">
+        <form action="" method="post">
+          <input type="hidden" name="accion" value="avanzar_etapa">
+          <input type="hidden" name="n_chasis" value="<?php echo $n_chasis; ?>">
+          <input type="hidden" name="id_service" value="<?php echo $id_service; ?>">
+          <input type="hidden" name="fecha" value="<?php echo $fecha; ?>">
+          <button type="submit" class="btn btn-primary">Avanzar etapa</button>
+        </form>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo t('cerrar'); ?></button>
       </div>
     </div>
   </div>
 </div>
+<?php
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['accion'] == 'avanzar_etapa'){
+    $n_chasis = $_POST['n_chasis'];
+    $id_service = $_POST['id_service'];
+    $fecha = $_POST['fecha'];
+
+    $con->begin_transaction();
+    try {
+
+        $etapaactual = "SELECT estado FROM reciben WHERE n_chasis = '$n_chasis' AND id_service = '$id_service' AND fecha = '$fecha'";
+        $resetapa = $con->query($etapaactual);
+
+        if ($row = $resetapa->fetch_assoc()) {
+            $estado_actual = $row['estado'];
+            $nuevaetapa = $estado_actual + 1;
+
+            // Obtener el id_etapa actual
+            $current_etapa_query = "SELECT e.id_etapa FROM etapa e
+                                    JOIN tienen_etapa_service tes ON e.id_etapa = tes.id_etapa
+                                    WHERE tes.id_service = '$id_service' AND e.orden = '$estado_actual'";
+            $current_etapa_result = $con->query($current_etapa_query);
+
+            if ($current_etapa_row = $current_etapa_result->fetch_assoc()) {
+                $current_id_etapa = $current_etapa_row['id_etapa'];
+
+                // Restar insumos
+                $restarinsumos = "SELECT i.*, n.cantidad
+                                  FROM insumos i
+                                  JOIN necesitan n ON n.id_insumo = i.id_insumos
+                                  WHERE n.id_etapa = '$current_id_etapa'";
+                $resinsumos = $con->query($restarinsumos);
+
+                while ($ins = $resinsumos->fetch_assoc()) {
+                    $id_insumo = $ins['id_insumos'];
+                    $cantidad_actual = $ins['cantidad_pedida'];
+                    $cantidad_a_restar = $ins['cantidad'];
+
+                    // Calcular la nueva cantidad pedida
+                    $nueva_cantidad = $cantidad_actual - $cantidad_a_restar;
+
+                    // Evitar que quede negativa
+                    if ($nueva_cantidad < 0) {
+                        throw new Exception("No hay suficiente stock del insumo ID $id_insumo (faltan " . abs($nueva_cantidad) . ").");
+                    }
+
+                    // Actualizar ese insumo puntual
+                    $actualizainsumos = "UPDATE insumos SET cantidad_pedida = '$nueva_cantidad' WHERE id_insumos = '$id_insumo'";
+
+                    if (!$con->query($actualizainsumos)) {
+                        throw new Exception("Error actualizando insumo ID $id_insumo: " . $con->error);
+                    }
+                }
+            } else {
+                throw new Exception("No se encontró la etapa actual para el servicio.");
+            }
+
+            // Actualizar etapa
+            $actualizaetapa = "UPDATE reciben SET estado = '$nuevaetapa' WHERE n_chasis = '$n_chasis' AND id_service = '$id_service' AND fecha = '$fecha'";
+            if (!$con->query($actualizaetapa)) {
+                throw new Exception("Error avanzando etapa: " . $con->error);
+            }
+
+            // Verificar si hay más etapas
+            $verificaetapa = "SELECT e.orden FROM etapa e
+                              JOIN tienen_etapa_service tes ON e.id_etapa = tes.id_etapa
+                              WHERE tes.id_service = '$id_service' AND e.orden = '$nuevaetapa'";
+            $reseetapa = $con->query($verificaetapa);
+
+            if ($reseetapa->num_rows == 0) {
+                $finaliza = "UPDATE reciben SET estado = 'completado' WHERE n_chasis = '$n_chasis' AND id_service = '$id_service' AND fecha = '$fecha'";
+                if (!$con->query($finaliza)) {
+                    throw new Exception("Error finalizando servicio: " . $con->error);
+                }
+                echo "<p class='text-success'>" . t('servicio_completado_exito') . "</p>";
+            } else {
+                echo "<p class='text-success'>" . t('etapa_avanzada_exito') . "</p>";
+            }
+        } else {
+            throw new Exception("No se encontró registro en 'reciben' para el chasis $n_chasis.");
+        }
+
+        // ✅ Confirmar cambios si todo fue bien
+        $con->commit();
+    } catch (Exception $e) {
+        // ❌ Revertir todos los cambios si hay algún error
+        $con->rollback();
+        echo "<p class='text-danger'>Error: " . $e->getMessage() . "</p>";
+    }
+}
+?>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="popup.js"></script>
     <script>
