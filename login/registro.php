@@ -1,15 +1,16 @@
 <?php
 include ('../conexionbd.php');
+include ('../lang.php');
 
 session_start();
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo $lang; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina 1</title>
+    <title><?php echo t('login_title'); ?></title>
        <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
         <script src="https://kit.fontawesome.com/16aa28c921.js" crossorigin="anonymous"></script>
@@ -37,33 +38,36 @@ session_start();
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav d-flex flex-row align-items-center gap-3">
             <li class="nav-item">
-              <a class="nav-link text-white" href="../inicio1.php">Inicio</a>
+              <button class="btn btn-outline-light" onclick="window.location.href='?lang=<?php echo ($lang == 'es' ? 'en' : 'es'); ?>'"><?php echo ($lang == 'es' ? 'EN' : 'ES'); ?></button>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="../inicio1.php?lang=<?php echo $lang; ?>"><?php echo t('nav_inicio'); ?></a>
             </li>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php">Servicios pendientes</a>
+                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios_pendientes'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'cliente'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../solservicio/servicios.php">Servicios</a>
+                <a class="nav-link text-white" href="../solservicio/servicios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../misautos/misautos.php">Mis autos</a>
+                <a class="nav-link text-white" href="../misautos/misautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_mis_autos'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'ventas'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../aautos/aautos.php">Agregar vehículo</a>
+                <a class="nav-link text-white" href="../aautos/aautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_vehiculo'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../insumos/insumos.php">Insumos</a>
+                <a class="nav-link text-white" href="../insumos/insumos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_insumos'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
+                <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -75,13 +79,13 @@ session_start();
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
                 <?php if (!isset($_SESSION['email'])): ?>
-                  <a class="dropdown-item" href="../login/registro.php">Iniciar sesión</a>
+                  <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                     <a class="dropdown-item" href="#">Mi perfil</a>
+                     <a class="dropdown-item" href="#"><?php echo t('nav_mi_perfil'); ?></a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
-                    <button class="dropdown-item" type="submit">Cerrar sesión</button>
+                    <button class="dropdown-item" type="submit"><?php echo t('nav_cerrar_sesion'); ?></button>
                   </form>
                 <?php endif; ?>
               </div>
@@ -98,21 +102,21 @@ session_start();
                   <?php if (isset($_GET['error'])): ?>
     <div class="alert alert-danger">
         <?php
-            if ($_GET['error'] == 1) echo "Datos incorrectos.";
-            if ($_GET['error'] == 2) echo "Faltan datos obligatorios para el registro.";
- 
+            if ($_GET['error'] == 1) echo t('login_error_incorrect');
+            if ($_GET['error'] == 2) echo t('login_error_missing');
+
         ?>
     </div>
 <?php endif; ?>
-                <label for="email">Correo electronico</label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="ejemplo@gmail.com" name="email">
+                <label for="email"><?php echo t('login_email'); ?></label>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="<?php echo t('login_placeholder_email'); ?>" name="email">
 
-                <label for="password">Contraseña</label>
-                <input type="password" class="form-control" id="password" placeholder="contraseña" name="contraseña">
+                <label for="password"><?php echo t('login_password'); ?></label>
+                <input type="password" class="form-control" id="password" placeholder="<?php echo t('login_placeholder_password'); ?>" name="contraseña">
                 <br>
-               <p>¿No tienes cuenta? 
-                <a href="../register/registrarse.php">registrarse</a></p>
-                <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+               <p><?php echo t('login_no_account'); ?>
+                <a href="../register/registrarse.php?lang=<?php echo $lang; ?>"><?php echo t('login_register'); ?></a></p>
+                <button name="submit" type="submit" class="btn btn-primary"><?php echo t('login_submit'); ?></button>
 
             </div>
         </div>

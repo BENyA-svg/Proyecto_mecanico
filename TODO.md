@@ -1,6 +1,10 @@
-# TODO: Fix Header Issue in inicio1.php
+# TODO: Agregar traducciones al inglés en servicios pendientes
 
-- [x] Fix HTML structure: Remove extra closing </div> tags in the header/navbar section to ensure proper nesting and full display.
-- [x] Update navbar to Bootstrap 5: Change data-toggle to data-bs-toggle and data-target to data-bs-target for consistency.
-- [ ] Verify .header-section CSS for full width display if needed.
-- [ ] Test the page to confirm header displays correctly and navbar functions.
+- [x] Verificar traducciones existentes en lang.php para spendientes.php
+- [x] Editar spendientes.php para reemplazar cadenas hardcodeadas con t() en:
+  - Títulos de tabla
+  - Botones
+  - Mensajes de éxito/error
+  - Etiquetas de formulario
+  - Footer
+- [ ] Probar que las traducciones funcionen cambiando el idioma

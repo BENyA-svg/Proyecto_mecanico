@@ -1,14 +1,15 @@
 <?php
 include '../conexionbd.php';
+include '../lang.php';
     session_start();
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo $lang; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JuancitoMotores - Inicio</title>
+    <title><?php echo t('title_users'); ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
         <script src="https://kit.fontawesome.com/16aa28c921.js" crossorigin="anonymous"></script>
@@ -37,33 +38,33 @@ include '../conexionbd.php';
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav d-flex flex-row align-items-center gap-3">
             <li class="nav-item">
-              <a class="nav-link text-white" href="../inicio1.php">Inicio</a>
+              <a class="nav-link text-white" href="../inicio1.php?lang=<?php echo $lang; ?>"><?php echo t('nav_inicio'); ?></a>
             </li>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php">Servicios pendientes</a>
+                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios_pendientes'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'cliente'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../solservicio/servicios.php">Servicios</a>
+                <a class="nav-link text-white" href="../solservicio/servicios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../misautos/misautos.php">Mis autos</a>
+                <a class="nav-link text-white" href="../misautos/misautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_mis_autos'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'ventas'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../aautos/aautos.php">Agregar vehículo</a>
+                <a class="nav-link text-white" href="../aautos/aautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_vehiculo'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../insumos/insumos.php">Insumos</a>
+                <a class="nav-link text-white" href="../insumos/insumos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_insumos'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
+                <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -75,13 +76,13 @@ include '../conexionbd.php';
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
                 <?php if (!isset($_SESSION['email'])): ?>
-                  <a class="dropdown-item" href="../login/registro.php">Iniciar sesión</a>
+                  <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                    <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
+                    <a class="dropdown-item" href="../Infousr/infousr.php?lang=<?php echo $lang; ?>"><?php echo t('mi_perfil'); ?></a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
-                    <button class="dropdown-item" type="submit">Cerrar sesión</button>
+                    <button class="dropdown-item" type="submit"><?php echo t('cerrar_sesion'); ?></button>
                   </form>
                 <?php endif; ?>
               </div>
@@ -103,10 +104,10 @@ include '../conexionbd.php';
   if ($res->num_rows > 0) {
   // Usar el mismo formato que la tabla de servicios pendientes
   echo '<div class="container py-5">';
-  echo '<h2 class="text-center mb-4">Usuarios</h2>';
+  echo '<h2 class="text-center mb-4">' . t('users') . '</h2>';
   echo '<div class="table-responsive">';
   echo '<table class="table table-striped table-hover">';
-  echo '<thead class="table-dark"><tr><th scope="col">CI</th><th scope="col">Nombre</th><th scope="col">Apellido</th><th scope="col">Correo</th><th scope="col">Telefono</th><th scope="col">Cargo</th><th scope="col">Acciones</th></tr></thead>';
+  echo '<thead class="table-dark"><tr><th scope="col">' . t('id') . '</th><th scope="col">' . t('name') . '</th><th scope="col">' . t('last_name') . '</th><th scope="col">' . t('email') . '</th><th scope="col">' . t('phone') . '</th><th scope="col">' . t('role') . '</th><th scope="col">' . t('actions') . '</th></tr></thead>';
   echo '<tbody>';
     while($fila = $res->fetch_assoc()) {
       echo "<tr>";
@@ -139,7 +140,7 @@ include '../conexionbd.php';
       // Columna de acciones: botón que rellena el formulario de abajo
       $correo_js = addslashes($fila["correo"]);
       $cargo_js = addslashes($cargo);
-      echo '<td><button type="button" class="btn btn-sm btn-primary" onclick="editarUsuario(\'' . $correo_js . '\', \'' . $cargo_js . '\')">Editar</button></td>';
+      echo '<td><button type="button" class="btn btn-sm btn-primary" onclick="editarUsuario(\'' . $correo_js . '\', \'' . $cargo_js . '\')">' . t('edit') . '</button></td>';
       echo "</tr>";
     }
     echo '</tbody>';
@@ -154,17 +155,17 @@ include '../conexionbd.php';
         </div>
     </div>
      <form action="" method="post">
-    <label for="usuario">Usuario (email):</label>
+    <label for="usuario"><?php echo t('user_email'); ?>:</label>
     <input type="text" name="usuario" id="usuario" required>
 
-    <label for="perfil">Nuevo perfil:</label>
+    <label for="perfil"><?php echo t('new_profile'); ?>:</label>
     <select name="perfil" id="perfil" required>
-        <option value="admin">Admin</option>
-        <option value="cliente">Cliente</option>
-        <option value="centro">Centro</option>
+        <option value="admin"><?php echo t('admin'); ?></option>
+        <option value="cliente"><?php echo t('client'); ?></option>
+        <option value="centro"><?php echo t('center'); ?></option>
     </select>
 
-    <button name="accion"  type="submit">Actualizar rango</button>
+    <button name="accion"  type="submit"><?php echo t('update_role'); ?></button>
 </form>
 
     <?php
@@ -185,7 +186,7 @@ include '../conexionbd.php';
         if (isset($sql2)) {
             $con->query($sql2);
         }
-        echo "<div class='alert alert-primary'>Rango actualizado correctamente.</div>";
+        echo "<div class='alert alert-primary'>" . t('role_updated_successfully') . "</div>";
     }
         } 
           

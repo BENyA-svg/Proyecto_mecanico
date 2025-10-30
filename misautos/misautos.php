@@ -1,5 +1,6 @@
 <?php
 include ('../conexionbd.php');
+include ('../lang.php');
 session_start();
 
 $mis_autos_ejemplo = [
@@ -16,11 +17,11 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo $lang; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JuancitoMotores - Mis Autos</title>
+    <title><?php echo t('title_mis_autos'); ?></title>
 
       <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
@@ -49,33 +50,33 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav d-flex flex-row align-items-center gap-3">
             <li class="nav-item">
-              <a class="nav-link text-white" href="../inicio1.php">Inicio</a>
+              <a class="nav-link text-white" href="../inicio1.php?lang=<?php echo $lang; ?>"><?php echo t('nav_inicio'); ?></a>
             </li>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php">Servicios pendientes</a>
+                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios_pendientes'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'cliente'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../solservicio/servicios.php">Servicios</a>
+                <a class="nav-link text-white" href="../solservicio/servicios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../misautos/misautos.php">Mis autos</a>
+                <a class="nav-link text-white" href="../misautos/misautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_mis_autos'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'ventas'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../aautos/aautos.php">Agregar vehículo</a>
+                <a class="nav-link text-white" href="../aautos/aautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_vehiculo'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../insumos/insumos.php">Insumos</a>
+                <a class="nav-link text-white" href="../insumos/insumos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_insumos'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
+                <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -87,13 +88,13 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
                 <?php if (!isset($_SESSION['email'])): ?>
-                  <a class="dropdown-item" href="../login/registro.php">Iniciar sesión</a>
+                  <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                     <a class="dropdown-item" href="#">Mi perfil</a>
+                     <a class="dropdown-item" href="#"><?php echo t('nav_mi_perfil'); ?></a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
-                    <button class="dropdown-item" type="submit">Cerrar sesión</button>
+                    <button class="dropdown-item" type="submit"><?php echo t('nav_cerrar_sesion'); ?></button>
                   </form>
                 <?php endif; ?>
               </div>
@@ -105,7 +106,7 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
   </div>
     
     <div class="container mt-5">
-        <h3 class="form-title">Mis Vehículos</h3>
+        <h3 class="form-title"><?php echo t('mis_vehiculos'); ?></h3>
         <div class="form-container">
 
         <!-- ACA VAMOS A TRABAJAR AHORA-->
@@ -122,18 +123,18 @@ if ($res->num_rows > 0) {
                 <div>
         <?php
              echo "<h5 class=\"card-title\">" . ($fila['marca'] . ' ' . $fila['modelo'] . ' ' . $fila['año']) . "</h5>";
-               echo "<p class=\"card-text\">" ."<strong>Matricula:</strong>" .($fila['matricula'] . 
-               '<br><strong>Numero de chasis:</strong> ' . $fila['n_chasis'].
-               ' <br><strong>Numero de motor:</strong>' . $fila['n_motor']) . 
-               ' <br><strong>Estado de garantia:</strong>' . $fila['estado_g'] .
-               ' <br><strong>Fecha de compra:</strong>' . $fila['fecha_compra'] . "</p>";
+             echo "<p class=\"card-text\">" ."<strong>" . t('matricula') . ":</strong>" .($fila['matricula'] .
+               '<br><strong>' . t('numero_chasis') . ':</strong> ' . $fila['n_chasis'].
+               ' <br><strong>' . t('numero_motor') . ':</strong>' . $fila['n_motor']) .
+               ' <br><strong>' . t('estado_garantia') . ':</strong>' . $fila['estado_g'] .
+               ' <br><strong>' . t('fecha_compra') . ':</strong>' . $fila['fecha_compra'] . "</p>";
            ?></div>
 </div>
 </div>
         <?php
     }
 }else{
-    echo "<tr><td colspan='7'>No hay vehículos registrados.</td></tr>";
+    echo "<tr><td colspan='7'>" . t('no_vehiculos') . "</td></tr>";
 }
     echo "</table>";
 
@@ -142,28 +143,28 @@ if ($res->num_rows > 0) {
     </div>
  
   <footer class="bg-dark text-white text-center py-3 mt-4">
-           <h2 class="h2">¡Vení a visitarnos!</h2>
-           <h1 class="h1">Y salí manejando tu auto como nuevo</h1><br><br>
-           <p class="contacto">Contactanos </p>
+           <h2 class="h2"><?php echo t('footer_visitanos'); ?></h2>
+           <h1 class="h1"><?php echo t('footer_auto_nuevo'); ?></h1><br><br>
+           <p class="contacto"><?php echo t('footer_contactanos'); ?> </p>
            <div class="d-flex justify-content-between align-items-center flex-wrap px-3">
              <div class="d-flex align-items-center">
-               <div class="logo-footer me-2"><img src="imagenes-inicio/sobre.png"></div>
-               <p class="logo-footer p">wolfcrewcontact@gmail.com</p>
+               <div class="logo-footer me-2"><img src="../imagenes-inicio/sobre.png"></div>
+               <p class="logo-footer p"><?php echo t('footer_email'); ?></p>
              </div>
              <div class="d-flex align-items-center">
-               <div class="logo-footer me-2"><img src="imagenes-inicio/telefono.png"></div>
-               <p class="logo-footer p">+598 099 456 220</p>
+               <div class="logo-footer me-2"><img src="../imagenes-inicio/telefono.png"></div>
+               <p class="logo-footer p"><?php echo t('footer_telefono'); ?></p>
              </div>
              <div class="d-flex align-items-center">
-               <div class="logo-footer me-2"><img src="imagenes-inicio/pinubicacion.png"></div>
-               <p class="logo-footer p">Con.José Pedro Varela 2737</p>
+               <div class="logo-footer me-2"><img src="../imagenes-inicio/pinubicacion.png"></div>
+               <p class="logo-footer p"><?php echo t('footer_direccion'); ?></p>
              </div>
            </div>
 
            <div class="map-container">
 <iframe src="https://www.google.com/maps/d/u/1/embed?mid=1_SIFaqqS37wGh6hIDiAiaXgrsSMJnGA&ehbc=2E312F" width="640" height="480"></iframe>
           </div>
-          <p>&copy; 2024 JuancitoMotores. Todos los derechos reservados.</p>
+          <p><?php echo t('footer_copyright'); ?></p>
         </footer>
 
 

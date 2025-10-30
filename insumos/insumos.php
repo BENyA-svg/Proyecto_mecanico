@@ -1,5 +1,6 @@
 <?php
 include ('../conexionbd.php');
+include ('../lang.php');
 session_start();
 // Manejo PRG: si se solicita expandir via GET, cargar datos en sesión y redirigir para evitar reenvío al recargar
 if (isset($_GET['expandir'])) {
@@ -14,11 +15,11 @@ if (isset($_GET['expandir'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo $lang; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JuancitoMotores - Inicio</title>
+    <title><?php echo t('title_supplies'); ?></title>
 
       <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
@@ -47,33 +48,33 @@ if (isset($_GET['expandir'])) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav d-flex flex-row align-items-center gap-3">
             <li class="nav-item">
-              <a class="nav-link text-white" href="../inicio1.php">Inicio</a>
+              <a class="nav-link text-white" href="../inicio1.php?lang=<?php echo $lang; ?>"><?php echo t('nav_inicio'); ?></a>
             </li>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php">Servicios pendientes</a>
+                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios_pendientes'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'cliente'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../solservicio/servicios.php">Servicios</a>
+                <a class="nav-link text-white" href="../solservicio/servicios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../misautos/misautos.php">Mis autos</a>
+                <a class="nav-link text-white" href="../misautos/misautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_mis_autos'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'ventas'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../aautos/aautos.php">Agregar vehículo</a>
+                <a class="nav-link text-white" href="../aautos/aautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_vehiculo'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../insumos/insumos.php">Insumos</a>
+                <a class="nav-link text-white" href="../insumos/insumos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_insumos'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
+                <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -85,13 +86,13 @@ if (isset($_GET['expandir'])) {
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
                 <?php if (!isset($_SESSION['email'])): ?>
-                  <a class="dropdown-item" href="../login/registro.php">Iniciar sesión</a>
+                  <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                     <a class="dropdown-item" href="#">Mi perfil</a>
+                     <a class="dropdown-item" href="#"><?php echo t('mi_perfil'); ?></a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
-                    <button class="dropdown-item" type="submit">Cerrar sesión</button>
+                    <button class="dropdown-item" type="submit"><?php echo t('cerrar_sesion'); ?></button>
                   </form>
                 <?php endif; ?>
               </div>
@@ -110,35 +111,35 @@ if (isset($_GET['expandir'])) {
     <div class="overlay" id="overlay">
         <div class="popup" id="popup">
             <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
-            <h2>Informacion del insumo:</h2>
+            <h2><?php echo t('supply_information'); ?></h2>
             <div class="container mt-4">
-        <h4>Agregar Insumo</h4>
+        <h4><?php echo t('add_supply'); ?></h4>
         <form method="post" action="" enctype="multipart/form-data">
-            
+
             <div class="mb-2">
-                <label for="precio">Precio:</label>
+                <label for="precio"><?php echo t('price'); ?>:</label>
                 <input type="number" class="form-control" name="precio" required>
             </div>
             <div class="mb-2">
-                <label for="tipo">Tipo:</label>
+                <label for="tipo"><?php echo t('type'); ?>:</label>
                 <input type="text" class="form-control" name="tipo" required>
             </div>
-            
+
             <div class="mb-2">
-                <label for="cantidad">Cantidad:</label>
+                <label for="cantidad"><?php echo t('quantity'); ?>:</label>
                 <input type="number" class="form-control" name="cantidad" required>
             </div>
             <div class="mb-2">
-                <label for="fecha_pedido">Fecha pedido:</label>
+                <label for="fecha_pedido"><?php echo t('order_date'); ?>:</label>
                 <input type="date" class="form-control" name="fecha_pedido" required>
             </div>
             <div class="mb-2">
-                <label for="imagen">Imagen:</label>
+                <label for="imagen"><?php echo t('image'); ?>:</label>
           <input type="file" name="foto" id="foto">
             </div>
               <a href="#" id="agregar-servicio" class="agregar-servicio"><i class="fa-solid fa-plus"></i></a>
             <input type="hidden" name="accion" value="agregar">
-            <button type="submit" class="btn btn-success">Agregar Insumo</button>
+            <button type="submit" class="btn btn-success"><?php echo t('add_supply_button'); ?></button>
         </form>
                 </div>
                 </div> 
@@ -160,13 +161,13 @@ echo '<div class="cards-container">';
   echo "<img src='data:image/jpeg;base64," . base64_encode($fila["imagen"]) . "' class='card-img img-fluid' alt='Imagen del auto'>";
         echo "<div class=\"card-body\">";
         echo "<h5 class=\"card-title\">".$fila["tipo"]."</h5>";
-        echo "<p class=\"card-text\">Precio: $".$fila["precio"]."</p>";
-        echo "<p class=\"card-text\">Cantidad: ".$fila["cantidad_pedida"]."</p>";
+        echo "<p class=\"card-text\">" . t('price') . ": $".$fila["precio"]."</p>";
+        echo "<p class=\"card-text\">" . t('quantity') . ": ".$fila["cantidad_pedida"]."</p>";
   echo "<p class=\"card-text\"></p>";
   // Botón que abre modal para ver/editar insumo (usamos GET + PRG para evitar reenvío al recargar)
   echo '<form method="get" class="d-inline">';
   echo '<input type="hidden" name="expandir" value="' . htmlspecialchars($fila["id_insumos"]) . '">';
-  echo '<button type="submit" class="btn btn-primary btn-editar btn-sm">Editar</button>';
+  echo '<button type="submit" class="btn btn-primary btn-editar btn-sm">' . t('edit') . '</button>';
   echo '</form>';
         echo "</div>";
         echo "</div>";
@@ -181,7 +182,7 @@ echo '</div>';
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="insumoModalLabel">Detalles del Insumo</h5>
+        <h5 class="modal-title" id="insumoModalLabel"><?php echo t('supply_details'); ?></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
     <div class="modal-body">
@@ -199,35 +200,35 @@ echo '</div>';
           <input type="hidden" name="accion" value="actualizar">
           <input type="hidden" name="id_insumos" value="<?php echo htmlspecialchars($row['id_insumos']); ?>">
           <div class="mb-2">
-            <label for="tipo_edit">Tipo:</label>
+            <label for="tipo_edit"><?php echo t('type'); ?>:</label>
             <input type="text" class="form-control" id="tipo_edit" name="tipo" value="<?php echo htmlspecialchars($row['tipo']); ?>" required>
           </div>
           <div class="mb-2">
-            <label for="precio_edit">Precio:</label>
+            <label for="precio_edit"><?php echo t('price'); ?>:</label>
             <input type="number" step="0.01" class="form-control" id="precio_edit" name="precio" value="<?php echo htmlspecialchars($row['precio']); ?>" required>
           </div>
           <div class="mb-2">
-            <label for="cantidad_actual">Cantidad actual (no editable):</label>
+            <label for="cantidad_actual"><?php echo t('current_quantity'); ?>:</label>
             <input type="number" class="form-control" id="cantidad_actual" name="cantidad_actual" value="<?php echo htmlspecialchars($row['cantidad_pedida']); ?>" readonly>
           </div>
           <div class="mb-2">
-            <label for="agregar_cantidad">Agregar cantidad (número a sumar):</label>
+            <label for="agregar_cantidad"><?php echo t('add_quantity'); ?>:</label>
             <input type="number" class="form-control" id="agregar_cantidad" name="agregar_cantidad" value="0" min="0">
           </div>
           <div class="mb-2">
-            <label for="fecha_edit">Fecha pedido:</label>
+            <label for="fecha_edit"><?php echo t('order_date'); ?>:</label>
             <input type="date" class="form-control" id="fecha_edit" name="fecha_pedido" value="<?php echo htmlspecialchars($row['fecha_pedido']); ?>" required>
           </div>
           <div class="mb-2">
-            <label for="imagen_edit">Imagen (dejar vacío para no cambiar):</label>
+            <label for="imagen_edit"><?php echo t('image'); ?> (<?php echo t('leave_empty'); ?>):</label>
             <input type="file" class="form-control" id="imagen_edit" name="foto">
           </div>
           <div class="mb-2">
-            <label for="correo_of_edit">Ofrecido por:</label>
+            <label for="correo_of_edit"><?php echo t('offered_by'); ?>:</label>
             <input type="email" class="form-control" id="correo_of_edit" name="correo_of" value="<?php echo htmlspecialchars($row['correo_of'] ?? ''); ?>">
           </div>
           <div class="text-center">
-            <button type="submit" class="btn btn-success">Guardar cambios</button>
+            <button type="submit" class="btn btn-success"><?php echo t('save_changes'); ?></button>
           </div>
         </form>
         <?php
@@ -238,7 +239,7 @@ echo '</div>';
     ?>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo t('close'); ?></button>
       </div>
     </div>
   </div>
@@ -267,11 +268,11 @@ if (isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
     $sql = "INSERT INTO insumos (id_insumos, precio, tipo, correo_of, cantidad_pedida, fecha_pedido, imagen) 
     VALUES ('$numeroSeguro', '$precio', '$tipo', '".$_SESSION['email']."', '$cantidad', '$fecha_pedido', '$imgData')";
     if ($con->query($sql) === TRUE) {
-        echo '<div class="alert alert-success">Insumo agregado correctamente.</div>';
+        echo '<div class="alert alert-success">' . t('supply_added_successfully') . '</div>';
         echo '<script>window.location = window.location.pathname;</script>';
         exit();
     } else {
-        echo '<div class="alert alert-danger">Error al agregar insumo: ' . $con->error . '</div>';
+        echo '<div class="alert alert-danger">' . t('error_adding_supply') . ' ' . $con->error . '</div>';
     }
 }
   }
@@ -312,20 +313,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion']) && $_POST['a
   if (!empty($update_fields)) {
     $sql_up = "UPDATE insumos SET " . implode(', ', $update_fields) . " WHERE id_insumos = '$id_insumo'";
     if ($con->query($sql_up) === TRUE) {
-      echo "<div class='alert alert-success'>Insumo actualizado correctamente.</div>";
+      echo "<div class='alert alert-success'>" . t('supply_updated_successfully') . "</div>";
       // Recargar para ver cambios y evitar reenvío del formulario
       echo "<script>setTimeout(function(){ window.location = window.location.pathname; }, 700);</script>";
       exit();
     } else {
-      echo "<div class='alert alert-danger'>Error al actualizar insumo: " . $con->error . "</div>";
+      echo "<div class='alert alert-danger'>" . t('error_updating_supply') . " " . $con->error . "</div>";
     }
   }
 }
 ?>
 
         <footer class="bg-dark text-white text-center py-3 mt-4">
-         
-          <p>&copy; 2024 JuancitoMotores. Todos los derechos reservados.</p>
+           <h2 class="h2"><?php echo t('footer_visitanos'); ?></h2>
+           <h1 class="h1"><?php echo t('footer_auto_nuevo'); ?></h1><br><br>
+           <p class="contacto"><?php echo t('footer_contactanos'); ?> </p>
+           <div class="d-flex justify-content-between align-items-center flex-wrap px-3">
+             <div class="d-flex align-items-center">
+               <div class="logo-footer me-2"><img src="../imagenes-inicio/sobre.png"></div>
+               <p class="logo-footer p"><?php echo t('footer_email'); ?></p>
+             </div>
+             <div class="d-flex align-items-center">
+               <div class="logo-footer me-2"><img src="../imagenes-inicio/telefono.png"></div>
+               <p class="logo-footer p"><?php echo t('footer_telefono'); ?></p>
+             </div>
+             <div class="d-flex align-items-center">
+               <div class="logo-footer me-2"><img src="../imagenes-inicio/pinubicacion.png"></div>
+               <p class="logo-footer p"><?php echo t('footer_direccion'); ?></p>
+             </div>
+           </div>
+
+           <div class="map-container">
+<iframe src="https://www.google.com/maps/d/u/1/embed?mid=1_SIFaqqS37wGh6hIDiAiaXgrsSMJnGA&ehbc=2E312F" width="640" height="480"></iframe>
+          </div>
+          <p><?php echo t('footer_copyright'); ?></p>
         </footer>
 
 

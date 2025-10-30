@@ -1,13 +1,14 @@
 <?php
 include ('../conexionbd.php');
+include ('../lang.php');
 session_start();
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo $lang; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina 1</title>
+    <title><?php echo t('title_add_services'); ?></title>
      <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
         <script src="https://kit.fontawesome.com/16aa28c921.js" crossorigin="anonymous"></script>
@@ -36,33 +37,33 @@ session_start();
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav d-flex flex-row align-items-center gap-3">
             <li class="nav-item">
-              <a class="nav-link text-white" href="../inicio1.php">Inicio</a>
+              <a class="nav-link text-white" href="../inicio1.php?lang=<?php echo $lang; ?>"><?php echo t('nav_inicio'); ?></a>
             </li>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php">Servicios pendientes</a>
+                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios_pendientes'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'cliente'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../solservicio/servicios.php">Servicios</a>
+                <a class="nav-link text-white" href="../solservicio/servicios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../misautos/misautos.php">Mis autos</a>
+                <a class="nav-link text-white" href="../misautos/misautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_mis_autos'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'ventas'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../aautos/aautos.php">Agregar vehículo</a>
+                <a class="nav-link text-white" href="../aautos/aautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_vehiculo'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../insumos/insumos.php">Insumos</a>
+                <a class="nav-link text-white" href="../insumos/insumos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_insumos'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
+                <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -74,13 +75,13 @@ session_start();
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
                 <?php if (!isset($_SESSION['email'])): ?>
-                  <a class="dropdown-item" href="../login/registro.php">Iniciar sesión</a>
+                  <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                     <a class="dropdown-item" href="#">Mi perfil</a>
+                     <a class="dropdown-item" href="#"><?php echo t('mi_perfil'); ?></a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
-                    <button class="dropdown-item" type="submit">Cerrar sesión</button>
+                    <button class="dropdown-item" type="submit"><?php echo t('cerrar_sesion'); ?></button>
                   </form>
                 <?php endif; ?>
               </div>
@@ -98,31 +99,31 @@ session_start();
         <div class="overlay" id="overlay">
             <div class="popup" id="popup">
                 <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
-                <h2>Información del servicio:</h2>
+                <h2><?php echo t('service_information'); ?></h2>
                 <div class="container mt-4">
-                    <h4>Agregar Servicio</h4>
+                    <h4><?php echo t('add_service'); ?></h4>
                     <form action="" method="post">
                         <div class="mb-2">
-                            <label for="nombre">Nombre del servicio:</label>
+                            <label for="nombre"><?php echo t('service_name'); ?></label>
                             <input type="text" class="form-control" name="nombre" id="nombre" required>
                         </div>
 
                         <div class="mb-2">
-                            <label for="requisitos">Requisitos:</label>
+                            <label for="requisitos"><?php echo t('requirements'); ?></label>
                             <textarea class="form-control" name="requisitos" id="requisitos" rows="3" required></textarea>
                         </div>
 
                         <div class="mb-2">
-                            <label for="descripcion">Descripción:</label>
+                            <label for="descripcion"><?php echo t('description'); ?></label>
                             <textarea class="form-control" name="descripcion" id="descripcion" rows="4" required></textarea>
                         </div>
 
                         <div class="mb-2">
-                            <label for="costos">Costos:</label>
+                            <label for="costos"><?php echo t('costs'); ?></label>
                             <input type="number" class="form-control" name="costos" id="costos" step="0.01" min="0" required>
                         </div>
 
-                        <button type="submit" class="btn btn-success">Agregar Servicio</button>
+                        <button type="submit" class="btn btn-success"><?php echo t('add_service_button'); ?></button>
                     </form>
                 </div>
             </div>
@@ -132,23 +133,23 @@ session_start();
         <div class="overlay" id="overlay-etapa">
             <div class="popup" id="popup-etapa">
                 <a href="#" id="btn-cerrar-popup-etapa" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
-                <h2>Agregar Etapa</h2>
+                <h2><?php echo t('add_stage'); ?></h2>
                 <div class="container mt-4">
                     <form action="" method="post">
                         <input type="hidden" name="id_servicio" id="id_servicio_etapa">
                         <div class="mb-2">
-                            <label for="nombre_etapa">Nombre de la etapa:</label>
+                            <label for="nombre_etapa"><?php echo t('stage_name'); ?></label>
                             <input type="text" class="form-control" name="nombre_etapa" id="nombre_etapa" required>
                         </div>
                         <div class="mb-2">
-                            <label for="duracion">Duración:</label>
+                            <label for="duracion"><?php echo t('duration'); ?></label>
                             <input type="text" class="form-control" name="duracion" id="duracion" required>
                         </div>
                         <div class="mb-2">
-                            <label for="tipo_etapa">Tipo:</label>
+                            <label for="tipo_etapa"><?php echo t('type'); ?></label>
                             <input type="text" class="form-control" name="tipo_etapa" id="tipo_etapa" required>
                         </div>
-                        <button type="submit" class="btn btn-success">Agregar Etapa</button>
+                        <button type="submit" class="btn btn-success"><?php echo t('add_stage_button'); ?></button>
                     </form>
                 </div>
             </div>
@@ -158,19 +159,19 @@ session_start();
         <div class="overlay" id="overlay-insumo">
             <div class="popup" id="popup-insumo">
                 <a href="#" id="btn-cerrar-popup-insumo" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
-                <h2>Agregar Insumo</h2>
+                <h2><?php echo t('add_supply'); ?></h2>
                 <div class="container mt-4">
                     <form action="" method="post">
                         <input type="hidden" name="id_servicio" id="id_servicio_insumo">
                         <div class="mb-2">
-                            <label for="nombre_insumo">Nombre del insumo:</label>
+                            <label for="nombre_insumo"><?php echo t('supply_name'); ?></label>
                             <input type="text" class="form-control" name="nombre_insumo" id="nombre_insumo" required>
                         </div>
                         <div class="mb-2">
-                            <label for="cantidad">Cantidad:</label>
+                            <label for="cantidad"><?php echo t('quantity'); ?></label>
                             <input type="number" class="form-control" name="cantidad" id="cantidad" min="1" required>
                         </div>
-                        <button type="submit" class="btn btn-success">Agregar Insumo</button>
+                        <button type="submit" class="btn btn-success"><?php echo t('add_supply_button'); ?></button>
                     </form>
                 </div>
             </div>
@@ -184,16 +185,16 @@ session_start();
 $res = $con->query($sel);
 if ($res->num_rows > 0) { ?>
     <div class="container py-5">
-        <h2 class="text-center mb-4">Servicios registrados</h2>
+        <h2 class="text-center mb-4"><?php echo t('registered_services'); ?></h2>
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead class="table-dark">
                     <tr>
-                        <th>Nombre</th>
-                        <th>Requisitos</th>
-                        <th>Descripción</th>
-                        <th>Costos</th>
-                        <th>Acciones</th>
+                        <th><?php echo t('name'); ?></th>
+                        <th><?php echo t('requirements'); ?></th>
+                        <th><?php echo t('description'); ?></th>
+                        <th><?php echo t('costs'); ?></th>
+                        <th><?php echo t('actions'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -234,9 +235,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             $sql = "INSERT INTO servicios (nombre, requisitos, descripcion, costos, id_servicio) VALUES ('$nombre', '$requisitos', '$descripcion', '$costos', '$id_servicio')";
             $res = $con->query($sql);
             if ($res == TRUE) {
-                echo '<div class="alert alert-success">Servicio agregado exitosamente.</div>';
+                echo '<div class="alert alert-success">' . t('service_added_successfully') . '</div>';
             } else {
-                echo '<div class="alert alert-danger">Error al agregar el servicio: ' . $con->error . '</div>';
+                echo '<div class="alert alert-danger">' . t('error_adding_service') . ' ' . $con->error . '</div>';
             }
         }
     } elseif (isset($_POST['nombre_etapa'])) {
@@ -254,11 +255,11 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
                 $con->query("INSERT INTO etapa (id_etapa, nombre, tipo, duracion) VALUES ('$id_etapa', '$nombre_etapa', '$tipo_etapa', '$duracion_etapa')");
                 $con->query("INSERT INTO tienen_etapa_service (id_service, id_etapa) VALUES ('".$_POST['id_servicio']."', '$id_etapa')");
                 $con->commit();
-                echo "Transacción completada con éxito";
+                echo t('stage_added_successfully');
             } catch (Exception $e) {
                 // Si hay algún error, revertimos todo
                 $con->rollback();
-                echo "Error en la transacción: " . $e->getMessage();
+                echo t('error_adding_stage') . ' ' . $e->getMessage();
             }
         }
     } elseif (isset($_POST['nombre_insumo'])) {
@@ -272,9 +273,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             $sql = "INSERT INTO insumos (id_servicio, nombre, cantidad) VALUES ('$id_servicio', '$nombre_insumo', '$cantidad')";
             $res = $con->query($sql);
             if ($res == TRUE) {
-                echo '<div class="alert alert-success">Insumo agregado exitosamente.</div>';
+                echo '<div class="alert alert-success">' . t('supply_added_successfully') . '</div>';
             } else {
-                echo '<div class="alert alert-danger">Error al agregar el insumo: ' . $con->error . '</div>';
+                echo '<div class="alert alert-danger">' . t('error_adding_supply') . ' ' . $con->error . '</div>';
             }
         }
     }
