@@ -251,27 +251,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     </div>
     <br>
   <footer class="bg-dark text-white text-center py-3 mt-4">
-           <h2 class="h2">¡Vení a visitarnos!</h2>
-           <h1 class="h1">Y salí manejando tu auto como nuevo</h1><br><br>
-           <p class="contacto">Contactanos </p>
-           <div class="d-flex justify-content-between align-items-center flex-wrap px-3">
-             <div class="d-flex align-items-center">
-               <div class="logo-footer me-2"><img src="imagenes-inicio/sobre.png"></div>
-               <p class="logo-footer p">wolfcrewcontact@gmail.com</p>
-             </div>
-             <div class="d-flex align-items-center">
-               <div class="logo-footer me-2"><img src="imagenes-inicio/telefono.png"></div>
-               <p class="logo-footer p">+598 099 456 220</p>
-             </div>
-             <div class="d-flex align-items-center">
-               <div class="logo-footer me-2"><img src="imagenes-inicio/pinubicacion.png"></div>
-               <p class="logo-footer p">Con.José Pedro Varela 2737</p>
-             </div>
-           </div>
-
-           <div class="map-container">
-<iframe src="https://www.google.com/maps/d/u/1/embed?mid=1_SIFaqqS37wGh6hIDiAiaXgrsSMJnGA&ehbc=2E312F" width="640" height="480"></iframe>
-          </div>
           <p>&copy; 2024 JuancitoMotores. Todos los derechos reservados.</p>
         </footer>
 

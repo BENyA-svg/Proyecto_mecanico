@@ -8,6 +8,10 @@ body {
     flex-direction: column;
     min-height: 100vh;
 }
+
+footer {
+    margin-top: auto;
+}
 .header-section {
     background-color: #84BFA0;
     color: white;
@@ -180,7 +184,15 @@ form {
     font-size: 1.75rem;            /* Tamaño de fuente */
     font-weight: 600;              /* Grosor de fuente semi-bold */
     font-family: 'Segoe UI', Roboto, sans-serif;
-}/* visualizacion tabla */
+}
+.btn-primary {
+    background-color: #7FB899;
+    border-color: #7FB899;
+}
+.btn-primary:hover {
+    background-color: #48705a;
+    border-color: #48705a;
+}
 .container {
     max-width: 1200px;
     margin: 0 auto;

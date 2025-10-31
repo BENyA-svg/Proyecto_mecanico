@@ -89,12 +89,12 @@
     margin-top: 20px;
 }
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #7FB899;
+    border-color: #7FB899;
 }
 .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+    background-color: #48705a;
+    border-color: #48705a;
 }
 a {
     color: #007bff;
@@ -150,13 +150,13 @@ nav form button {
     padding: 5px 50px 0 50px; /* ajusta según tu diseño */
 }
 .btn.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #7FB899;
+    border-color: #7FB899;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 .btn.btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+    background-color: #48705a;
+    border-color: #48705a;
     transform: scale(1.20);
 }
 .overlay{
@@ -232,6 +232,16 @@ nav form button {
     padding: 5px;
  
 }* visualizacion tabla */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+footer {
+    margin-top: auto;
+}
+
 .container {
     max-width: 1200px; /* Ancho máximo del contenedor */
     margin: 0 auto; /* Centrar el contenedor */

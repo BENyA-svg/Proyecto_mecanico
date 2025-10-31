@@ -419,6 +419,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['ac
         if ($row = $resetapa->fetch_assoc()) {
             $estado_actual = $row['estado'];
             $nuevaetapa = $estado_actual + 1;
+  
 
             // Obtener el id_etapa actual
             $current_etapa_query = "SELECT e.id_etapa FROM etapa e
@@ -508,29 +509,9 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
     </div>
 
-  <footer class="bg-dark text-white text-center py-3 mt-4">
-           <h2 class="h2"><?php echo t('footer_visitanos'); ?></h2>
-           <h1 class="h1"><?php echo t('footer_auto_nuevo'); ?></h1><br><br>
-           <p class="contacto"><?php echo t('footer_contactanos'); ?> </p>
-           <div class="d-flex justify-content-between align-items-center flex-wrap px-3">
-             <div class="d-flex align-items-center">
-               <div class="logo-footer me-2"><img src="../imagenes-inicio/sobre.png"></div>
-               <p class="logo-footer p"><?php echo t('footer_email'); ?></p>
-             </div>
-             <div class="d-flex align-items-center">
-               <div class="logo-footer me-2"><img src="../imagenes-inicio/telefono.png"></div>
-               <p class="logo-footer p"><?php echo t('footer_telefono'); ?></p>
-             </div>
-             <div class="d-flex align-items-center">
-               <div class="logo-footer me-2"><img src="../imagenes-inicio/pinubicacion.png"></div>
-               <p class="logo-footer p"><?php echo t('footer_direccion'); ?></p>
-             </div>
-           </div>
+ <footer class="bg-dark text-white text-center py-3 mt-4">
 
-           <div class="map-container">
-<iframe src="https://www.google.com/maps/d/u/1/embed?mid=1_SIFaqqS37wGh6hIDiAiaXgrsSMJnGA&ehbc=2E312F" width="640" height="480"></iframe>
-          </div>
-          <p><?php echo t('footer_copyright'); ?></p>
+          <p>&copy; 2024 JuancitoMotores. Todos los derechos reservados.</p>
         </footer>
     </body>
     </html>

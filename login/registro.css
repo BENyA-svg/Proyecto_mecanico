@@ -89,12 +89,12 @@
     margin-top: 20px;
 }
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #7FB899;
+    border-color: #7FB899;
 }
 .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+    background-color: #48705a;
+    border-color: #48705a;
 }
 a {
     color: #007bff;
