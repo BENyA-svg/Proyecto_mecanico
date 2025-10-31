@@ -66,7 +66,7 @@ session_start();
                 <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
               <li class="nav-item">
-                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+                 <a class="nav-link text-white" href="../addservicios/svadd.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_servicios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -80,7 +80,7 @@ session_start();
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                      <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
+                     <a class="dropdown-item" href="../Infousr/infousr.php?lang=<?php echo $lang; ?>"><?php echo t('mi_perfil'); ?></a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
@@ -141,5 +141,3 @@ session_start();
 
     </body>
     </html>
-
-

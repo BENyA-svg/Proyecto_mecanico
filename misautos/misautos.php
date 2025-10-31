@@ -3,16 +3,22 @@ include ('../conexionbd.php');
 include ('../lang.php');
 session_start();
 
-$mis_autos_ejemplo = [
-    [
-        'usuario' => 'Juancito',
-        'marca' => 'Ford',
-        'modelo' => 'Focus',
-        'fecha_compra' => '2025-05-11'
-    ]
-];
+// Procesar la actualización de la matrícula si se envía el formulario
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_matricula'])) {
+    if (isset($_POST['n_chasis']) && isset($_POST['matricula'])) {
+        $n_chasis = $con->real_escape_string($_POST['n_chasis']);
+        $matricula = $con->real_escape_string($_POST['matricula']);
 
-$_SESSION['mis_autos'] = $mis_autos_ejemplo;
+        // Preparamos y ejecutamos la consulta para actualizar la matrícula
+        $update_sql = "UPDATE auto SET matricula = '$matricula' WHERE n_chasis = '$n_chasis' AND correo = '" . $_SESSION['email'] . "'";
+
+        if ($con->query($update_sql)) {
+            // Opcional: puedes mostrar un mensaje de éxito
+            $mensaje_exito = "Matrícula actualizada correctamente.";
+        }
+    }
+}
+
 
 ?>
 
@@ -29,7 +35,7 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="vehiculos.css"> 
+    <link rel="stylesheet" href="vehiculos.css?v=1.1"> 
 </head>
 <body>
 <div class="header-section text-center text-white py-3">
@@ -79,7 +85,7 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
                 <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
               <li class="nav-item">
-                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+                 <a class="nav-link text-white" href="../addservicios/svadd.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_servicios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -93,7 +99,7 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                      <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
+                      <a class="dropdown-item" href="../Infousr/infousr.php?lang=<?php echo $lang; ?>"><?php echo t('mi_perfil'); ?></a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
@@ -111,40 +117,52 @@ $_SESSION['mis_autos'] = $mis_autos_ejemplo;
     <div class="container mt-5">
         <h3 class="form-title"><?php echo t('mis_vehiculos'); ?></h3>
         <div class="form-container">
-
-        <!-- ACA VAMOS A TRABAJAR AHORA-->
- <?php  
-$sel = "SELECT * FROM auto WHERE correo='" . $_SESSION['email'] . "';";    
-$res = $con->query($sel);
-if ($res->num_rows > 0) {
-    while($fila = $res->fetch_assoc()) {
-        ?><div class="card mb-3">
-            <div class="card-body d-flex align-items-center">
-<div class="card-img-container">
-                <?php echo "<td><img src='data:image/jpeg;base64," . base64_encode($fila["imagen"]) . "' class='card-img' alt='Imagen del auto'></td>"; ?>
-</div>
-                <div>
-        <?php
-             echo "<h5 class=\"card-title\">" . ($fila['marca'] . ' ' . $fila['modelo'] . ' ' . $fila['año']) . "</h5>";
-             echo "<p class=\"card-text\">" ."<strong>" . t('matricula') . ":</strong>" .($fila['matricula'] .
-               '<br><strong>' . t('numero_chasis') . ':</strong> ' . $fila['n_chasis'].
-               ' <br><strong>' . t('numero_motor') . ':</strong>' . $fila['n_motor']) .
-               ' <br><strong>' . t('estado_garantia') . ':</strong>' . $fila['estado_g'] .
-               ' <br><strong>' . t('fecha_compra') . ':</strong>' . $fila['fecha_compra'] . "</p>";
-           ?></div>
-</div>
-</div>
-        <?php
-    }
-}else{
-    echo "<tr><td colspan='7'>" . t('no_vehiculos') . "</td></tr>";
-}
-    echo "</table>";
-
-?>
+          <?php if (isset($_SESSION['email'])): // Comprobar si el usuario SÍ ha iniciado sesión
+            
+            // Mostrar mensaje de éxito si existe
+            if (isset($mensaje_exito)) {
+                echo "<div class='alert alert-success'>$mensaje_exito</div>";
+            }
+ 
+            $sel = "SELECT * FROM auto WHERE correo='" . $_SESSION['email'] . "';";    
+            $res = $con->query($sel);
+            if ($res->num_rows > 0) {
+                while($fila = $res->fetch_assoc()) {
+                    // Determinar la clase CSS basada en el estado de la garantía
+                    $garantia_class = ($fila['estado_g'] == 'Activo') ? 'active-warranty' : 'inactive-warranty';
+            ?>
+            <div class="card mb-3 <?php echo $garantia_class; ?>">
+                <div class="card-body d-flex align-items-center">
+                    <div class="card-img-container">
+                        <?php echo "<td><img src='data:image/jpeg;base64," . base64_encode($fila["imagen"]) . "' class='card-img' alt='Imagen del auto'></td>"; ?>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <?php
+                            echo "<h5 class=\"card-title\">" . htmlspecialchars($fila['marca'] . ' ' . $fila['modelo'] . ' ' . $fila['año']) . "</h5>";
+                            echo "<p class=\"card-text\">" .
+                                ' <br><strong>' . t('numero_chasis') . ':</strong> ' . $fila['n_chasis'].
+                                ' <br><strong>' . t('numero_motor') . ':</strong>' . $fila['n_motor'] .
+                                ' <br><strong>' . t('estado_garantia') . ':</strong>' . $fila['estado_g'] .
+                                ' <br><strong>' . t('fecha_compra') . ':</strong>' . $fila['fecha_compra'] . "</p>";
+                        ?>
+                        <form action="misautos.php?lang=<?php echo $lang; ?>" method="post" class="d-flex align-items-center gap-2 mt-2">
+                            <input type="hidden" name="n_chasis" value="<?php echo htmlspecialchars($fila['n_chasis']); ?>">
+                            <label for="matricula-<?php echo htmlspecialchars($fila['n_chasis']); ?>" class="form-label mb-0"><strong><?php echo t('matricula'); ?>:</strong></label>
+                            <input type="text" class="form-control" id="matricula-<?php echo htmlspecialchars($fila['n_chasis']); ?>" name="matricula" value="<?php echo htmlspecialchars($fila['matricula']); ?>" style="width: 150px;">
+                            <button type="submit" name="actualizar_matricula" class="btn btn-primary btn-sm">Actualizar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <?php
+                }
+            } else {
+                echo "<p>" . t('no_vehiculos') . "</p>";
+            }
+          endif; ?>
         </div>
     </div>
- 
+
   <footer class="bg-dark text-white text-center py-3 mt-4">
           <p>&copy; 2024 JuancitoMotores. Todos los derechos reservados.</p>
         </footer>
@@ -156,4 +174,3 @@ if ($res->num_rows > 0) {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
     </html>
-

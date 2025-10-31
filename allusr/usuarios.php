@@ -67,7 +67,7 @@ include '../lang.php';
                 <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
               <li class="nav-item">
-                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+                 <a class="nav-link text-white" href="../addservicios/svadd.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_servicios'); ?></a>
               </li>
             <?php endif; ?>
 

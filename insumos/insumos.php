@@ -1,4 +1,5 @@
 <?php
+
 include ('../conexionbd.php');
 include ('../lang.php');
 session_start();
@@ -9,7 +10,8 @@ if (isset($_GET['expandir'])) {
   if ($resX && $rowX = $resX->fetch_assoc()) {
     $_SESSION['insumo_edit'] = $rowX;
   }
-  header('Location: ' . $_SERVER['PHP_SELF']);
+  $lang_param = isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : '';
+  header('Location: ' . $_SERVER['PHP_SELF'] . $lang_param);
   exit();
 }
 ?>
@@ -77,7 +79,7 @@ if (isset($_GET['expandir'])) {
                 <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
               <li class="nav-item">
-                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+                 <a class="nav-link text-white" href="../addservicios/svadd.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_servicios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -91,8 +93,7 @@ if (isset($_GET['expandir'])) {
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                      <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
-                    <hr class="dropdown-divider">
+                  <a class="dropdown-item" href="../Infousr/infousr.php?lang=<?php echo $lang; ?>"><?php echo t('mi_perfil'); ?></a>
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
                     <button class="dropdown-item" type="submit"><?php echo t('cerrar_sesion'); ?></button>
@@ -120,24 +121,24 @@ if (isset($_GET['expandir'])) {
         <form method="post" action="" enctype="multipart/form-data">
 
             <div class="mb-2">
-                <label for="precio"><?php echo t('price'); ?>:</label>
+                <label for="precio"><?php echo t('price'); ?></label>
                 <input type="number" class="form-control" name="precio" required>
             </div>
             <div class="mb-2">
-                <label for="tipo"><?php echo t('type'); ?>:</label>
+                <label for="tipo"><?php echo t('type'); ?></label>
                 <input type="text" class="form-control" name="tipo" required>
             </div>
 
             <div class="mb-2">
-                <label for="cantidad"><?php echo t('quantity'); ?>:</label>
+                <label for="cantidad"><?php echo t('quantity'); ?></label>
                 <input type="number" class="form-control" name="cantidad" required>
             </div>
             <div class="mb-2">
-                <label for="fecha_pedido"><?php echo t('order_date'); ?>:</label>
+                <label for="fecha_pedido"><?php echo t('order_date'); ?></label>
                 <input type="date" class="form-control" name="fecha_pedido" required>
             </div>
             <div class="mb-2">
-                <label for="imagen"><?php echo t('image'); ?>:</label>
+                <label for="imagen"><?php echo t('image'); ?></label>
           <input type="file" name="foto" id="foto">
             </div>
               <a href="#" id="agregar-servicio" class="agregar-servicio"><i class="fa-solid fa-plus"></i></a>
@@ -170,6 +171,7 @@ echo '<div class="cards-container">';
   // Botón que abre modal para ver/editar insumo (usamos GET + PRG para evitar reenvío al recargar)
   echo '<form method="get" class="d-inline">';
   echo '<input type="hidden" name="expandir" value="' . htmlspecialchars($fila["id_insumos"]) . '">';
+  echo '<input type="hidden" name="lang" value="' . htmlspecialchars($lang) . '">';
   echo '<button type="submit" class="btn btn-primary btn-editar btn-sm">' . t('edit') . '</button>';
   echo '</form>';
         echo "</div>";
@@ -203,31 +205,31 @@ echo '</div>';
           <input type="hidden" name="accion" value="actualizar">
           <input type="hidden" name="id_insumos" value="<?php echo htmlspecialchars($row['id_insumos']); ?>">
           <div class="mb-2">
-            <label for="tipo_edit"><?php echo t('type'); ?>:</label>
+            <label for="tipo_edit"><?php echo t('type'); ?></label>
             <input type="text" class="form-control" id="tipo_edit" name="tipo" value="<?php echo htmlspecialchars($row['tipo']); ?>" required>
           </div>
           <div class="mb-2">
-            <label for="precio_edit"><?php echo t('price'); ?>:</label>
+            <label for="precio_edit"><?php echo t('price'); ?></label>
             <input type="number" step="0.01" class="form-control" id="precio_edit" name="precio" value="<?php echo htmlspecialchars($row['precio']); ?>" required>
           </div>
           <div class="mb-2">
-            <label for="cantidad_actual"><?php echo t('current_quantity'); ?>:</label>
+            <label for="cantidad_actual"><?php echo t('current_quantity'); ?></label>
             <input type="number" class="form-control" id="cantidad_actual" name="cantidad_actual" value="<?php echo htmlspecialchars($row['cantidad_pedida']); ?>" readonly>
           </div>
           <div class="mb-2">
-            <label for="agregar_cantidad"><?php echo t('add_quantity'); ?>:</label>
+            <label for="agregar_cantidad"><?php echo t('add_quantity'); ?></label>
             <input type="number" class="form-control" id="agregar_cantidad" name="agregar_cantidad" value="0" min="0">
           </div>
           <div class="mb-2">
-            <label for="fecha_edit"><?php echo t('order_date'); ?>:</label>
+            <label for="fecha_edit"><?php echo t('order_date'); ?></label>
             <input type="date" class="form-control" id="fecha_edit" name="fecha_pedido" value="<?php echo htmlspecialchars($row['fecha_pedido']); ?>" required>
           </div>
           <div class="mb-2">
-            <label for="imagen_edit"><?php echo t('image'); ?> (<?php echo t('leave_empty'); ?>):</label>
+            <label for="imagen_edit"><?php echo t('leave_empty_to_not_change'); ?></label>
             <input type="file" class="form-control" id="imagen_edit" name="foto">
           </div>
           <div class="mb-2">
-            <label for="correo_of_edit"><?php echo t('offered_by'); ?>:</label>
+            <label for="correo_of_edit"><?php echo t('offered_by'); ?></label>
             <input type="email" class="form-control" id="correo_of_edit" name="correo_of" value="<?php echo htmlspecialchars($row['correo_of'] ?? ''); ?>">
           </div>
           <div class="text-center">
@@ -318,7 +320,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion']) && $_POST['a
     if ($con->query($sql_up) === TRUE) {
       echo "<div class='alert alert-success'>" . t('supply_updated_successfully') . "</div>";
       // Recargar para ver cambios y evitar reenvío del formulario
-      echo "<script>setTimeout(function(){ window.location = window.location.pathname; }, 700);</script>";
+      $lang_param = isset($_SESSION['lang']) ? '?lang=' . $_SESSION['lang'] : '';
+      echo "<script>setTimeout(function(){ window.location = window.location.pathname + '" . $lang_param . "'; }, 700);</script>";
       exit();
     } else {
       echo "<div class='alert alert-danger'>" . t('error_updating_supply') . " " . $con->error . "</div>";

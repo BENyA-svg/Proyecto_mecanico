@@ -66,7 +66,7 @@ session_start();
                 <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
               <li class="nav-item">
-                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+                 <a class="nav-link text-white" href="../addservicios/svadd.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_servicios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -80,7 +80,7 @@ session_start();
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                      <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
+                      <a class="dropdown-item" href="../Infousr/infousr.php?lang=<?php echo $lang; ?>"><?php echo t('mi_perfil'); ?></a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
@@ -167,8 +167,8 @@ session_start();
                             $selinsumo="SELECT tipo, id_insumos FROM insumos;";
                             $seletapa="SELECT nombre_etapa AS nombre_etapa, id_etapa FROM etapa;";
                             ?>
-                            <label for="nombre_insumo">Nombre del insumo:</label>
-                              <input class="form-control" list="insumos_list" id="nombre_insumo" name="nombre_insumo" placeholder="Selecciona un insumo" />
+                            <label for="nombre_insumo"><?php echo t('supply_name'); ?></label>
+                              <input class="form-control" list="insumos_list" id="nombre_insumo" name="nombre_insumo" placeholder="<?php echo t('selecciona_insumo'); ?>" />
                                 <datalist id="insumos_list">
                             <?php
                             $resi = $con->query($selinsumo);
@@ -181,8 +181,8 @@ session_start();
                           </datalist>
                         </div>
                        <div class="mb-2">
-                            <label for="nombre_e">Nombre de la etapa:</label>
-                              <input class="form-control" list="etapas_list" id="nombre_e" name="nombre_e" placeholder="Selecciona una etapa" />
+                            <label for="nombre_e"><?php echo t('stage_name'); ?></label>
+                              <input class="form-control" list="etapas_list" id="nombre_e" name="nombre_e" placeholder="<?php echo t('selecciona_etapa'); ?>" />
                                 <datalist id="etapas_list">
                                 </datalist>
                         </div>
@@ -200,14 +200,10 @@ session_start();
         <div class="overlay" id="overlay-expandir">
             <div class="popup" id="popup-expandir">
                 <a href="#" id="btn-cerrar-popup-expandir" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
-                <h2>Detalles del Servicio</h2>
-                <div class="container mt-4">
-                    <input type="hidden" name="id_servicio_expandir" id="id_servicio_expandir">
-                    <h4>Etapas del Servicio</h4>
-                    <div id="etapas-container"></div>
-                    <h4>Insumos por Etapa</h4>
-                    <div id="insumos-container"></div>
-                </div>
+                <h2><?php echo t('service_details'); ?></h2>
+                <input type="hidden" name="id_servicio_expandir" id="id_servicio_expandir">
+                <div id="etapas-container" class="container mt-4"></div>
+                <div id="insumos-container" class="container mt-2"></div>
             </div>
         </div>
 
@@ -239,9 +235,9 @@ if ($res->num_rows > 0) { ?>
                             <td><?php echo htmlspecialchars($fila["descripcion"]); ?></td>
                             <td><?php echo htmlspecialchars($fila["costos"]); ?></td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm me-2 btn-agregar-etapa" data-id="<?php echo $fila['id_service']; ?>">Agregar Etapa</button>
-                                <button type="button" class="btn btn-secondary btn-sm btn-agregar-insumo" data-id="<?php echo $fila['id_service']; ?>">Agregar Insumo</button>
-                                <button type="button" class="btn btn-info btn-sm btn-expandir" data-id="<?php echo $fila['id_service']; ?>">Expandir</button>
+                                <button type="button" class="btn btn-primary btn-sm me-2 btn-agregar-etapa" data-id="<?php echo $fila['id_service']; ?>"><?php echo t('add_stage_button'); ?></button>
+                                <button type="button" class="btn btn-secondary btn-sm btn-agregar-insumo" data-id="<?php echo $fila['id_service']; ?>"><?php echo t('add_supply_button'); ?></button>
+                                <button type="button" class="btn btn-info btn-sm btn-expandir" data-id="<?php echo $fila['id_service']; ?>"><?php echo t('expandir'); ?></button>
                             </td>
                         </tr>
                     <?php } ?>
@@ -250,7 +246,7 @@ if ($res->num_rows > 0) { ?>
         </div>
     </div>
 <?php } else {
-    echo "<p class='text-center'>No se encontraron resultados.</p>";
+    echo "<p class='text-center'>" . t('no_resultados') . "</p>";
 } ?>
             </div>
         </div>
@@ -345,7 +341,19 @@ WHERE e.nombre = '$nombre_etapa'
       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var translations = {
+            'etapa_label': '<?php echo t('etapa_label'); ?>',
+            'insumo_label': '<?php echo t('insumo_label'); ?>',
+            'cantidad_label': '<?php echo t('cantidad_label'); ?>',
+            'no_etapas': '<?php echo t('no_etapas'); ?>',
+            'no_insumos': '<?php echo t('no_insumos'); ?>',
+            'service_details': '<?php echo t('service_details'); ?>',
+            'stages_of_service': '<?php echo t('stages_of_service'); ?>',
+            'supplies_per_stage': '<?php echo t('supplies_per_stage'); ?>'
+        };
+    </script>
     <script src="popup.js"></script>
 </body>
 </html>

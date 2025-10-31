@@ -22,7 +22,7 @@ if ($result->num_rows > 0) {
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo $lang; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,36 +55,39 @@ if ($result->num_rows > 0) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav d-flex flex-row align-items-center gap-3">
             <li class="nav-item">
-              <a class="nav-link text-white" href="../inicio1.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Inicio</a>
+              <a href="?lang=<?php echo $lang == 'es' ? 'en' : 'es'; ?>" class="btn btn-outline-light me-3"><?php echo $lang == 'es' ? 'EN' : 'ES'; ?></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="../inicio1.php?lang=<?php echo $lang; ?>"><?php echo t('nav_inicio'); ?></a>
             </li>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Servicios pendientes</a>
+                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios_pendientes'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'cliente'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../solservicio/servicios.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Servicios</a>
+                <a class="nav-link text-white" href="../solservicio/servicios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../misautos/misautos.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Mis autos</a>
+                <a class="nav-link text-white" href="../misautos/misautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_mis_autos'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'ventas'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../aautos/aautos.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Agregar vehículo</a>
+                <a class="nav-link text-white" href="../aautos/aautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_vehiculo'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../insumos/insumos.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Insumos</a>
+                <a class="nav-link text-white" href="../insumos/insumos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_insumos'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../allusr/usuarios.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Usuarios</a>
+                <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
               <li class="nav-item">
-                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+                 <a class="nav-link text-white" href="../addservicios/svadd.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_servicios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -96,13 +99,13 @@ if ($result->num_rows > 0) {
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
                 <?php if (!isset($_SESSION['email'])): ?>
-                  <a class="dropdown-item" href="../login/registro.php">Iniciar sesión</a>
+                  <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                     <a class="dropdown-item" href="../Infousr/infousr.php<?php echo isset($_GET['lang']) ? '?lang=' . $_GET['lang'] : ''; ?>">Mi perfil</a>
+                     <a class="dropdown-item" href="../Infousr/infousr.php?lang=<?php echo $lang; ?>"><?php echo t('mi_perfil'); ?></a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
-                    <button class="dropdown-item" type="submit">Cerrar sesión</button>
+                    <button class="dropdown-item" type="submit"><?php echo t('cerrar_sesion'); ?></button>
                   </form>
                 <?php endif; ?>
               </div>

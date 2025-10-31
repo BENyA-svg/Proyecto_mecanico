@@ -66,7 +66,7 @@ session_start();
                 <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
               <li class="nav-item">
-                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+                 <a class="nav-link text-white" href="../addservicios/svadd.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_servicios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -80,7 +80,7 @@ session_start();
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                      <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
+                      <a class="dropdown-item" href="../Infousr/infousr.php?lang=<?php echo $lang; ?>"><?php echo t('mi_perfil'); ?></a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
@@ -148,6 +148,15 @@ session_start();
                         <div class="mb-2">
                             <label for="fecha_compra"><?php echo t('purchase_date'); ?>:</label>
                             <input type="date" class="form-control" name="fecha_compra" id="fecha_compra" required>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="estado_g"><?php echo t('warranty_status'); ?>:</label>
+                            <select class="form-control" name="estado_g" id="estado_g" required>
+                                <option value=""><?php echo t('select_option'); ?></option>
+                                <option value="Activo"><?php echo t('active'); ?></option>
+                                <option value="Inactivo"><?php echo t('inactive'); ?></option>
+                            </select>
                         </div>
 
                         <div class="mb-2">
@@ -222,14 +231,15 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $año = $_POST['año'];
     $correo = $_POST['myUsuario'];
     $fecha_compra = $_POST['fecha_compra'];
+    $estado_g = $_POST['estado_g'];
     $imagen = $_FILES['foto']['name'];
    $imgData = file_get_contents($_FILES['foto']['tmp_name']);
     $imgData = $con->real_escape_string($imgData);
-    if (empty($num_chasis) || empty($num_motor) || empty($marca) || empty($modelo) || empty($año) || empty($correo) || empty($fecha_compra) || empty($imagen)) {
+    if (empty($num_chasis) || empty($num_motor) || empty($marca) || empty($modelo) || empty($año) || empty($correo) || empty($fecha_compra) || empty($estado_g) || empty($imagen)) {
         echo '<div class="alert alert-danger">Por favor completa todos los campos obligatorios correctamente.</div>';
     } else {
-        $sql = "INSERT INTO auto (n_chasis, n_motor, marca, modelo, año, correo, fecha_compra, correo_of, imagen, estado_g) 
-        VALUES ('".$num_chasis."', '".$num_motor."', '".$marca."', '".$modelo."', '".$año."', '".$correo."', '".$fecha_compra."','".$_SESSION['email']."', '".$imgData."', 'activo')";
+        $sql = "INSERT INTO auto (n_chasis, n_motor, marca, modelo, año, correo, fecha_compra, correo_of, imagen, estado_g)
+        VALUES ('".$num_chasis."', '".$num_motor."', '".$marca."', '".$modelo."', '".$año."', '".$correo."', '".$fecha_compra."','".$_SESSION['email']."', '".$imgData."', '".$estado_g."')";
         $res = $con->query($sql);
         if ($res == TRUE) {
            echo '<div class="alert alert-success">' . t('vehicle_added_successfully') . '</div>';

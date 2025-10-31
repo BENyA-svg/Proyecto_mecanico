@@ -82,12 +82,16 @@ btnsExpandir.forEach(function(btn) {
        var idServicio = btn.getAttribute("data-id"); 
         document.getElementById("id_servicio_expandir").value = idServicio;
 
+        // Actualizar título principal del popup
+        var popupTitle = popupExpandir.querySelector("h2");
+        if(popupTitle) popupTitle.textContent = translations.service_details;
 
         fetch('get_etapas.php?id_service=' + idServicio)
             .then(response => response.json())
             .then(etapas => {
                 var etapasContainer = document.getElementById("etapas-container");
                 etapasContainer.innerHTML = "";
+
                 if (etapas.length > 0) {
                     etapas.forEach(function(etapa) {
                         var etapaDiv = document.createElement("div");
@@ -95,8 +99,14 @@ btnsExpandir.forEach(function(btn) {
                         etapaDiv.innerHTML = "<h5>" + etapa.nombre + "</h5>";
                         etapasContainer.appendChild(etapaDiv);
                     });
+                    var stagesTitle = document.createElement("h4");
+                    stagesTitle.textContent = translations.stages_of_service;
+                    etapasContainer.prepend(stagesTitle);
                 } else {
-                    etapasContainer.innerHTML = "<p>No hay etapas registradas para este servicio.</p>";
+                    var noEtapasP = document.createElement("p");
+                    noEtapasP.textContent = translations.no_etapas;
+                    etapasContainer.innerHTML = '<h4>' + translations.stages_of_service + '</h4>';
+                    etapasContainer.appendChild(noEtapasP);
                 }
             })
             .catch(error => console.error('Error cargando etapas:', error));
@@ -106,15 +116,22 @@ btnsExpandir.forEach(function(btn) {
             .then(insumos => {
                 var insumosContainer = document.getElementById("insumos-container");
                 insumosContainer.innerHTML = "";
+
                 if (insumos.length > 0) {
                     insumos.forEach(function(insumo) {
                         var insumoDiv = document.createElement("div");
                         insumoDiv.className = "insumo";
-                        insumoDiv.innerHTML = "<p><strong>Etapa:</strong> " + insumo.etapa + "</p><p><strong>Insumo:</strong> " + insumo.insumo + "</p><p><strong>Cantidad:</strong> " + insumo.cantidad + "</p>";
+                        insumoDiv.innerHTML = "<p><strong>" + translations.etapa_label + "</strong> " + insumo.etapa + "</p><p><strong>" + translations.insumo_label + "</strong> " + insumo.insumo + "</p><p><strong>" + translations.cantidad_label + "</strong> " + insumo.cantidad + "</p>";
                         insumosContainer.appendChild(insumoDiv);
                     });
+                    var suppliesTitle = document.createElement("h4");
+                    suppliesTitle.textContent = translations.supplies_per_stage;
+                    insumosContainer.prepend(suppliesTitle);
                 } else {
-                    insumosContainer.innerHTML = "<p>No hay insumos registrados para este servicio.</p>";
+                    var noInsumosP = document.createElement("p");
+                    noInsumosP.textContent = translations.no_insumos;
+                    insumosContainer.innerHTML = '<h4>' + translations.supplies_per_stage + '</h4>';
+                    insumosContainer.appendChild(noInsumosP);
                 }
             })
             .catch(error => console.error('Error cargando insumos:', error));

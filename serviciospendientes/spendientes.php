@@ -1,11 +1,13 @@
 <?php
+
 include ('../conexionbd.php');
 include ('../lang.php');
-    session_start();
+session_start();
 ?>
 
+
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo $lang; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,36 +42,39 @@ include ('../lang.php');
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav d-flex flex-row align-items-center gap-3">
             <li class="nav-item">
+              <a href="?lang=<?php echo $lang == 'es' ? 'en' : 'es'; ?>" class="btn btn-outline-light me-3"><?php echo $lang == 'es' ? 'EN' : 'ES'; ?></a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link text-white" href="../inicio1.php?lang=<?php echo $lang; ?>"><?php echo t('nav_inicio'); ?></a>
             </li>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'centro'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php"><?php echo t('nav_servicios_pendientes'); ?></a>
+                <a class="nav-link text-white" href="../serviciospendientes/spendientes.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios_pendientes'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'cliente'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../solservicio/servicios.php">Servicios</a>
+                <a class="nav-link text-white" href="../solservicio/servicios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_servicios'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../misautos/misautos.php">Mis autos</a>
+                <a class="nav-link text-white" href="../misautos/misautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_mis_autos'); ?></a>
               </li>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] == 'ventas'): ?>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../aautos/aautos.php">Agregar vehículo</a>
+                <a class="nav-link text-white" href="../aautos/aautos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_vehiculo'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../insumos/insumos.php">Insumos</a>
+                <a class="nav-link text-white" href="../insumos/insumos.php?lang=<?php echo $lang; ?>"><?php echo t('nav_insumos'); ?></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="../allusr/usuarios.php">Usuarios</a>
+                <a class="nav-link text-white" href="../allusr/usuarios.php?lang=<?php echo $lang; ?>"><?php echo t('nav_usuarios'); ?></a>
               </li>
               <li class="nav-item">
-                 <a class="nav-link text-white" href="../addservicios/svadd.php">Agregar servicios</a>
+                 <a class="nav-link text-white" href="../addservicios/svadd.php?lang=<?php echo $lang; ?>"><?php echo t('nav_agregar_servicios'); ?></a>
               </li>
             <?php endif; ?>
 
@@ -83,7 +88,7 @@ include ('../lang.php');
                 <?php if (!isset($_SESSION['email'])): ?>
                   <a class="dropdown-item" href="../login/registro.php?lang=<?php echo $lang; ?>"><?php echo t('nav_iniciar_sesion'); ?></a>
                 <?php else: ?>
-                 <a class="dropdown-item" href="../Infousr/infousr.php">Mi perfil</a>
+                     <a class="dropdown-item" href="../Infousr/infousr.php?lang=<?php echo $lang; ?>"><?php echo t('mi_perfil'); ?></a>
                     <hr class="dropdown-divider">
                   <form action="../inicio2.php" method="post" class="d-inline">
                     <input type="hidden" name="cerrar" value="1">
@@ -107,7 +112,7 @@ include ('../lang.php');
              
             <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
              <!-- busca auto a partir de usuario -->
-                                <label for="myUsuario"><?php echo t('usuario'); ?>:</label>
+                                <label for="myUsuario"><?php echo t('usuario_label'); ?></label>
                                 <input class="form-control" list="usuarios" id="myUsuario" name="myUsuario" placeholder="<?php echo t('selecciona_usuario'); ?>" />
                                 <datalist id="usuarios">
                                     <?php
@@ -129,7 +134,7 @@ include ('../lang.php');
                                         $result = $con->query($selectauto);
                                 ?>
                                 <br>
-                                <label for="autoUsuario"><?php echo t('auto'); ?>:</label>
+                                <label for="autoUsuario"><?php echo t('auto_label'); ?></label>
                                 <select class="form-control" id="autoUsuario" name="autoUsuario">
                                     <option value=""><?php echo t('selecciona_auto'); ?></option>
                                     <?php
@@ -226,13 +231,13 @@ $sel .= " ORDER BY fecha ASC";
           <table class="table table-striped table-hover">
             <thead class="table-dark">
               <tr>
-                <th scope="col"><?php echo t('auto'); ?></th>
-                <th scope="col"><?php echo t('fecha'); ?></th>
-                <th scope="col"><?php echo t('estado'); ?></th>
-                <th scope="col"><?php echo t('descripcion'); ?></th>
-                <th scope="col"><?php echo t('chasis'); ?></th>
-                <th scope="col"><?php echo t('costo'); ?></th>
-                <th scope="col"><?php echo t('acciones'); ?></th>
+                <th scope="col"><?php echo t('table_auto'); ?></th>
+                <th scope="col"><?php echo t('table_fecha'); ?></th>
+                <th scope="col"><?php echo t('table_estado'); ?></th>
+                <th scope="col"><?php echo t('table_descripcion'); ?></th>
+                <th scope="col"><?php echo t('table_chasis'); ?></th>
+                <th scope="col"><?php echo t('table_costo'); ?></th>
+                <th scope="col"><?php echo t('table_acciones'); ?></th>
               </tr>
             </thead>
             <tbody>
@@ -245,15 +250,7 @@ $sel .= " ORDER BY fecha ASC";
                   <td><?php echo htmlspecialchars($fila["n_chasis"]); ?></td>
                   <td>$<?php echo htmlspecialchars($fila["costos"]); ?></td>
                   <td>
-                     <form method="post" style="display:inline;">
-    <input type="hidden" name="accion" value="expandir">
-    <input type="hidden" name="n_chasis" value="<?php echo $fila['n_chasis']; ?>">
-    <input type="hidden" name="id_service" value="<?php echo $fila['id_service']; ?>">
-    <input type="hidden" name="fecha" value="<?php echo $fila['fecha']; ?>">
-    <button type="submit" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#serviceModal">
-        <i class="fas fa-edit"></i> <?php echo t('expandir'); ?>
-    </button>
-</form>
+  
  <form method="post" style="display:inline;">
     <input type="hidden" name="accion" value="eliminar">
     <input type="hidden" name="n_chasis" value="<?php echo $fila['n_chasis']; ?>">
@@ -310,7 +307,7 @@ $sel .= " ORDER BY fecha ASC";
              WHERE n_chasis = '$n_chasis' 
                AND id_service = '$id_service' 
                AND fecha = '$fecha';";
-               $cambiarmembresia= "UPDATE auto SET estado = 'inactivo' WHERE n_chasis = '$n_chasis'";
+               $cambiarmembresia= "UPDATE auto SET estado_g = 'inactivo' WHERE n_chasis = '$n_chasis'";
        if ($con->query($cancelar) === TRUE && $con->query($cambiarmembresia) === TRUE) {
            echo "<p class='text-success'>" . t('servicio_cancelado_exito') . "</p>";
        } else {

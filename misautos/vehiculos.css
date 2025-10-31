@@ -139,9 +139,17 @@ a:hover {
     transition: transform 0.3s;
 }
 
+/* Estilos para el estado de la garantía */
+.active-warranty {
+    border-left: 5px solid #28a745; /* Verde para garantía activa */
+}
+
+.inactive-warranty {
+    border-left: 5px solid #dc3545; /* Rojo para garantía inactiva */
 .map-container {
 margin-top: 2rem;
 text-align: center;
+}
 }
 .map-container iframe {
   width: 100%;
