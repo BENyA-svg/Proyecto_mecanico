@@ -185,6 +185,7 @@ if ($result->num_rows > 0) {
         </div>
     </form>
       <footer class="bg-dark text-white text-center py-3 mt-4">
+
           <p><?php echo t('footer_copyright'); ?></p>
         </footer>
 
