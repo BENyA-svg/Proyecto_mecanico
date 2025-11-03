@@ -204,7 +204,7 @@ session_start();
     ?>
     <div class="d-flex gap-2 mb-3">
             <form action="" method="post">
-                <input type="hidden" name="todo" value="todos">
+                <input type="hidden" name="todo" value="todo">
                 <button type="submit" class="btn btn-primary"><?php echo t('mostrar_todos'); ?></button>
             </form><br>
             <form action="" method="post">
@@ -213,7 +213,7 @@ session_start();
             </form>
           </div>  
         <?php
-if (!isset($_POST['todo'])) {
+if (!isset($_POST['todo']) || $_POST['todo'] != 'todo') {
     $sel .= " AND estado REGEXP '^[0-9]+$'";
  
 }
@@ -250,7 +250,16 @@ $sel .= " ORDER BY fecha ASC";
                   <td><?php echo htmlspecialchars($fila["n_chasis"]); ?></td>
                   <td>$<?php echo htmlspecialchars($fila["costos"]); ?></td>
                   <td>
-  
+  <form method="post" style="display:inline;">
+    <input type="hidden" name="accion" value="expandir">
+    <input type="hidden" name="n_chasis" value="<?php echo $fila['n_chasis']; ?>">
+    <input type="hidden" name="id_service" value="<?php echo $fila['id_service']; ?>">
+    <input type="hidden" name="fecha" value="<?php echo $fila['fecha']; ?>">
+    <button type="submit" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#serviceModal">
+        <i class="fas fa-edit"></i> <?php echo t('expandir'); ?>
+    </button>
+</form>
+
  <form method="post" style="display:inline;">
     <input type="hidden" name="accion" value="eliminar">
     <input type="hidden" name="n_chasis" value="<?php echo $fila['n_chasis']; ?>">

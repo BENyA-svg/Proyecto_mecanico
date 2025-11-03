@@ -107,7 +107,7 @@ session_start();
                                 <input class="form-control" list="autos" id="auto" name="auto" placeholder="<?php echo t('selecciona_auto'); ?>" />
                                 <datalist id="autos">
                                     <?php
-                                    $selectauto = "SELECT marca, modelo, año FROM auto  where correo='" . $_SESSION['email'] . "' AND estado_g= 'activo' ;";
+                                    $selectauto = "SELECT marca, modelo, año FROM auto  where correo='" . $_SESSION['email'] . "' AND estado_g= 'Activo' ;";
                                     $result = $con->query($selectauto);
                                     while ($row = $result->fetch_assoc()) {
                                         echo '<option value="' . $row['marca'] . ' ' . $row['modelo'] . ' ' . $row['año'] . '"></option>';
