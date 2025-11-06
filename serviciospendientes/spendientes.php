@@ -42,9 +42,6 @@ session_start();
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav d-flex flex-row align-items-center gap-3">
             <li class="nav-item">
-              <a href="?lang=<?php echo $lang == 'es' ? 'en' : 'es'; ?>" class="btn btn-outline-light me-3"><?php echo $lang == 'es' ? 'EN' : 'ES'; ?></a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link text-white" href="../inicio1.php?lang=<?php echo $lang; ?>"><?php echo t('nav_inicio'); ?></a>
             </li>
 
@@ -330,8 +327,8 @@ $sel .= " ORDER BY fecha ASC";
 <div class="modal fade" id="serviceModal" tabindex="-1" aria-labelledby="serviceModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="serviceModalLabel"><?php echo t('detalles_del_servicio'); ?></h5>
+      <div class="modal-header"> 
+        <h5 class="modal-title" id="serviceModalLabel"><?php echo t('service_details'); ?></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -340,14 +337,14 @@ $sel .= " ORDER BY fecha ASC";
             $n_chasis = $_POST['n_chasis'];
             $id_service = $_POST['id_service'];
             $fecha = $_POST['fecha'];
-            
-            $query = "SELECT 
-    a.*, 
+
+            $query = "SELECT
+    a.*,
     s.nombre AS nombre_service,
-    s.*, 
-    r.fecha, 
-    r.estado, 
-    u.nombre, 
+    s.*,
+    r.fecha,
+    r.estado,
+    u.nombre,
     u.apellido,
     e.id_etapa,
     e.nombre AS nombre_etapa
@@ -362,19 +359,19 @@ AND s.id_service = '$id_service'
 AND r.fecha = '$fecha'
 AND e.orden = r.estado;
    ";
-            
+
             $result = $con->query($query);
-            
+
             if ($row = $result->fetch_assoc()) {
-                echo "<p><strong>Cliente:</strong> " . htmlspecialchars($row['nombre'] . " " . $row['apellido']) . "</p>";
-                echo "<p><strong>Vehículo:</strong> " . htmlspecialchars($row['marca'] . " " . $row['modelo'] . " (" . $row['año'] . ")") . "</p>";
-                echo "<p><strong>Número de Chasis:</strong> " . htmlspecialchars($row['n_chasis']) . "</p>";
-                echo "<p><strong>Servicio:</strong> " . htmlspecialchars($row['nombre_service']) . "</p>";
-                echo "<p><strong>Descripción:</strong> " . htmlspecialchars($row['descripcion']) . "</p>";
-                echo "<p><strong>Fecha programada:</strong> " . htmlspecialchars($row['fecha']) . "</p>";
-                echo "<p><strong>Estado:</strong> " . htmlspecialchars($row['estado']) . "</p>";
-                echo "<p><strong>Costo:</strong> $" . htmlspecialchars($row['costos']) . "</p>";
-                echo "<h5>Etapas e Insumos:</h5>";
+                echo "<p><strong>" . t('cliente') . ":</strong> " . htmlspecialchars($row['nombre'] . " " . $row['apellido']) . "</p>";
+                echo "<p><strong>" . t('vehiculo') . ":</strong> " . htmlspecialchars($row['marca'] . " " . $row['modelo'] . " (" . $row['año'] . ")") . "</p>";
+                echo "<p><strong>" . t('numero_chasis') . ":</strong> " . htmlspecialchars($row['n_chasis']) . "</p>";
+                echo "<p><strong>" . t('servicio') . ":</strong> " . htmlspecialchars($row['nombre_service']) . "</p>";
+                echo "<p><strong>" . t('descripcion') . ":</strong> " . htmlspecialchars($row['descripcion']) . "</p>";
+                echo "<p><strong>" . t('fecha_programada') . ":</strong> " . htmlspecialchars($row['fecha']) . "</p>";
+                echo "<p><strong>" . t('estado') . ":</strong> " . htmlspecialchars($row['estado']) . "</p>";
+                echo "<p><strong>" . t('costo') . ":</strong> $" . htmlspecialchars($row['costos']) . "</p>";
+                echo "<h5>" . t('etapas_e_insumos') . ":</h5>";
                 echo "<ul>";
                 $selinsumos = "SELECT i.*, n.cantidad
 FROM insumos i
@@ -386,14 +383,14 @@ WHERE e.id_etapa = ".$row['id_etapa'].";"
                 if ($resinsumos->num_rows > 0) {
                     echo "<h6>" . htmlspecialchars($row['nombre_etapa']) . "</h6>";
                      while ($rowinsumos = $resinsumos->fetch_assoc()) {
-                    echo "<li>" . htmlspecialchars($rowinsumos['tipo']) . " - Cantidad: " . htmlspecialchars($rowinsumos['cantidad']) . "</li>";
+                    echo "<li>" . htmlspecialchars($rowinsumos['tipo']) . " - " . t('cantidad_label') . htmlspecialchars($rowinsumos['cantidad']) . "</li>";
                 }
                 }else{
-                  echo "esta etapa no requiere insumos";
+                  echo t('esta_etapa_no_requiere_insumos');
                 }
                 echo "</ul>";
             }
-            
+
         }
         ?>
       </div>
