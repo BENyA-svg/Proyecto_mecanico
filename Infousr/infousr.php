@@ -10,8 +10,8 @@ if (!isset($_SESSION['ci'])) {
 }
 
 // Obtener datos actuales del usuario
-$ci = $_SESSION['ci'];
-$sql = "SELECT * FROM usuario WHERE ci = '$ci'";
+$email = $_SESSION['email'];
+$sql = "SELECT * FROM usuario WHERE correo = '$email'";
 $result = $con->query($sql);
 if ($result->num_rows > 0) {
     $usuario = $result->fetch_assoc();

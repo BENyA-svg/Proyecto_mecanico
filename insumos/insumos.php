@@ -141,7 +141,6 @@ if (isset($_GET['expandir'])) {
                 <label for="imagen"><?php echo t('image'); ?></label>
           <input type="file" name="foto" id="foto">
             </div>
-              <a href="#" id="agregar-servicio" class="agregar-servicio"><i class="fa-solid fa-plus"></i></a>
             <input type="hidden" name="accion" value="agregar">
             <button type="submit" class="btn btn-success"><?php echo t('add_supply_button'); ?></button>
         </form>

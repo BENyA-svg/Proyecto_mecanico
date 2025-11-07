@@ -383,7 +383,7 @@ WHERE e.id_etapa = ".$row['id_etapa'].";"
                 if ($resinsumos->num_rows > 0) {
                     echo "<h6>" . htmlspecialchars($row['nombre_etapa']) . "</h6>";
                      while ($rowinsumos = $resinsumos->fetch_assoc()) {
-                    echo "<li>" . htmlspecialchars($rowinsumos['tipo']) . " - " . t('cantidad_label') . htmlspecialchars($rowinsumos['cantidad']) . "</li>";
+                    echo "<li>" . htmlspecialchars($rowinsumos['tipo']) . " - " . t('cantidad_label') ." ". htmlspecialchars($rowinsumos['cantidad']) . "</li>";
                 }
                 }else{
                   echo t('esta_etapa_no_requiere_insumos');
@@ -489,10 +489,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['ac
             throw new Exception("No se encontró registro en 'reciben' para el chasis $n_chasis.");
         }
 
-        // ✅ Confirmar cambios si todo fue bien
         $con->commit();
     } catch (Exception $e) {
-        // ❌ Revertir todos los cambios si hay algún error
+
         $con->rollback();
         echo "<p class='text-danger'>Error: " . $e->getMessage() . "</p>";
     }
